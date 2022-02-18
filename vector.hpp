@@ -1,20 +1,21 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-# include <memory>       // std::allocator
-# include <iterator>     // std::iterator
-# include <cstddef>      // ptrdiff_t, size_t
+# include <memory>          // std::allocator
+# include <iterator>        // std::iterator
+# include <cstddef>         // ptrdiff_t, size_t
+# include <iostream>        // std::cout
 
 namespace ft {
-    template<typename T>
+    template<typename T, typename Alloc = std::allocator<T> >
     class vector {
         public:
-            vector(void) : var(5) {}
-            int var;
+            //vector(void) : var(5) {}
+            //int var;
 
             // MEMBER TYPES
             typedef T                                                                           value_type;
-            typedef typename std::allocator<value_type>                                         allocator_type;
+            typedef Alloc                                                                       allocator_type;
             typedef typename allocator_type::reference                                          reference;
             typedef typename allocator_type::const_reference                                    const_reference;
             typedef typename allocator_type::pointer                                            pointer;
@@ -29,6 +30,20 @@ namespace ft {
             typedef size_t                                                                      size_type;
 
             // CONSTRUCTORS / DESTRUCTOR
+            explicit vector(allocator_type const & alloc = allocator_type()) : _alloc(alloc) {
+                _arr = _alloc.allocate(1);
+                _alloc.construct(_arr, 0);
+                //std::cout << alloc.max_size() << '\n';
+            }
+            /*explicit vector(size_type n, value_type const & val = value_type()) {}
+            template <typename InputIterator>
+                vector(InputIterator first, InputIterator last, allocator_type const & alloc = allocator_type()) {
+
+                }
+            vector(vector const & x) {}*/
+        private:
+            T*  _arr;
+            allocator_type _alloc;
 
     };
 }
