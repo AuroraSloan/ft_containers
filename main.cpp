@@ -6,9 +6,10 @@
 
 int main(void)
 {
-    ft::vector<int> vec;
-    std::vector<int> stdvec;
-    std::cout << stdvec.max_size() << '\n';
+    ft::vector<int> vec(4, 100);
+    std::vector<int> stdvec(4, 100);
+    //std::cout << *vec._vec << std::endl;
+    //std::cout << stdvec.max_size() << '\n';
 //    std::cout << vec.var << std::endl;
 
     //std::allocator<int> j = std::allocator<int>();
