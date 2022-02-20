@@ -34,17 +34,28 @@ namespace ft {
             // CONSTRUCTORS / DESTRUCTOR
             explicit vector(allocator_type const & alloc = allocator_type()) : _begin(NULL), _end(NULL), _alloc(alloc) {}
             explicit vector(size_type n, value_type const & val = value_type(), allocator_type const & alloc = allocator_type()) : _alloc(alloc) {
-                _vec = _alloc.allocate(n + 1);
-                for(size_t i = 0; i < n; i++) {
-                    _alloc.construct(_vec + i, val);
+                _begin = _alloc.allocate(n + 1);
+                size_type i = 0;
+                for(; i < n; i++) {
+                    _alloc.construct(_begin + i, val);
                 }
+                _end = _begin + i;
+                _cap = _end;
+            }
+            ~vector() {
+                size_type i = 0;
+                for (; i < size(); i++) {
+                    _alloc.destroy(_begin + i);
+
+                }
+                _alloc.deallocate(_begin, i);
+
             }
             /*template <class InputIterator>
                 vector(InputIterator first, InputIterator last, allocator_type const & alloc = allocator_type()) {
 
                 }
             vector(vector const & x) {}
-            ~vector() {}
             */
             // ITERATORS
             /*iterator                begin() {}
@@ -59,7 +70,7 @@ namespace ft {
 
             // CAPACITY
             size_type               size() { return (_end - _begin); }
-            //size_type               max_size() {/*numeric limits?*/}
+            //size_type               max_size() {/*numeric limits?allocator::max_size?*/}
             //void                    resize() {}
             size_type               capacity() { return (_cap - _begin); }
             //bool                    empty() const { return (!size()) }

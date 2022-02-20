@@ -8,6 +8,10 @@ int main(void)
 {
     ft::vector<int> vec(4, 100);
     std::vector<int> stdvec(4, 100);
+    std::cout << "std size: " << stdvec.size() << std::endl;
+    std::cout << "ft size: " << vec.size() << std::endl;
+    std::cout << "std capacity: " << stdvec.capacity() << std::endl;
+    std::cout << "ft capacity: " << vec.capacity() << std::endl;
     //std::cout << *vec._vec << std::endl;
     //std::cout << stdvec.max_size() << '\n';
 //    std::cout << vec.var << std::endl;
