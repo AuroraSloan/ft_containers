@@ -12,6 +12,10 @@ int main(void)
     std::cout << "ft size: " << vec.size() << std::endl;
     std::cout << "std capacity: " << stdvec.capacity() << std::endl;
     std::cout << "ft capacity: " << vec.capacity() << std::endl;
+    for (std::vector<int>::iterator stdit = stdvec.begin(); stdit != stdvec.end(); stdit++)
+        std::cout << "stdit: " << *stdit << '\n';
+    for (ft::vector<int>::iterator ftit = vec.begin(); ftit != vec.end(); ftit++)
+        std::cout << "ftit: " << *ftit << '\n';
     //std::cout << *vec._vec << std::endl;
     //std::cout << stdvec.max_size() << '\n';
 //    std::cout << vec.var << std::endl;

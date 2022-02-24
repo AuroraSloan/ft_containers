@@ -24,7 +24,7 @@ namespace ft {
             // should be convertable to const
             typedef typename std::iterator<std::random_access_iterator_tag, value_type>         iterator;
             // const in the right place?? cannot be convertable to non-const
-            typedef typename std::iterator<const std::random_access_iterator_tag, value_type>   const_iterator;
+            typedef typename std::iterator<std::random_access_iterator_tag, value_type>         const_iterator;
             typedef typename std::reverse_iterator<iterator>                                    reverse_iterator;
             typedef typename std::reverse_iterator<const_iterator>                              const_reverse_iterator;
             typedef ptrdiff_t                                                                   difference_type;
@@ -58,11 +58,11 @@ namespace ft {
             vector(vector const & x) {}
             */
             // ITERATORS
-            /*iterator                begin() {}
-            cons_iterator           begin() const {}
-            iterator                end() {}
-            const_iterator          end() const {}
-            reverse_iterator        rbegin() {}
+            iterator                begin() { return (iterator(_begin)); }
+            //cons_iterator           begin() const { return (iterator(const begin)); }
+            iterator                end() { return (iterator(_end)); }
+            //const_iterator          end() const { return (iterator(const end)); }
+            /*reverse_iterator        rbegin() {}
             const_reverse_iterator  rbegin() const {}
             reverse_iterator        rend() {}
             const_reverse_iterator  rend() const {}*/
