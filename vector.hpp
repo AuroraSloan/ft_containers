@@ -2,9 +2,10 @@
 # define VECTOR_HPP
 
 # include <memory>          // std::allocator
-# include <iterator>        // std::iterator
+//# include <iterator>        // std::iterator
 # include <cstddef>         // ptrdiff_t, size_t
 # include <iostream>        // std::cout
+# include "iterator.hpp"
 
 namespace ft {
     template<typename T, class Alloc = std::allocator<T> >
@@ -22,11 +23,11 @@ namespace ft {
             typedef typename allocator_type::pointer                                            pointer;
             typedef typename allocator_type::const_pointer                                      const_pointer;
             // should be convertable to const
-            typedef typename std::iterator<std::random_access_iterator_tag, value_type>         iterator;
+            typedef ft::iterator<T> iterator;
             // const in the right place?? cannot be convertable to non-const
-            typedef typename std::iterator<std::random_access_iterator_tag, value_type>         const_iterator;
-            typedef typename std::reverse_iterator<iterator>                                    reverse_iterator;
-            typedef typename std::reverse_iterator<const_iterator>                              const_reverse_iterator;
+            //typedef typename std::iterator<std::random_access_iterator_tag, value_type>         const_iterator;
+            //typedef typename std::reverse_iterator<iterator>                                    reverse_iterator;
+            //typedef typename std::reverse_iterator<const_iterator>                              const_reverse_iterator;
             typedef ptrdiff_t                                                                   difference_type;
             typedef size_t                                                                      size_type;
 
