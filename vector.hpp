@@ -2,12 +2,76 @@
 # define VECTOR_HPP
 
 # include <memory>          // std::allocator
-//# include <iterator>        // std::iterator
+# include <iterator>        // std::iterator
 # include <cstddef>         // ptrdiff_t, size_t
 # include <iostream>        // std::cout
 # include "iterator.hpp"
 
 namespace ft {
+    // RANDOM ACCESS ITERATOR
+    template <typename T>
+    class random_access_iterator : public std::iterator<std::random_access_iterator_tag, T> {
+    public:
+
+        T*  _data;
+        random_access_iterator(void) : _data(NULL) {}
+        random_access_iterator(T *x) : _data(x) {}
+        random_access_iterator(random_access_iterator const & src) : _data(src.data) {}
+        ~random_access_iterator(void) {}
+
+        bool operator==(random_access_iterator const &rhs) const { return (_data == rhs.data); }
+        bool operator!=(random_access_iterator const &rhs) const { return (_data != rhs.data); }
+
+        T& operator*() { /* if in a dereferencable state */return (*_data); }
+        //T* operator->() const;
+        T* operator->() { return (_data); }
+
+        random_access_iterator const & operator=(random_access_iterator const &rhs) {
+            /* if in a dereferenceable state*/
+            if (this != &rhs)
+                _data = rhs._data;
+            return (*this);
+        }
+
+        random_access_iterator & operator++(void) {
+            ++_data;
+            return (*this);
+        }
+
+        random_access_iterator operator++(T) {
+            random_access_iterator tmp(*this);
+            _data++;
+            //operator++();
+            return tmp;
+        }
+        /*random_access_iterator * operator++(T*) {
+            random_access_iterator tmp(*this);
+            *_data++;
+            //operator++();
+            return tmp;
+        }*/
+        random_access_iterator & operator--(void) {
+            --_data;
+            return (*this);
+        }
+
+        random_access_iterator operator--(T) {
+            random_access_iterator tmp(*this);
+            _data--;
+            //operator++();
+            return tmp;
+        }
+        /*random_access_iterator * operator--(T*) {
+            random_access_iterator tmp(*this);
+            *_data--;
+            //operator--();
+            return tmp;
+        }*/
+ //       random_access_iterator operator
+
+    };
+
+
     template<typename T, class Alloc = std::allocator<T> >
     class vector {
         public:
@@ -23,7 +87,8 @@ namespace ft {
             typedef typename allocator_type::pointer                                            pointer;
             typedef typename allocator_type::const_pointer                                      const_pointer;
             // should be convertable to const
-            typedef ft::iterator<T> iterator;
+            typedef typename ft::random_access_iterator<T> iterator;
+            //typedef ft::random_access_iterator<T>   iterator;
             // const in the right place?? cannot be convertable to non-const
             //typedef typename std::iterator<std::random_access_iterator_tag, value_type>         const_iterator;
             //typedef typename std::reverse_iterator<iterator>                                    reverse_iterator;
