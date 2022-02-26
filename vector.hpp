@@ -69,6 +69,26 @@ namespace ft {
         }*/
  //       random_access_iterator operator
 
+        random_access_iterator operator+(ptrdiff_t x) { return (_data + x); }
+        random_access_iterator operator+(random_access_iterator const & rhs) { return (*_data + *rhs._data); }
+        random_access_iterator operator-(ptrdiff_t x) { return (_data - x); }
+        random_access_iterator operator-(random_access_iterator const & rhs) { return (*_data - *rhs._data); }
+
+        bool operator<(random_access_iterator const & rhs) { return (*_data < *rhs._data); }
+        bool operator>(random_access_iterator const & rhs) { return (*_data > *rhs._data); }
+        bool operator<=(random_access_iterator const & rhs) { return (*_data <= *rhs._data); }
+        bool operator>=(random_access_iterator const & rhs) { return (*_data >= *rhs._data); }
+
+        random_access_iterator const & operator+=(random_access_iterator const &rhs) {
+            _data += rhs._data;
+            return (*this);
+        }
+        random_access_iterator const & operator-=(random_access_iterator const &rhs) {
+            _data -= rhs._data;
+            return (*this);
+        }
+
+        //T   operator[]()
     };
 
 
