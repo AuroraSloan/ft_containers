@@ -16,11 +16,11 @@ namespace ft {
         T*  _data;
         random_access_iterator(void) : _data(NULL) {}
         random_access_iterator(T *x) : _data(x) {}
-        random_access_iterator(random_access_iterator const & src) : _data(src.data) {}
+        random_access_iterator(random_access_iterator const & src) : _data(src._data) {}
         ~random_access_iterator(void) {}
 
-        bool operator==(random_access_iterator const &rhs) const { return (_data == rhs.data); }
-        bool operator!=(random_access_iterator const &rhs) const { return (_data != rhs.data); }
+        bool operator==(random_access_iterator const &rhs) const { return (_data == rhs._data); }
+        bool operator!=(random_access_iterator const &rhs) const { return (_data != rhs._data); }
 
         T& operator*() { /* if in a dereferencable state */return (*_data); }
         //T* operator->() const;

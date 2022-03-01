@@ -3,42 +3,64 @@
 #include "stack.hpp"
 #include <iostream>
 #include <vector>
+#include <ctime>           //clock
+#include <time.h>
+#include "utils.hpp"
 
-#define RED '\u001b[31m'
-#define GREEN '\u001b[32m'
-#define RESET '\u001b[0m'
-
-void    ft_write(std::string color, std::string message)
+template <typename VectorClass>
+void    vector_iterator_construction(int count, int data)
 {
-    std::cout << color + message << RESET + '\n';
+    VectorClass vec(count, data);
+    //vec.push_back(55);
+
+    ft::display( "default construct - ");
+    typename VectorClass::iterator default_it;
+    ft::display(GREEN, "SUCCESS\n");
+
+
+    ft::display( "copy assign - ");
+    typename VectorClass::iterator begin = vec.begin();
+    typename VectorClass::iterator end= vec.end();
+    (begin == vec.begin() && end == vec.end()) ? ft::display(GREEN, "SUCCESS\n") : ft::display(RED, "FAILURE\n");
+
+    ft::display( "copy construct - ");
+    typename VectorClass::iterator copy_it(begin);
+    copy_it == vec.begin() ? ft::display(GREEN, "SUCCESS\n") : ft::display(RED, "FAILURE\n");
+
     return ;
 }
 
-void    ft_write(std::string color, int x)
-{
-    std::cout << color << x << RESET << '\n';
+template < typename F >
+void ft_test(std::string testName, F test) {
+    ft::write(SUBHDR + testName + SUBHDR + '\n');
+    test();
+}
+
+void emptyFunc(void) {
+    ft::display(CYAN, "\tSTD\n");
+    clock_t begin = clock();
+    vector_iterator_construction<std::vector<int> >(4, 100);
+    double  stdtime = ((double)(clock() - begin)) / CLOCKS_PER_SEC;
+    ft::display(CYAN, "\tFT\n");
+    begin = clock();
+    vector_iterator_construction<ft::vector<int> >(4, 100);
+    double  fttime = ((double)(clock() - begin)) / CLOCKS_PER_SEC;
+    if (stdtime < fttime)
+    {
+        int ratio = (int)(fttime/stdtime);
+        std::string color = ratio > 20 ? RED : YELLOW;
+        ft::write(color + std::string("std is "), ratio, "x faster\n");
+    }
+    else
+        ft::write(GREEN + std::string("ft is "), (int)(stdtime/fttime), "x faster\n");
+
     return ;
 }
-
-void    vector_iterator_example(int count, int data)
-{
-    std::vector<int> vec(count, data);
-    vec.push_back(55);
-
-    ft_write(GREEN, "default constructed");
-    std::vector<int>::iterator default_it;
-    ft_write(GREEN, "copy assigned");
-    std::vector<int>::iterator begin = vec.begin();
-    std::vector<int>::iterator end= vec.end();
-    (begin == vec.begin() && end == vec.end()) ? ft_write(GREEN, "copy assigner success") : ft_write(RED, "copy assigner failure") :
-    ft_write(GREEN, "copy constructed");
-    std::vector<int>::iterator copy_it(begin);
-    copy_it == begin ? ft_write(GREEN, "copy constructor success") : ft_write(RED, "copy constructor failure") :
-}
-
 int main(void)
 {
-    vector_iterator_example(4, 100);
+    ft::write(MAGENTA, HDR + std::string(" Vector Tests ") + HDR + RESET + '\n');
+    ft_test(" Vector iterator construction ", emptyFunc);
+
  //   vector_iterator_example(4, "hey");
 
 
