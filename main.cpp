@@ -7,7 +7,6 @@
 #include <time.h>
 #include "utils.hpp"
 
-template <typename VectorClass>
 void    vector_iterator_construction(int count, int data)
 {
     VectorClass vec(count, data);
@@ -33,10 +32,12 @@ void    vector_iterator_construction(int count, int data)
 template < typename F >
 void ft_test(std::string testName, F test) {
     ft::write(SUBHDR + testName + SUBHDR + '\n');
-    test();
+
 }
 
-void emptyFunc(void) {
+void vectorTests(void) {
+    ft::write(MAGENTA, HDR + std::string(" Vector Tests ") + HDR + RESET + '\n');
+    ft_test("vector_iterator_constructor", vector_iterator_construction)
     ft::display(CYAN, "\tSTD\n");
     clock_t begin = clock();
     vector_iterator_construction<std::vector<int> >(4, 100);
@@ -56,10 +57,10 @@ void emptyFunc(void) {
 
     return ;
 }
+
 int main(void)
 {
-    ft::write(MAGENTA, HDR + std::string(" Vector Tests ") + HDR + RESET + '\n');
-    ft_test(" Vector iterator construction ", emptyFunc);
+    vectorTests();
 
  //   vector_iterator_example(4, "hey");
 
