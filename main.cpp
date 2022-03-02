@@ -1,51 +1,14 @@
-#include "vector.hpp"
-#include "map.hpp"
-#include "stack.hpp"
+#include "include/vector.hpp"
+#include "include/map.hpp"
+#include "include/stack.hpp"
+#include "include/utils.hpp"
+#include "tests/vectorTests.hpp"
 #include <iostream>
 #include <vector>
-#include <ctime>           //clock
-#include <time.h>
-#include "utils.hpp"
 
-void    vector_iterator_construction(int count, int data)
+
+void print_results(double stdtime, double fttime)
 {
-    VectorClass vec(count, data);
-    //vec.push_back(55);
-
-    ft::display( "default construct - ");
-    typename VectorClass::iterator default_it;
-    ft::display(GREEN, "SUCCESS\n");
-
-
-    ft::display( "copy assign - ");
-    typename VectorClass::iterator begin = vec.begin();
-    typename VectorClass::iterator end= vec.end();
-    (begin == vec.begin() && end == vec.end()) ? ft::display(GREEN, "SUCCESS\n") : ft::display(RED, "FAILURE\n");
-
-    ft::display( "copy construct - ");
-    typename VectorClass::iterator copy_it(begin);
-    copy_it == vec.begin() ? ft::display(GREEN, "SUCCESS\n") : ft::display(RED, "FAILURE\n");
-
-    return ;
-}
-
-template < typename F >
-void ft_test(std::string testName, F test) {
-    ft::write(SUBHDR + testName + SUBHDR + '\n');
-
-}
-
-void vectorTests(void) {
-    ft::write(MAGENTA, HDR + std::string(" Vector Tests ") + HDR + RESET + '\n');
-    ft_test("vector_iterator_constructor", vector_iterator_construction)
-    ft::display(CYAN, "\tSTD\n");
-    clock_t begin = clock();
-    vector_iterator_construction<std::vector<int> >(4, 100);
-    double  stdtime = ((double)(clock() - begin)) / CLOCKS_PER_SEC;
-    ft::display(CYAN, "\tFT\n");
-    begin = clock();
-    vector_iterator_construction<ft::vector<int> >(4, 100);
-    double  fttime = ((double)(clock() - begin)) / CLOCKS_PER_SEC;
     if (stdtime < fttime)
     {
         int ratio = (int)(fttime/stdtime);
@@ -54,13 +17,37 @@ void vectorTests(void) {
     }
     else
         ft::write(GREEN + std::string("ft is "), (int)(stdtime/fttime), "x faster\n");
+}
 
-    return ;
+void vector_tests(std::string testName)
+{
+    double stdtime, fttime;
+
+    ft::write(MAGENTA, HDR + testName + HDR + RESET + '\n');
+
+    // CONSTRUCTION TESTS
+
+    // ITERATOR TESTS
+    ft::write(SUBHDR + std::string(" Iterator Tests ") + SUBHDR + '\n');
+    stdtime = vector_iterator_tests<std::vector<int> >(CYAN, "\tDST\n");
+    fttime = vector_iterator_tests<ft::vector<int> >(CYAN, "\tFT\n");
+    print_results(stdtime, fttime);
+
+    // CAPACITY TESTS
+
+    // ELEMENT ACCESS TESTS
+
+    // MODIFIER TESTS
+
+    // ALLOCATOR AND NON-MEMBER FUNCTION OVERLOAD TESTS
+
 }
 
 int main(void)
 {
-    vectorTests();
+    vector_tests(" Vector Tests ");
+    //stack_tests(" Stack Tests ");
+    //map_tests(" Map Tests ");
 
  //   vector_iterator_example(4, "hey");
 
