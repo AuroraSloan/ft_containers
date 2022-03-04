@@ -22,7 +22,7 @@ namespace ft {
         bool operator==(random_access_iterator const &rhs) const { return (_data == rhs._data); }
         bool operator!=(random_access_iterator const &rhs) const { return (_data != rhs._data); }
 
-        T& operator*() { /* if in a dereferencable state */return (*_data); }
+        T& operator*() {return (*_data); }
         //T* operator->() const;
         T* operator->() { return (_data); }
 
@@ -122,9 +122,8 @@ namespace ft {
             explicit vector(size_type n, value_type const & val = value_type(), allocator_type const & alloc = allocator_type()) : _alloc(alloc) {
                 _begin = _alloc.allocate(n + 1);
                 size_type i = 0;
-                for(; i < n; i++) {
+                for(; i < n; i++)
                     _alloc.construct(_begin + i, val);
-                }
                 _end = _begin + i;
                 _cap = _end;
             }
@@ -140,9 +139,17 @@ namespace ft {
             /*template <class InputIterator>
                 vector(InputIterator first, InputIterator last, allocator_type const & alloc = allocator_type()) {
 
-                }
-            vector(vector const & x) {}
-            */
+                }*/
+            vector(vector const & x) : _alloc(x._alloc) {
+                size_type   n = x.size();
+                int         i= 0;
+                _begin = _alloc.allocate((int)n + 1);
+                for(; i < n; i++)
+                    _alloc.construct(_begin + i, x._begin + i);
+                _end = _begin + i;
+                _cap = _end;
+            }
+
             // ITERATORS
             iterator                begin() { return (iterator(_begin)); }
             //cons_iterator           begin() const { return (iterator(const begin)); }
@@ -155,10 +162,10 @@ namespace ft {
 
 
             // CAPACITY
-            size_type               size() { return (_end - _begin); }
+            size_type               size() const { return (_end - _begin); }
             //size_type               max_size() {/*numeric limits?allocator::max_size?*/}
             //void                    resize() {}
-            size_type               capacity() { return (_cap - _begin); }
+            size_type               capacity() const { return (_cap - _begin); }
             //bool                    empty() const { return (!size()) }
             //void                    reserve(size_type n) {}
 

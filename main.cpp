@@ -13,24 +13,31 @@ void print_results(double stdtime, double fttime)
     {
         int ratio = (int)(fttime/stdtime);
         std::string color = ratio > 20 ? RED : YELLOW;
-        ft::write(color + std::string("std is "), ratio, "x faster\n");
+        ft::write(color + std::string("std is "), ratio, "x faster");
     }
     else
-        ft::write(GREEN + std::string("ft is "), (int)(stdtime/fttime), "x faster\n");
+        ft::write(GREEN + std::string("ft is "), (int)(stdtime/fttime), "x faster");
+    std::cout << "\t[std: " << stdtime * 1000 << "ms] " << "[ft: " << fttime * 1000 << "ms]\n";
 }
 
 void vector_tests(std::string testName)
 {
-    double stdtime, fttime;
+    double stdtime;//, fttime;
 
     ft::write(MAGENTA, HDR + testName + HDR + RESET + '\n');
 
     // CONSTRUCTION TESTS
+    std::cout << CYAN << '\t' << SUBHDR << "Construction Tests" << SUBHDR << RESET << '\n';
+    //vector_construction_tests();
+    stdtime = vector_construction_timed_tests<std::vector<int> >();
+    //fttime = vector_construction_timed_tests<ft::vector<int> >();
+    //print_results(stdtime, fttime);
 
     // ITERATOR TESTS
-    ft::write(SUBHDR + std::string(" Iterator Tests ") + SUBHDR + '\n');
-    stdtime = vector_iterator_tests<std::vector<int> >(CYAN, "\tDST\n");
-    fttime = vector_iterator_tests<ft::vector<int> >(CYAN, "\tFT\n");
+    std::cout << CYAN << '\t' << SUBHDR << "Iterator Tests" << SUBHDR << RESET << '\n';
+    vector_iterator_tests();
+    stdtime = vector_iterator_timed_tests<std::vector<int> >();
+    fttime = vector_iterator_timed_tests<ft::vector<int> >();
     print_results(stdtime, fttime);
 
     // CAPACITY TESTS
