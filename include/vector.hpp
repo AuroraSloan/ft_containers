@@ -22,12 +22,10 @@ namespace ft {
         bool operator==(random_access_iterator const &rhs) const { return (_data == rhs._data); }
         bool operator!=(random_access_iterator const &rhs) const { return (_data != rhs._data); }
 
-        T& operator*() {return (*_data); }
-        //T* operator->() const;
+        T& operator*() { return (*_data); }
         T* operator->() { return (_data); }
 
         random_access_iterator const & operator=(random_access_iterator const &rhs) {
-            /* if in a dereferenceable state*/
             if (this != &rhs)
                 _data = rhs._data;
             return (*this);
@@ -88,7 +86,7 @@ namespace ft {
             return (*this);
         }
 
-        //T   operator[]()
+        T&   operator[](ptrdiff_t i) const { return (*(_data + i)); }
     };
 
 
