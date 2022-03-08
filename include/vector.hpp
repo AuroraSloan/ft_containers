@@ -129,13 +129,10 @@ namespace ft {
                 _cap = _end;
             }
             ~vector() {
-                size_type i = 0;
-
-                for (; i < size(); i++)
-                    _alloc.destroy(_begin + i);
-                _alloc.deallocate(_begin, i);
+                __dealoc(_begin, size());
             }
             /*template <class InputIterator>
+             * ///////NEED TO ADD TESTS TO VECTOR CONSTRUCTOR TESTESt a
                 vector(InputIterator first, InputIterator last, allocator_type const & alloc = allocator_type()) {
 
                 }*/
@@ -156,9 +153,7 @@ namespace ft {
 
                 if (this == &rhs)
                     return (*this);
-                for (; i < size(); i++)
-                    _alloc.destroy(_begin + i);
-                _alloc.deallocate(_begin, i);
+                __dealoc(_begin, size());
                 _alloc = rhs._alloc;
                 _begin = _alloc.allocate(n);
                 for(; i < n; i++)
@@ -226,6 +221,12 @@ namespace ft {
             pointer         _end;
             pointer         _cap;
             allocator_type  _alloc;
+
+            void    __dealoc(pointer begin, size_type n) {
+                for(size_type i = 0; i < n; i++)
+                    _alloc.destroy(begin + i);
+                _alloc.deallocate(begin, n);
+            }
 
     };
 }

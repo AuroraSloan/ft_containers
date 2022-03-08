@@ -37,6 +37,7 @@ bool    containers_equal(VectorClass A, VectorClass B, VectorClass C) {
 
     return (true);
 }
+
 template <typename VectorClass>
 bool    vector_construction(void)
 {
@@ -96,9 +97,7 @@ double vector_construction_timed_tests(void) {
     clock_t begin, end;
 
     begin = clock();
-    // Vector iterator construction
     vector_construction<Container>();
-    // others
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
