@@ -130,12 +130,10 @@ namespace ft {
             }
             ~vector() {
                 size_type i = 0;
-                for (; i < size(); i++) {
+
+                for (; i < size(); i++)
                     _alloc.destroy(_begin + i);
-
-                }
                 _alloc.deallocate(_begin, i);
-
             }
             /*template <class InputIterator>
                 vector(InputIterator first, InputIterator last, allocator_type const & alloc = allocator_type()) {
@@ -150,6 +148,24 @@ namespace ft {
                     _alloc.construct(_begin + i, *(x._begin + i));
                 _end = _begin + i;
                 _cap = _end;
+            }
+
+            vector& operator=(const vector& rhs) {
+                size_type   i = 0;
+                size_type   n = rhs.size();
+
+                if (this == &rhs)
+                    return (*this);
+                for (; i < size(); i++)
+                    _alloc.destroy(_begin + i);
+                _alloc.deallocate(_begin, i);
+                _alloc = rhs._alloc;
+                _begin = _alloc.allocate(n);
+                for(; i < n; i++)
+                    _alloc.construct(_begin + i, *(rhs._begin + i));
+                _end = _begin + i;
+                _cap = _end;
+                return (*this);
             }
 
             // ITERATORS

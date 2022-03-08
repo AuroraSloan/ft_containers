@@ -8,6 +8,36 @@
 
 //============================ CONSTRUCTION TESTS ============================//
 template <typename VectorClass>
+bool    containers_equal(VectorClass A, VectorClass B, VectorClass C) {
+
+    typedef typename VectorClass::size_type size_type;
+    typedef typename VectorClass::iterator  iterator;
+
+    //check size
+    size_type Asize, Bsize, Csize;
+
+    Asize = A.size();
+    Bsize = B.size();
+    Csize = C.size();
+    if (Asize != Bsize || Asize != Csize || Bsize != Csize)
+        return (false);
+
+    //check items
+    iterator Aiterator, Biterator, Citerator;
+    Aiterator = A.begin();
+    Biterator = B.begin();
+    Citerator = C.begin();
+    for (size_type i = 0; i < Asize; i++) {
+        if (*(Aiterator + i) != *(Biterator + i)
+            || *(Aiterator + i) != *(Citerator + i)
+            || *(Biterator + i) != *(Citerator + i))
+            return (false);
+    }
+
+
+    return (true);
+}
+template <typename VectorClass>
 bool    vector_construction(void)
 {
 //    VectorClass vec(count, data);
@@ -28,8 +58,23 @@ bool    vector_construction(void)
     VectorClass sizeXdataCP(sizeXdata);
     VectorClass largeCP(large);
 
-
     // Equal overload
+    VectorClass emptyEQ, emptyXdataEQ, sizeOnlyEQ, sizeXdataEQ, largeEQ;
+
+    emptyEQ = emptyCP;
+    emptyXdataEQ = emptyXdataCP;
+    sizeOnlyEQ = sizeOnlyCP;
+    sizeXdataEQ = sizeXdataCP;
+    largeEQ = largeCP;
+    dflt = sizeXdataCP;
+
+    if (!containers_equal(empty, emptyCP, emptyEQ)
+        || !containers_equal(emptyXdata, emptyXdataCP, emptyXdataEQ)
+        || !containers_equal(sizeOnly, sizeOnlyCP, sizeOnlyEQ)
+        || !containers_equal(sizeXdata, sizeXdataCP, sizeXdataEQ)
+        || !containers_equal(large, largeCP, largeEQ)
+        || !containers_equal(dflt, sizeXdata, sizeXdataEQ))
+        return (false);
 
     return (true);
 }
