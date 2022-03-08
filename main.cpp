@@ -22,16 +22,16 @@ void print_results(double stdtime, double fttime)
 
 void vector_tests(std::string testName)
 {
-    double stdtime;//, fttime;
+    double stdtime, fttime;
 
     ft::write(MAGENTA, HDR + testName + HDR + RESET + '\n');
 
     // CONSTRUCTION TESTS
     std::cout << CYAN << '\t' << SUBHDR << "Construction Tests" << SUBHDR << RESET << '\n';
-    //vector_construction_tests();
+    vector_construction_tests();
     stdtime = vector_construction_timed_tests<std::vector<int> >();
-    //fttime = vector_construction_timed_tests<ft::vector<int> >();
-    //print_results(stdtime, fttime);
+    fttime = vector_construction_timed_tests<ft::vector<int> >();
+    print_results(stdtime, fttime);
 
     // ITERATOR TESTS
     std::cout << CYAN << '\t' << SUBHDR << "Iterator Tests" << SUBHDR << RESET << '\n';

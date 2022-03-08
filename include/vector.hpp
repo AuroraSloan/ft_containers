@@ -120,8 +120,9 @@ namespace ft {
             // CONSTRUCTORS / DESTRUCTOR
             explicit vector(allocator_type const & alloc = allocator_type()) : _begin(NULL), _end(NULL), _alloc(alloc) {}
             explicit vector(size_type n, value_type const & val = value_type(), allocator_type const & alloc = allocator_type()) : _alloc(alloc) {
-                _begin = _alloc.allocate(n + 1);
                 size_type i = 0;
+
+                _begin = _alloc.allocate(n);
                 for(; i < n; i++)
                     _alloc.construct(_begin + i, val);
                 _end = _begin + i;
@@ -140,12 +141,13 @@ namespace ft {
                 vector(InputIterator first, InputIterator last, allocator_type const & alloc = allocator_type()) {
 
                 }*/
-            vector(vector const & x) : _alloc(x._alloc) {
+            vector(vector const & x) : _alloc(allocator_type()) {
                 size_type   n = x.size();
-                int         i= 0;
-                _begin = _alloc.allocate((int)n + 1);
+                size_type   i = 0;
+
+                _begin = _alloc.allocate(n);
                 for(; i < n; i++)
-                    _alloc.construct(_begin + i, x._begin + i);
+                    _alloc.construct(_begin + i, *(x._begin + i));
                 _end = _begin + i;
                 _cap = _end;
             }

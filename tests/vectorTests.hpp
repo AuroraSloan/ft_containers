@@ -4,6 +4,7 @@
 # include "../include/vector.hpp"
 # include "../include/utils.hpp"
 # include <ctime>           //clock
+# include <vector>
 
 //============================ CONSTRUCTION TESTS ============================//
 template <typename VectorClass>
@@ -21,7 +22,7 @@ bool    vector_construction(void)
     VectorClass large(1000000, 5);
 
     // Copy Construction
-    //VectorClass emptyCP(empty);
+    VectorClass emptyCP(empty);
     VectorClass emptyXdataCP(emptyXdata);
     VectorClass sizeOnlyCP(sizeOnly);
     VectorClass sizeXdataCP(sizeXdata);
