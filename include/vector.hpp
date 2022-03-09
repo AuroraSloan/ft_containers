@@ -11,19 +11,26 @@ namespace ft {
     // RANDOM ACCESS ITERATOR
     template <typename T>
     class random_access_iterator : public std::iterator<std::random_access_iterator_tag, T> {
-    public:
+    private:
 
-        T*  _data;
+        typedef typename ft::iterator_traits<T*>::difference_type       difference_type;
+        typedef typename ft::iterator_traits<T*>::value_type            value_type;
+        typedef typename ft::iterator_traits<T*>::pointer               pointer;
+        typedef typename ft::iterator_traits<T*>::reference             reference;
+        typedef typename ft::iterator_traits<T*>::iterator_category     iterator_category;
+        pointer _data;
+
+    public:
         random_access_iterator(void) : _data(NULL) {}
-        random_access_iterator(T *x) : _data(x) {}
+        random_access_iterator(value_type *x) : _data(x) {}
         random_access_iterator(random_access_iterator const & src) : _data(src._data) {}
         ~random_access_iterator(void) {}
 
         bool operator==(random_access_iterator const &rhs) const { return (_data == rhs._data); }
         bool operator!=(random_access_iterator const &rhs) const { return (_data != rhs._data); }
 
-        T& operator*() { return (*_data); }
-        T* operator->() { return (_data); }
+        reference   operator*() { return (*_data); }
+        pointer     operator->() { return (_data); }
 
         random_access_iterator const & operator=(random_access_iterator const &rhs) {
             if (this != &rhs)
@@ -67,9 +74,9 @@ namespace ft {
         }*/
  //       random_access_iterator operator
 
-        random_access_iterator operator+(ptrdiff_t x) { return (_data + x); }
+        random_access_iterator operator+(difference_type x) { return (_data + x); }
         random_access_iterator operator+(random_access_iterator const & rhs) { return (*_data + *rhs._data); }
-        random_access_iterator operator-(ptrdiff_t x) { return (_data - x); }
+        random_access_iterator operator-(difference_type x) { return (_data - x); }
         random_access_iterator operator-(random_access_iterator const & rhs) { return (*_data - *rhs._data); }
 
         bool operator<(random_access_iterator const & rhs) { return (*_data < *rhs._data); }
@@ -86,7 +93,7 @@ namespace ft {
             return (*this);
         }
 
-        T&   operator[](ptrdiff_t i) const { return (*(_data + i)); }
+        reference   operator[](difference_type i) const { return (*(_data + i)); }
     };
 
 
