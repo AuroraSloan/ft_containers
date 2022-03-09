@@ -8,95 +8,6 @@
 # include "iterator.hpp"
 
 namespace ft {
-    // RANDOM ACCESS ITERATOR
-    template <typename T>
-    class random_access_iterator : public std::iterator<std::random_access_iterator_tag, T> {
-    private:
-
-        typedef typename ft::iterator_traits<T*>::difference_type       difference_type;
-        typedef typename ft::iterator_traits<T*>::value_type            value_type;
-        typedef typename ft::iterator_traits<T*>::pointer               pointer;
-        typedef typename ft::iterator_traits<T*>::reference             reference;
-        typedef typename ft::iterator_traits<T*>::iterator_category     iterator_category;
-        pointer _data;
-
-    public:
-        random_access_iterator(void) : _data(NULL) {}
-        random_access_iterator(value_type *x) : _data(x) {}
-        random_access_iterator(random_access_iterator const & src) : _data(src._data) {}
-        ~random_access_iterator(void) {}
-
-        bool operator==(random_access_iterator const &rhs) const { return (_data == rhs._data); }
-        bool operator!=(random_access_iterator const &rhs) const { return (_data != rhs._data); }
-
-        reference   operator*() { return (*_data); }
-        pointer     operator->() { return (_data); }
-
-        random_access_iterator const & operator=(random_access_iterator const &rhs) {
-            if (this != &rhs)
-                _data = rhs._data;
-            return (*this);
-        }
-
-        random_access_iterator & operator++(void) {
-            ++_data;
-            return (*this);
-        }
-
-        random_access_iterator operator++(T) {
-            random_access_iterator tmp(*this);
-            _data++;
-            //operator++();
-            return tmp;
-        }
-        /*random_access_iterator * operator++(T*) {
-            random_access_iterator tmp(*this);
-            *_data++;
-            //operator++();
-            return tmp;
-        }*/
-        random_access_iterator & operator--(void) {
-            --_data;
-            return (*this);
-        }
-
-        random_access_iterator operator--(T) {
-            random_access_iterator tmp(*this);
-            _data--;
-            //operator++();
-            return tmp;
-        }
-        /*random_access_iterator * operator--(T*) {
-            random_access_iterator tmp(*this);
-            *_data--;
-            //operator--();
-            return tmp;
-        }*/
- //       random_access_iterator operator
-
-        random_access_iterator operator+(difference_type x) { return (_data + x); }
-        random_access_iterator operator+(random_access_iterator const & rhs) { return (*_data + *rhs._data); }
-        random_access_iterator operator-(difference_type x) { return (_data - x); }
-        random_access_iterator operator-(random_access_iterator const & rhs) { return (*_data - *rhs._data); }
-
-        bool operator<(random_access_iterator const & rhs) { return (*_data < *rhs._data); }
-        bool operator>(random_access_iterator const & rhs) { return (*_data > *rhs._data); }
-        bool operator<=(random_access_iterator const & rhs) { return (*_data <= *rhs._data); }
-        bool operator>=(random_access_iterator const & rhs) { return (*_data >= *rhs._data); }
-
-        random_access_iterator const & operator+=(random_access_iterator const &rhs) {
-            _data += rhs._data;
-            return (*this);
-        }
-        random_access_iterator const & operator-=(random_access_iterator const &rhs) {
-            _data -= rhs._data;
-            return (*this);
-        }
-
-        reference   operator[](difference_type i) const { return (*(_data + i)); }
-    };
-
-
     template<typename T, class Alloc = std::allocator<T> >
     class vector {
         public:
@@ -105,21 +16,25 @@ namespace ft {
 
 
             // MEMBER TYPES
-            typedef T                                                                           value_type;
-            typedef Alloc                                                                       allocator_type;
-            typedef typename allocator_type::reference                                          reference;
-            typedef typename allocator_type::const_reference                                    const_reference;
-            typedef typename allocator_type::pointer                                            pointer;
-            typedef typename allocator_type::const_pointer                                      const_pointer;
+            typedef T                                           value_type;
+            typedef Alloc                                       allocator_type;
+            typedef typename allocator_type::reference          reference;
+            typedef typename allocator_type::const_reference    const_reference;
+            typedef typename allocator_type::pointer            pointer;
+            typedef typename allocator_type::const_pointer      const_pointer;
             // should be convertable to const
-            typedef typename ft::random_access_iterator<T> iterator;
-            //typedef ft::random_access_iterator<T>   iterator;
+            typedef typename ft::random_access_iterator<T>      iterator;
             // const in the right place?? cannot be convertable to non-const
-            //typedef typename std::iterator<std::random_access_iterator_tag, value_type>         const_iterator;
-            //typedef typename std::reverse_iterator<iterator>                                    reverse_iterator;
-            //typedef typename std::reverse_iterator<const_iterator>                              const_reverse_iterator;
-            typedef ptrdiff_t                                                                   difference_type;
-            typedef size_t                                                                      size_type;
+            /* Constant iterators are iterators that do not fulfill the requirements of an output iterator;
+            *  Dereferencing them yields a reference to a constant element (such as const T&).
+            */
+            typedef const iterator                              const_iterator;
+            // should be convertable to const
+            typedef typename ft::reverse_iterator<iterator>     reverse_iterator;
+            // const in the right place?? cannot be convertable to non-const
+            typedef const reverse_iterator                      const_reverse_iterator;
+            typedef ptrdiff_t                                   difference_type;
+            typedef size_t                                      size_type;
 
 
             // CONSTRUCTORS / DESTRUCTOR
@@ -170,13 +85,13 @@ namespace ft {
 
             // ITERATORS
             iterator                begin() { return (iterator(_begin)); }
-            //cons_iterator           begin() const { return (iterator(const begin)); }
+            const_iterator          begin() const { return (const_iterator(_begin)); }
             iterator                end() { return (iterator(_end)); }
-            //const_iterator          end() const { return (iterator(const end)); }
-            /*reverse_iterator        rbegin() {}
-            const_reverse_iterator  rbegin() const {}
-            reverse_iterator        rend() {}
-            const_reverse_iterator  rend() const {}*/
+            const_iterator          end() const { return (const_iterator(_end)); }
+            reverse_iterator        rbegin() { return (reverse_iterator(_end)); }
+            const_reverse_iterator  rbegin() const { return (const_reverse_iterator(_end)); }
+            reverse_iterator        rend() { return (reverse_iterator(_begin)); }
+            const_reverse_iterator  rend() const { return (const_reverse_iterator(_begin)); }
 
 
             // CAPACITY

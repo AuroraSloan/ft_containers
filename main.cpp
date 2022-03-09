@@ -50,9 +50,23 @@ void vector_tests(std::string testName)
 
 }
 
+void test_rev_it(void) {
+    std::vector<int> vec(10);
+    vec.push_back(10);
+    vec.push_back(11);
+    vec.push_back(12);
+    vec.push_back(13);
+    vec.push_back(14);
+    std::vector<int>::reverse_iterator revit = vec.rbegin();
+    std::cout << *revit << '\n';
+    revit--;
+    std::cout << *revit << '\n';
+}
+
 int main(void)
 {
     vector_tests(" Vector Tests ");
+    test_rev_it();
     //stack_tests(" Stack Tests ");
     //map_tests(" Map Tests ");
 
@@ -68,7 +82,9 @@ int main(void)
     std::cout << (it - e) << '\n';;
     std::cout << *(it + 1) << '\n';
     std::cout << "str vector\n";*/
-    std::vector<std::string> sstdvec(4, "hey");
+
+
+    /*std::vector<std::string> sstdvec(4, "hey");
     sstdvec.push_back("bye");
     std::vector<std::string>::iterator sit = sstdvec.begin();
     std::vector<std::string>::iterator se = sstdvec.end();
@@ -76,7 +92,7 @@ int main(void)
     std::cout << *sit + "yes" << '\n';
     std::cout << *sit << '\n';
     std::cout << *--se << '\n';
-    std::cout << *sit + *se << '\n';
+    std::cout << *sit + *se << '\n';*/
 
    // std::cout << (it + e) << '\n';
     //std::cout << "std size: " << stdvec.size() << std::endl;

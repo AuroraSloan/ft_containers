@@ -33,5 +33,108 @@ namespace ft {
         typedef typename std::random_access_iterator_tag const      iterator_category;
     };
 
+    // RANDOM ACCESS ITERATOR
+    template <typename T>
+    class random_access_iterator : public std::iterator<std::random_access_iterator_tag, T> {
+    private:
+
+        typedef typename ft::iterator_traits<T*>::difference_type       difference_type;
+        typedef typename ft::iterator_traits<T*>::value_type            value_type;
+        typedef typename ft::iterator_traits<T*>::pointer               pointer;
+        typedef typename ft::iterator_traits<T*>::reference             reference;
+        typedef typename ft::iterator_traits<T*>::iterator_category     iterator_category;
+        pointer _data;
+
+    public:
+        random_access_iterator(void) : _data(NULL) {}
+        random_access_iterator(value_type *x) : _data(x) {}
+        random_access_iterator(random_access_iterator const & src) : _data(src._data) {}
+        ~random_access_iterator(void) {}
+
+        bool operator==(random_access_iterator const &rhs) const { return (_data == rhs._data); }
+        bool operator!=(random_access_iterator const &rhs) const { return (_data != rhs._data); }
+
+        reference   operator*() { return (*_data); }
+        pointer     operator->() { return (_data); }
+
+        random_access_iterator const & operator=(random_access_iterator const &rhs) {
+            if (this != &rhs)
+                _data = rhs._data;
+            return (*this);
+        }
+
+        random_access_iterator & operator++(void) {
+            ++_data;
+            return (*this);
+        }
+
+        random_access_iterator operator++(T) {
+            random_access_iterator tmp(*this);
+            _data++;
+            //operator++();
+            return tmp;
+        }
+        /*random_access_iterator * operator++(T*) {
+            random_access_iterator tmp(*this);
+            *_data++;
+            //operator++();
+            return tmp;
+        }*/
+        random_access_iterator & operator--(void) {
+            --_data;
+            return (*this);
+        }
+
+        random_access_iterator operator--(T) {
+            random_access_iterator tmp(*this);
+            _data--;
+            //operator++();
+            return tmp;
+        }
+        /*random_access_iterator * operator--(T*) {
+            random_access_iterator tmp(*this);
+            *_data--;
+            //operator--();
+            return tmp;
+        }*/
+        //       random_access_iterator operator
+
+        random_access_iterator operator+(difference_type x) { return (_data + x); }
+        random_access_iterator operator+(random_access_iterator const & rhs) { return (*_data + *rhs._data); }
+        random_access_iterator operator-(difference_type x) { return (_data - x); }
+        random_access_iterator operator-(random_access_iterator const & rhs) { return (*_data - *rhs._data); }
+
+        bool operator<(random_access_iterator const & rhs) { return (*_data < *rhs._data); }
+        bool operator>(random_access_iterator const & rhs) { return (*_data > *rhs._data); }
+        bool operator<=(random_access_iterator const & rhs) { return (*_data <= *rhs._data); }
+        bool operator>=(random_access_iterator const & rhs) { return (*_data >= *rhs._data); }
+
+        random_access_iterator const & operator+=(random_access_iterator const &rhs) {
+            _data += rhs._data;
+            return (*this);
+        }
+        random_access_iterator const & operator-=(random_access_iterator const &rhs) {
+            _data -= rhs._data;
+            return (*this);
+        }
+
+        reference   operator[](difference_type i) const { return (*(_data + i)); }
+    };
+
+    template <typename Iterator>
+    class reverse_iterator {
+
+        typedef Iterator                                                    iterator_type;
+        typedef typename ft::iterator_traits<Iterator>::difference_type     difference_type;
+        typedef typename ft::iterator_traits<Iterator>::value_type          value_type;
+        typedef typename ft::iterator_traits<Iterator>::pointer             pointer;
+        typedef typename ft::iterator_traits<Iterator>::reference           reference;
+        typedef typename ft::iterator_traits<Iterator>::iterator_category   iterator_category;
+        pointer _data;
+
+        reverse_iterator(void) : _data(NULL) {}
+//        explicit reverse_iterator(iterator_type it) : _data()
+
+    };
 }
 #endif
