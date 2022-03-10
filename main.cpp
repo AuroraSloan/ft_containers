@@ -51,22 +51,55 @@ void vector_tests(std::string testName)
 }
 
 void test_rev_it(void) {
-    std::vector<int> vec(10);
+    std::vector<int> vec;
+    ft::vector<int> myvec(10, 10);
     vec.push_back(10);
     vec.push_back(11);
     vec.push_back(12);
     vec.push_back(13);
     vec.push_back(14);
-    std::vector<int>::reverse_iterator revit = vec.rbegin();
-    std::cout << *revit << '\n';
-    revit--;
-    std::cout << *revit << '\n';
+    std::vector<int>::reverse_iterator begin = vec.rbegin();
+    ft::vector<int>::reverse_iterator mybegin = myvec.rbegin();
+    std::vector<int>::reverse_iterator tbegin(vec.begin());
+    ft::vector<int>::reverse_iterator mytbegin(myvec.begin());
+    std::cout << "begin: " << *begin << " tbegin: " << *tbegin << '\n';
+    begin++;
+    tbegin--;
+    std::cout << "begin: " << *begin << " tbegin: " << *tbegin << '\n';
+    begin++;
+    tbegin--;
+    std::cout << "begin: " << *begin << " tbegin: " << *tbegin << '\n';
+    std::vector<int>::reverse_iterator end = vec.rend();
+    std::cout << *end << '\n';
 }
 
 int main(void)
 {
     vector_tests(" Vector Tests ");
-    test_rev_it();
+    //test_rev_it();
+    std::vector<int> stdvec;
+    ft::vector<int> ftvec;
+    ft::vector<int> ftvec2(1);
+    std::vector<int> stdvec2(1);
+    ft::vector<int> ftvec3(1, 1);
+    std::vector<int> stdvec3(1, 1);
+/*    std::cout << "std: " << stdvec.empty() << " ft: " << ftvec.empty() << '\n';
+    std::cout << "std: " << stdvec2.empty() << " ft: " << ftvec2.empty() << '\n';
+    std::cout << "std: " << stdvec3.empty() << " ft: " << ftvec3.empty() << '\n';
+    std::cout << "stdsize: " << stdvec3.size() << " ftsize: " << ftvec3.size() << '\n';
+    std::cout << "stdcap: " << stdvec3.capacity() << " ftcap: " << ftvec3.capacity() << '\n';
+    stdvec3.reserve(100);
+    ftvec3.reserve(100);
+    std::cout << "stdsize: " << stdvec3.size() << " ft: " << ftvec3.size() << '\n';
+    std::cout << "stdcap: " << stdvec3.capacity() << " ftcap: " << ftvec3.capacity() << '\n';*/
+    try {
+        std::cout << "std: " << ftvec3.at(50) << '\n';
+    }
+    catch (std::exception const & e) {
+        std::cout << e.what() << '\n';
+    }
+
+//    std::cout << "ft: " << ftvec3[1] << '\n';
     //stack_tests(" Stack Tests ");
     //map_tests(" Map Tests ");
 

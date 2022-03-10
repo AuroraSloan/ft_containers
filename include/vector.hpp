@@ -5,7 +5,9 @@
 # include <iterator>        // std::iterator
 # include <cstddef>         // ptrdiff_t, size_t
 # include <iostream>        // std::cout
+# include <stdexcept>
 # include "iterator.hpp"
+# include "utils.hpp"
 
 namespace ft {
     template<typename T, class Alloc = std::allocator<T> >
@@ -96,18 +98,42 @@ namespace ft {
 
             // CAPACITY
             size_type               size() const { return (_end - _begin); }
-            //size_type               max_size() {/*numeric limits?allocator::max_size?*/}
-            //void                    resize() {}
+            size_type               max_size() { return (_alloc.max_size()); }
+            /*void                    resize(size_type n, value_type val = value_type()) {
+                //inserts and erases
+            }*/
             size_type               capacity() const { return (_cap - _begin); }
-            //bool                    empty() const { return (!size()) }
-            //void                    reserve(size_type n) {}
+            bool                    empty() const { return (!size()); }
+            void                    reserve(size_type n) {
+                pointer     _tmp;
+                size_type   i = 0;
+
+                if (capacity() >= n)
+                    return ;
+                _tmp = _alloc.allocate(n);
+                for(; i < size(); i++)
+                    _alloc.construct(_tmp + i, *(_begin + i));
+                __dealoc(_begin, size());
+
+                _begin = _tmp;
+                _end = _begin + i;
+                _cap = _begin + n;
+            }
 
 
             // ELEMENT ACCESS
-            //reference               operator[](size_type n) {}
-            //const_reference         operator[](size_type n) const {}
-            //reference               at(size_type n) {}
-            //const_reference         at(size_type n) const {}
+            reference               operator[](size_type n) { return (*(_begin + n)); }
+            const_reference         operator[](size_type n) const { return (*(_begin + n)); }
+            reference               at(size_type n) {
+                if (n >= size())
+                    throw std::out_of_range("vector");
+                return (_begin[n]);
+            }
+            const_reference         at(size_type n) const {
+                if (n >= size())
+                    throw std::out_of_range("vector");
+                return (_begin[n]);
+            }
             reference               front() { return (*_begin); }
             const_reference         front() const { return (*_begin); }
             reference               back() { return (*_end); }
