@@ -70,7 +70,7 @@ namespace ft {
             _dealoc(_begin, size());
             _alloc = rhs._alloc;
             _begin = _alloc.allocate(n);
-            _construct(_begin, rhs._begin)
+            _construct(_begin, n, rhs._begin);
             _end = _begin + n;
             _cap = _end;
             return (*this);
@@ -196,13 +196,16 @@ namespace ft {
         void        insert(iterator position, size_type n, value_type const & val) {
             size_type i = 0;
             size_type j = 0;
-            if (_passedMaxCapacity(n)) {
-                pointer _tmp = _alloc.allocate(n * 2);
+            size_type s = size() + n;
+            if (_passedMaxCapacity(s)) {
+                pointer _tmp = _alloc.allocate(s * 2);
                 for(; _begin + i != _end; i++) {
                     if (_begin + i == position) {
                         position = _tmp + i;
-                        _alloc.construct(position, val);
-                        j = 1;
+                        for(size_type k = 0; k < n; k++) {
+                            _alloc.construct(position + j, val);
+                            j++;
+                        }
                         i--;
                     } else {
                         _alloc.construct(_tmp + i + j, *(_begin + i));
@@ -211,25 +214,85 @@ namespace ft {
                 _dealoc(_begin, size());
                 _begin = _tmp;
                 _end = _begin + i + j;
-                _cap = _begin + n * 2;
+                _cap = _begin + s * 2;
             } else {
                 i = 1;
-                _end = _end + i;
-                for (; _end - i != position; i++) {
+                _end = _end + n;
+                for (; _end - i != position + n; i++) {
                     _alloc.destroy(_end - i);
                     _alloc.construct(_end - i, *(_end - (i + 1)));
                 }
-                _alloc.destroy(_end - i);
-                _alloc.construct(_end - i, val);
+                while(n-- > 0) {
+                    _alloc.destroy(_end - i);
+                    _alloc.construct(_end - i, val);
+                }
             }
         }
-       /* template <class InputIterator>
+        template <class InputIterator>// check that Input iterator is compatible with value_type
         void    insert(iterator position, InputIterator first, InputIterator last) {
+            size_type i = 0;
+            size_type j = 0;
+            size_type n = std::distance(first, last);
+            size_type s = size() + n;
+            if (_passedMaxCapacity(s)) {
+                pointer _tmp = _alloc.allocate(s * 2);
+                for(; _begin + i != _end; i++) {
+                    if (_begin + i == position) {
+                        position = _tmp + i;
+                        for(; first != last; first++) {
+                            _alloc.construct(position + j, *first);
+                            j++;
+                        }
+                        i--;
+                    } else {
+                        _alloc.construct(_tmp + i + j, *(_begin + i));
+                    }
+                }
+                _dealoc(_begin, size());
+                _begin = _tmp;
+                _end = _begin + i + j;
+                _cap = _begin + s * 2;
+            } else {
+                i = 1;
+                _end = _end + n;
+                for (; _end - i != position + n; i++) {
+                    _alloc.destroy(_end - i);
+                    _alloc.construct(_end - i, *(_end - (i + 1)));
+                }
+                for(; last != first; last--) {
+                    _alloc.destroy(_end - i);
+                    _alloc.construct(_end - i, *last);
+                }
+            }
         }
-        iterator    erase(iterator position) {}
-        iterator    erase(iterator first, iterator last) {}
-        void        swap(vector & x) {}
-        void        clear() {}*/
+        iterator    erase(iterator position) {
+            for(pointer tmp = position + 1; tmp != _end; tmp++) {
+                _alloc.destroy(position);
+                _alloc.construct(position, *(tmp));
+                position++;
+            }
+            _alloc.destroy(position);
+            _end = position;
+        }
+        iterator    erase(iterator first, iterator last) {
+            for (size_type i = 0; first + i != last; i++)
+                _alloc.destroy(first + i);
+            for(; last != _end; last++) {
+                _alloc.construct(first, *(last));
+                first++;
+            }
+            _end = first;
+        }
+        void        swap(vector & x) {
+           _swap(_begin, x._begin);
+           _swap(_end, x._end);
+           _swap(_cap, x._cap);
+           _swap(_alloc, x._alloc);
+        }
+        void        clear() {
+            while (_end != _begin)
+                _alloc.destroy(--_end);
+        }
 
 
         // ALLOCATOR
@@ -243,10 +306,10 @@ namespace ft {
         allocator_type  _alloc;
 
         void    _dealoc(pointer begin, size_type n) {
-            for(size_type i = 0; i < n; i++)
-                _alloc.destroy(begin + i);
+            clear();
             _alloc.deallocate(begin, n);
         }
+
         size_type   _construct(pointer begin, size_type n, value_type val) {
             size_type i = 0;
 
@@ -260,6 +323,16 @@ namespace ft {
             for(; i < n; i++)
                 _alloc.construct(begin + i, *(src + i));
             return (i);
+        }
+        void    _swap(pointer a, pointer b) {
+            pointer tmp = a;
+            a = b;
+            b = tmp;
+        }
+        void    _swap(allocator_type a, allocator_type b) {
+            allocator_type tmp = a;
+            a = b;
+            b = tmp;
         }
 
         bool    _atMaxCapacity(void) { return (size() == capacity()); }
