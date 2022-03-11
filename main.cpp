@@ -98,6 +98,17 @@ int main(void)
     catch (std::exception const & e) {
         std::cout << e.what() << '\n';
     }
+    std::cout << "NEW TEST\n";
+    stdvec.reserve(50);
+    stdvec.push_back(1);
+    stdvec.push_back(2);
+    stdvec.push_back(3);
+    std::vector<int>::iterator it = stdvec.begin();
+    stdvec.pop_back();
+    for (; it != stdvec.end(); it++)
+        std::cout << "it: " << *it << '\n';
+    it++;
+    std::cout << "MAJOR TEST: " << *it << '\n';
 
 //    std::cout << "ft: " << ftvec3[1] << '\n';
     //stack_tests(" Stack Tests ");
