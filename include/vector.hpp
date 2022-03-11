@@ -106,7 +106,7 @@ namespace ft {
             pointer     _tmp;
             size_type   i = 0;
 
-            if (capacity() >= n)
+            if (!_passedMaxCapacity(n))
                 return ;
             _tmp = _alloc.allocate(n);
             for(; i < size(); i++)
@@ -142,7 +142,7 @@ namespace ft {
         template <class InputIterator>
         void assign(InputIterator first, InputIterator last) {
             size_type dist = std::distance(first, last);
-            if (dist > capacity()) {
+            if (_passedMaxCapacity(dist)) {
                 _dealoc(_begin, size());
                 _begin = _alloc.allocate(dist * 2);
                 _end = _begin + dist;
@@ -151,7 +151,7 @@ namespace ft {
             insert(_begin, first, last);
         }
         void        assign(size_type n, value_type const & val) {
-            if (n > capacity()) {
+            if (_passedMaxCapacity(n)) {
                 _dealoc(_begin, size());
                 _begin = _alloc.allocate(n * 2);
                 _end = _begin + n;
@@ -160,18 +160,49 @@ namespace ft {
             insert(_begin, n, val);
         }
         void        push_back(value_type const & val) {
-            if (size() == capacity())
+            if (_atMaxCapacity())
                 reserve(size() * 2);
             ++_end = val;
         }
         void        pop_back() {
             pointer tmp;
             tmp = _end - 1;
-            alloc.desroy(_end);
+            _alloc.desroy(_end);
             _end = tmp;
         }
-/*        iterator    insert(iterator position, value_type const & val) {}
-        void        insert(iterator position, size_type n, value_type const & val) {}
+        iterator    insert(iterator position, value_type const & val) {
+            size_type i = 0;
+            size_type j = 0;
+            size_type sze = size() * 2;
+            if (_atMaxCapacity()) {
+                pointer _tmp = _alloc.allocate(sze);
+                for(; _begin + i != _end; i++) {
+                    if (_begin + i == position) {
+                        position = _tmp + i;
+                        _alloc.construct(position, val);
+                        j = 1;
+                        i--;
+                    } else {
+                        _alloc.construct(_tmp + i + j, *(_begin + i));
+                    }
+                }
+                _dealoc(_begin, size());
+                _begin = _tmp;
+                _end = _begin + i + j;
+                _cap = _begin + sze * 2;
+            } else {
+                i = 1;
+                _end = _end + i;
+                for (; _end - i != position; i++) {
+                    _alloc.destroy(_end - i);
+                    _alloc.construct(_end - i, *(_end - (i + 1)));
+                }
+                _alloc.destroy(_end - i);
+                _alloc.construct(_end - i, val);
+            }
+            return (position);
+        }
+/*        void        insert(iterator position, size_type n, value_type const & val) {}
         template <class InputIterator>
         void    insert(iterator position, InputIterator first, InputIterator last) {
         }
@@ -196,6 +227,9 @@ namespace ft {
                 _alloc.destroy(begin + i);
             _alloc.deallocate(begin, n);
         }
+
+        bool    _atMaxCapacity(void) { return (size() == capacity()); }
+        bool    _passedMaxCapacity(size_type n) { return (n > capacity()); }
 
     };
 }
