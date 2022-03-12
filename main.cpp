@@ -33,6 +33,13 @@ void vector_tests(std::string testName)
     fttime = vector_construction_timed_tests<ft::vector<int> >();
     print_results(stdtime, fttime);
 
+    // MODIFIER TESTS
+    std::cout << CYAN << '\t' << SUBHDR << "Modifier Tests" << SUBHDR << RESET << '\n';
+    vector_modifier_tests();
+    stdtime = vector_modifier_timed_tests<std::vector<int> >();
+    fttime = vector_modifier_timed_tests<ft::vector<int> >();
+    print_results(stdtime, fttime);
+
     // ITERATOR TESTS
     std::cout << CYAN << '\t' << SUBHDR << "Iterator Tests" << SUBHDR << RESET << '\n';
     vector_iterator_tests();
@@ -77,12 +84,12 @@ int main(void)
 {
     vector_tests(" Vector Tests ");
     //test_rev_it();
-    std::vector<int> stdvec;
+    /*std::vector<int> stdvec;
     ft::vector<int> ftvec;
     ft::vector<int> ftvec2(1);
     std::vector<int> stdvec2(1);
     ft::vector<int> ftvec3(1, 1);
-    std::vector<int> stdvec3(1, 1);
+    std::vector<int> stdvec3(1, 1);*/
 /*    std::cout << "std: " << stdvec.empty() << " ft: " << ftvec.empty() << '\n';
     std::cout << "std: " << stdvec2.empty() << " ft: " << ftvec2.empty() << '\n';
     std::cout << "std: " << stdvec3.empty() << " ft: " << ftvec3.empty() << '\n';
@@ -92,7 +99,7 @@ int main(void)
     ftvec3.reserve(100);
     std::cout << "stdsize: " << stdvec3.size() << " ft: " << ftvec3.size() << '\n';
     std::cout << "stdcap: " << stdvec3.capacity() << " ftcap: " << ftvec3.capacity() << '\n';*/
-    try {
+    /*try {
         std::cout << "std: " << ftvec3.at(50) << '\n';
     }
     catch (std::exception const & e) {
@@ -108,7 +115,7 @@ int main(void)
     for (; it != stdvec.end(); it++)
         std::cout << "it: " << *it << '\n';
     it++;
-    std::cout << "MAJOR TEST: " << *it << '\n';
+    std::cout << "MAJOR TEST: " << *it << '\n';*/
 
 //    std::cout << "ft: " << ftvec3[1] << '\n';
     //stack_tests(" Stack Tests ");
