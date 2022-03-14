@@ -105,15 +105,15 @@ double vector_construction_timed_tests(void) {
 //============================ MODIFIER TESTS ============================//
 
 template <typename VectorClass>
-bool    vector_modifier(void) {
-    ft::vector<int>
+bool    vector_assign(void) {
+
     return (true);
 }
 void    vector_modifier_tests(void) {
 
     // Vector construction
-    std::cout << "vector modifier - ";
-    if (vector_modifier<ft::vector<int> >())
+    std::cout << "vector assign - ";
+    if (vector_assign<ft::vector<int> >())
         std::cout << GREEN << "SUCCESS\n" << RESET;
     else
         std::cout << RED << "FAILURE\n" << RESET;
@@ -126,7 +126,7 @@ double vector_modifier_timed_tests(void) {
     clock_t begin, end;
 
     begin = clock();
-    vector_modifier<Container>();
+    vector_assign<Container>();
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
