@@ -132,7 +132,7 @@ namespace ft {
         // MODIFIERS
         template <class InputIterator>
         void assign(InputIterator first, InputIterator last) {
-            size_type dist = std::distance(first, last);
+            size_type dist = last - first;//std::distance(first, last);
             if (_passedMaxCapacity(dist)) {
                 _dealoc(_begin, size());
                 _begin = _alloc.allocate(dist * 2);
@@ -168,7 +168,7 @@ namespace ft {
             if (_atMaxCapacity()) {
                 pointer _tmp = _alloc.allocate(sze);
                 for(; _begin + i != _end; i++) {
-                    if (_begin + i == position) {
+                    if (_begin + i == position.get_data()) {
                         position = _tmp + i;
                         _alloc.construct(position, val);
                         j = 1;
@@ -232,15 +232,15 @@ namespace ft {
         void    insert(iterator position, InputIterator first, InputIterator last) {
             size_type i = 0;
             size_type j = 0;
-            size_type n = std::distance(first, last);
+            size_type n = last - first;//std::distance(first, last);
             size_type s = size() + n;
             if (_passedMaxCapacity(s)) {
                 pointer _tmp = _alloc.allocate(s * 2);
                 for(; _begin + i != _end; i++) {
-                    if (_begin + i == position) {
+                    if (_begin + i == position.get_data()) {
                         position = _tmp + i;
                         for(; first != last; first++) {
-                            _alloc.construct(position + j, *first);
+                            _alloc.construct(position.get_data() + j, first);
                             j++;
                         }
                         i--;
@@ -255,18 +255,18 @@ namespace ft {
             } else {
                 i = 1;
                 _end = _end + n;
-                for (; _end - i != position + n; i++) {
+                for (; _end - i != position.get_data() + n; i++) {
                     _alloc.destroy(_end - i);
                     _alloc.construct(_end - i, *(_end - (i + 1)));
                 }
                 for(; last != first; last--) {
                     _alloc.destroy(_end - i);
-                    _alloc.construct(_end - i, *last);
+                    _alloc.construct(_end - i, last);
                 }
             }
         }
         iterator    erase(iterator position) {
-            for(pointer tmp = position + 1; tmp != _end; tmp++) {
+            for(pointer tmp = position.get_data() + 1; tmp != _end; tmp++) {
                 _alloc.destroy(position);
                 _alloc.construct(position, *(tmp));
                 position++;

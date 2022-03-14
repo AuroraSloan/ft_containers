@@ -48,7 +48,6 @@ int main(int argc, char **argv)
         print_usage();
     if (strcmp(argv[1], "vector") == 0) {
         std::cout << MAGENTA << HDR << " Vector Tests " << HDR << RESET << '\n';
-        //ft::write(MAGENTA, HDR + " Vector Tests " + HDR + RESET + '\n');
         vector_construction_tests();
         vector_modifier_tests();
         vector_iterator_tests();

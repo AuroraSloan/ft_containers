@@ -7,6 +7,34 @@
 # include <ctime>           //clock
 # include <vector>
 
+template <typename ftContainer, typename stdContainer>
+bool    containers_equal(ftContainer vec, stdContainer comp) {
+
+    typedef typename ftContainer::size_type size_type;
+    typename ftContainer::iterator  vecIterator;
+    typename stdContainer::iterator compIterator;
+
+    //check size
+    size_type vecSize, compSize;
+
+    vecSize = vec.size();
+    compSize = comp.size();
+    if (vecSize != compSize)
+        return (false);
+
+    //check items
+    vecIterator = vec.begin();
+    compIterator = comp.begin();
+
+    for (size_type i = 0; i < vecSize; i++) {
+        //std::cout << "me! " << *(vecIterator + i) << "STD: " << *(compIterator + i) << '\n';
+        if (*(vecIterator + i) != *(compIterator + i))
+            return (false);
+    }
+
+    return (true);
+}
+
 //============================ CONSTRUCTION TESTS ============================//
 template <typename VectorClass>
 bool    containers_equal(VectorClass A, VectorClass B, VectorClass C) {
@@ -109,8 +137,14 @@ void    vector_construction_tests(void) {
 //============================ MODIFIER TESTS ============================//
 
 template <typename VectorClass>
-bool    vector_assign(void) {
+bool    vector_assign(int count, int data) {
+    VectorClass         myvec(count, data);
+    std::vector<int>    comp(count, data);
 
+    myvec.assign(1, 17);
+    comp.assign(1, 17);
+    if (!containers_equal(myvec, comp))
+        return (false);
     return (true);
 }
 
@@ -119,7 +153,7 @@ double vector_modifier_timed_tests(void) {
     clock_t begin, end;
 
     begin = clock();
-    vector_assign<Container>();
+    vector_assign<Container>(10, 100);
     //vector_push_back<Container>();
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
@@ -131,7 +165,7 @@ void    vector_modifier_tests(void) {
     std::cout << CYAN << '\t' << SUBHDR << "Modifier Tests" << SUBHDR << RESET << '\n';
     // ASSIGN
     std::cout << "vector assign - ";
-    if (vector_assign<ft::vector<int> >())
+    if (vector_assign<ft::vector<int> >(10, 100))
         std::cout << GREEN << "SUCCESS\n" << RESET;
     else
         std::cout << RED << "FAILURE\n" << RESET;
