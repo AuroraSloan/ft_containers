@@ -3,6 +3,7 @@
 
 # include "../include/vector.hpp"
 # include "../include/utils.hpp"
+# include "testUtils.hpp"
 # include <ctime>           //clock
 # include <vector>
 
@@ -80,18 +81,6 @@ bool    vector_construction(void)
     return (true);
 }
 
-void    vector_construction_tests(void) {
-
-    // Vector construction
-    std::cout << "vector construction - ";
-    if (vector_construction<ft::vector<int> >())
-        std::cout << GREEN << "SUCCESS\n" << RESET;
-    else
-        std::cout << RED << "FAILURE\n" << RESET;
-    // others
-
-}
-
 template < typename Container >
 double vector_construction_timed_tests(void) {
     clock_t begin, end;
@@ -102,23 +91,27 @@ double vector_construction_timed_tests(void) {
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
 
+void    vector_construction_tests(void) {
+    double stdtime, fttime;
+
+    std::cout << CYAN << '\t' << SUBHDR << "Construction Tests" << SUBHDR << RESET << '\n';
+
+    std::cout << "vector construction - ";
+    if (vector_construction<ft::vector<int> >())
+        std::cout << GREEN << "SUCCESS\n" << RESET;
+    else
+        std::cout << RED << "FAILURE\n" << RESET;
+    stdtime = vector_construction_timed_tests<std::vector<int> >();
+    fttime = vector_construction_timed_tests<ft::vector<int> >();
+    print_results(stdtime, fttime);
+}
+
 //============================ MODIFIER TESTS ============================//
 
 template <typename VectorClass>
 bool    vector_assign(void) {
 
     return (true);
-}
-void    vector_modifier_tests(void) {
-
-    // Vector construction
-    std::cout << "vector assign - ";
-    if (vector_assign<ft::vector<int> >())
-        std::cout << GREEN << "SUCCESS\n" << RESET;
-    else
-        std::cout << RED << "FAILURE\n" << RESET;
-    // others
-
 }
 
 template < typename Container >
@@ -127,10 +120,33 @@ double vector_modifier_timed_tests(void) {
 
     begin = clock();
     vector_assign<Container>();
+    //vector_push_back<Container>();
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
 
+void    vector_modifier_tests(void) {
+    double stdtime, fttime;
+
+    std::cout << CYAN << '\t' << SUBHDR << "Modifier Tests" << SUBHDR << RESET << '\n';
+    // ASSIGN
+    std::cout << "vector assign - ";
+    if (vector_assign<ft::vector<int> >())
+        std::cout << GREEN << "SUCCESS\n" << RESET;
+    else
+        std::cout << RED << "FAILURE\n" << RESET;
+
+    // PUSH_BACK
+    /*std::cout << "vector push_back - ";
+    if (vector_push_back<ft::vector<int> >())
+        std::cout << GREEN << "SUCCESS\n" << RESET;
+    else
+        std::cout << RED << "FAILURE\n" << RESET;*/
+
+    stdtime = vector_modifier_timed_tests<std::vector<int> >();
+    fttime = vector_modifier_timed_tests<ft::vector<int> >();
+    print_results(stdtime, fttime);
+}
 //============================ ITERATOR TESTS ============================//
 template <typename VectorClass>
 bool    vector_iterator_construction(int count, int data)
@@ -155,18 +171,6 @@ bool    vector_iterator_construction(int count, int data)
     return (true);
 }
 
-void    vector_iterator_tests(void) {
-
-    // Vector iterator construction
-    std::cout << "vector iterator construction - ";
-    if (vector_iterator_construction<ft::vector<int> >(4, 100))
-        std::cout << GREEN << "SUCCESS\n" << RESET;
-    else
-        std::cout << RED << "FAILURE\n" << RESET;
-    // others
-
-}
-
 template < typename Container >
 double vector_iterator_timed_tests(void) {
     clock_t begin, end;
@@ -177,6 +181,29 @@ double vector_iterator_timed_tests(void) {
     // others
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
+}
+
+void    vector_iterator_tests(void) {
+    double stdtime, fttime;
+
+    std::cout << CYAN << '\t' << SUBHDR << "Iterator Tests" << SUBHDR << RESET << '\n';
+
+    // Vector iterator construction
+    std::cout << "vector iterator construction - ";
+    if (vector_iterator_construction<ft::vector<int> >(4, 100))
+        std::cout << GREEN << "SUCCESS\n" << RESET;
+    else
+        std::cout << RED << "FAILURE\n" << RESET;
+/*    // others
+    std::cout << "vector iterator construction - ";
+    if (vector_iterator_construction<ft::vector<int> >(4, 100))
+        std::cout << GREEN << "SUCCESS\n" << RESET;
+    else
+        std::cout << RED << "FAILURE\n" << RESET;*/
+
+    stdtime = vector_iterator_timed_tests<std::vector<int> >();
+    fttime = vector_iterator_timed_tests<ft::vector<int> >();
+    print_results(stdtime, fttime);
 }
 
 #endif

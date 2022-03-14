@@ -5,57 +5,8 @@
 #include "tests/vectorTests.hpp"
 #include <iostream>
 #include <vector>
+#include <cstring> //strcmp
 
-
-void print_results(double stdtime, double fttime)
-{
-    if (stdtime < fttime)
-    {
-        int ratio = (int)(fttime/stdtime);
-        std::string color = ratio > 20 ? RED : YELLOW;
-        ft::write(color + std::string("std is "), ratio, "x faster");
-    }
-    else
-        ft::write(GREEN + std::string("ft is "), (int)(stdtime/fttime), "x faster");
-    std::cout << "\t[std: " << stdtime * 1000 << "ms] " << "[ft: " << fttime * 1000 << "ms]\n";
-}
-
-void vector_tests(std::string testName)
-{
-    double stdtime, fttime;
-
-    ft::write(MAGENTA, HDR + testName + HDR + RESET + '\n');
-
-    // CONSTRUCTION TESTS
-    std::cout << CYAN << '\t' << SUBHDR << "Construction Tests" << SUBHDR << RESET << '\n';
-    vector_construction_tests();
-    stdtime = vector_construction_timed_tests<std::vector<int> >();
-    fttime = vector_construction_timed_tests<ft::vector<int> >();
-    print_results(stdtime, fttime);
-
-    // MODIFIER TESTS
-    std::cout << CYAN << '\t' << SUBHDR << "Modifier Tests" << SUBHDR << RESET << '\n';
-    vector_modifier_tests();
-    stdtime = vector_modifier_timed_tests<std::vector<int> >();
-    fttime = vector_modifier_timed_tests<ft::vector<int> >();
-    print_results(stdtime, fttime);
-
-    // ITERATOR TESTS
-    std::cout << CYAN << '\t' << SUBHDR << "Iterator Tests" << SUBHDR << RESET << '\n';
-    vector_iterator_tests();
-    stdtime = vector_iterator_timed_tests<std::vector<int> >();
-    fttime = vector_iterator_timed_tests<ft::vector<int> >();
-    print_results(stdtime, fttime);
-
-    // CAPACITY TESTS
-
-    // ELEMENT ACCESS TESTS
-
-    // MODIFIER TESTS
-
-    // ALLOCATOR AND NON-MEMBER FUNCTION OVERLOAD TESTS
-
-}
 
 void test_rev_it(void) {
     std::vector<int> vec;
@@ -80,9 +31,33 @@ void test_rev_it(void) {
     std::cout << *end << '\n';
 }
 
-int main(void)
+bool    valid_arg(std::string arg) {
+    return (arg == "vector" || arg == "stack" || arg == "map");
+}
+
+void print_usage(void) {
+    std::cout << "usage: ./ft_containers <test name>\n"
+    << "available tests:\nvector\nstack\nmap\n";
+
+    exit(EXIT_FAILURE);
+}
+
+int main(int argc, char **argv)
 {
-    vector_tests(" Vector Tests ");
+    if (argc != 2 || !valid_arg(argv[1]))
+        print_usage();
+    if (strcmp(argv[1], "vector") == 0) {
+        std::cout << MAGENTA << HDR << " Vector Tests " << HDR << RESET << '\n';
+        //ft::write(MAGENTA, HDR + " Vector Tests " + HDR + RESET + '\n');
+        vector_construction_tests();
+        vector_modifier_tests();
+        vector_iterator_tests();
+        //vector_capacity_tests();
+        //vector_elementAccess_tests();
+        //vector_other_tests();
+    }
+    exit(EXIT_SUCCESS);
+
     //test_rev_it();
     /*std::vector<int> stdvec;
     ft::vector<int> ftvec;
@@ -166,6 +141,4 @@ int main(void)
     ft::stack<int> stack;
     std::cout << stack.var << std::endl;*/
 
-
-    return (0);
 }
