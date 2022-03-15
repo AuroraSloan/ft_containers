@@ -40,13 +40,11 @@ namespace ft {
         // CONSTRUCTORS / DESTRUCTOR
         explicit vector(allocator_type const & alloc = allocator_type()) : _begin(NULL), _end(NULL), _alloc(alloc) {}
         explicit vector(size_type n, value_type const & val = value_type(), allocator_type const & alloc = allocator_type()) : _alloc(alloc) {
-            _begin = _alloc.allocate(n);
-            _construct(_begin, n, val);
-            _end = _begin + n;
-            _cap = _end;
+            _allocate(n);
+            _construct(_end, n, val);
         }
         ~vector() {
-            _dealoc(_begin, size());
+            _dealoc(_begin, capacity());
         }
         /*template <class InputIterator>
         * ///////NEED TO ADD TESTS TO VECTOR CONSTRUCTOR TESTESt a
@@ -54,25 +52,19 @@ namespace ft {
 
         }*/
         vector(vector const & x) : _alloc(allocator_type()) {
-            size_type   n = x.size();
-
-            _begin = _alloc.allocate(n);
-            _construct(_begin, n, x._begin);
-            _end = _begin + n;
-            _cap = _end;
+            size_type x_size = x.size();
+            _allocate(x_size);
+            _construct(_end, x_size, x._begin);
         }
 
         vector& operator=(const vector& rhs) {
-            size_type   n = rhs.size();
-
-            if (this == &rhs)
-                return (*this);
-            _dealoc(_begin, size());
-            _alloc = rhs._alloc;
-            _begin = _alloc.allocate(n);
-            _construct(_begin, n, rhs._begin);
-            _end = _begin + n;
-            _cap = _end;
+            size_type rhs_size = rhs.size();
+            if (this != &rhs) {
+                _alloc = rhs._alloc;
+                _dealoc(_begin, size());
+                _allocate(rhs_size);
+                _construct(_end, rhs_size, rhs._begin);
+            }
             return (*this);
         }
 
@@ -88,14 +80,15 @@ namespace ft {
 
 
         // CAPACITY
-        size_type               size() const { return (_end - _begin); }
+        difference_type         size() const { return (_end - _begin); }
         size_type               max_size() { return (_alloc.max_size()); }
         /*void                    resize(size_type n, value_type val = value_type()) {
         //inserts and erases
         }*/
-        size_type               capacity() const { return (_cap - _begin); }
+        difference_type         capacity() const { return (_cap - _begin); }
         bool                    empty() const { return (!size()); }
         void                    reserve(size_type n) {
+            // try to use _dealloc _alloc and _construct later
             pointer     _tmp;
             size_type   i;
 
@@ -132,23 +125,23 @@ namespace ft {
         // MODIFIERS
         template <class InputIterator>
         void assign(InputIterator first, InputIterator last) {
-            size_type dist = last - first;//std::distance(first, last);
+            size_type dist = std::distance(first, last);
             if (_passedMaxCapacity(dist)) {
                 _dealoc(_begin, size());
-                _begin = _alloc.allocate(dist * 2);
-                _end = _begin + dist;
-                _cap = _begin + (dist * 2);
+                _allocate(dist * 2);
+            } else {
+                clear();
             }
-            insert(_begin, first, last);
+            _construct(_end, dist, first);
         }
         void        assign(size_type n, value_type const & val) {
             if (_passedMaxCapacity(n)) {
-                _dealoc(_begin, size());
-                _begin = _alloc.allocate(n * 2);
-                _end = _begin + n;
-                _cap = _begin + (n * 2);
+                _dealoc(_begin, capacity());
+                _allocate(n);
+            } else {
+                clear();
             }
-            insert(_begin, n, val);
+            _construct(_end, n, val);
         }
         void        push_back(value_type const & val) {
             if (_atMaxCapacity())
@@ -305,38 +298,51 @@ namespace ft {
         pointer         _cap;
         allocator_type  _alloc;
 
-        void    _dealoc(pointer begin, size_type n) {
+        void    _dealoc(pointer & begin, size_type n) {
             clear();
             _alloc.deallocate(begin, n);
         }
+        void    _allocate(size_type n) {
+            _begin = _alloc.allocate(n);
+            _end = _begin;
+            _cap = _begin + n;
+        }
 
-        size_type   _construct(pointer begin, size_type n, value_type val) {
+        size_type   _construct(pointer & start, size_type n, value_type val) {
             size_type i = 0;
 
             for(; i < n; i++)
-                _alloc.construct(begin + i, val);
+                _alloc.construct(start++, val);
             return (i);
         }
-        size_type   _construct(pointer begin, size_type n, pointer src) {
+        size_type   _construct(pointer & start, size_type n, pointer src) {
             size_type i = 0;
 
             for(; i < n; i++)
-                _alloc.construct(begin + i, *(src + i));
+                _alloc.construct(start++, *(src + i));
             return (i);
         }
-        void    _swap(pointer a, pointer b) {
+//        template <typename InputIterator>
+        difference_type _construct(pointer & start, difference_type n, iterator src) {
+            difference_type i = 0;
+
+            for(; i < n; i++)
+                _alloc.construct(start++, *(src + i));
+            return (i);
+        }
+        void    _swap(pointer & a, pointer & b) {
             pointer tmp = a;
             a = b;
             b = tmp;
         }
-        void    _swap(allocator_type a, allocator_type b) {
+        void    _swap(allocator_type & a, allocator_type & b) {
             allocator_type tmp = a;
             a = b;
             b = tmp;
         }
 
         bool    _atMaxCapacity(void) { return (size() == capacity()); }
-        bool    _passedMaxCapacity(size_type n) { return (n > capacity()); }
+        bool    _passedMaxCapacity(difference_type n) { return (n > capacity()); }
 
     };
 }

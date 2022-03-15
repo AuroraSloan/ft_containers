@@ -8,7 +8,7 @@
 # include <vector>
 
 template <typename ftContainer, typename stdContainer>
-bool    containers_equal(ftContainer vec, stdContainer comp) {
+bool    containers_equal(ftContainer & vec, stdContainer & comp) {
 
     typedef typename ftContainer::size_type size_type;
     typename ftContainer::iterator  vecIterator;
@@ -19,6 +19,7 @@ bool    containers_equal(ftContainer vec, stdContainer comp) {
 
     vecSize = vec.size();
     compSize = comp.size();
+    std::cout << "mysieze: " << vecSize << " std sieze: " << compSize << '\n';
     if (vecSize != compSize)
         return (false);
 
@@ -27,17 +28,15 @@ bool    containers_equal(ftContainer vec, stdContainer comp) {
     compIterator = comp.begin();
 
     for (size_type i = 0; i < vecSize; i++) {
-        //std::cout << "me! " << *(vecIterator + i) << "STD: " << *(compIterator + i) << '\n';
         if (*(vecIterator + i) != *(compIterator + i))
             return (false);
     }
-
     return (true);
 }
 
 //============================ CONSTRUCTION TESTS ============================//
 template <typename VectorClass>
-bool    containers_equal(VectorClass A, VectorClass B, VectorClass C) {
+bool    containers_equal(VectorClass & A, VectorClass & B, VectorClass & C) {
 
     typedef typename VectorClass::size_type size_type;
     typedef typename VectorClass::iterator  iterator;
@@ -62,8 +61,6 @@ bool    containers_equal(VectorClass A, VectorClass B, VectorClass C) {
             || *(Biterator + i) != *(Citerator + i))
             return (false);
     }
-
-
     return (true);
 }
 
@@ -97,7 +94,6 @@ bool    vector_construction(void)
     sizeXdataEQ = sizeXdataCP;
     largeEQ = largeCP;
     dflt = sizeXdataCP;
-
     if (!containers_equal(empty, emptyCP, emptyEQ)
         || !containers_equal(emptyXdata, emptyXdataCP, emptyXdataEQ)
         || !containers_equal(sizeOnly, sizeOnlyCP, sizeOnlyEQ)
@@ -105,7 +101,6 @@ bool    vector_construction(void)
         || !containers_equal(large, largeCP, largeEQ)
         || !containers_equal(dflt, sizeXdata, sizeXdataEQ))
         return (false);
-
     return (true);
 }
 
@@ -123,7 +118,6 @@ void    vector_construction_tests(void) {
     double stdtime, fttime;
 
     std::cout << CYAN << '\t' << SUBHDR << "Construction Tests" << SUBHDR << RESET << '\n';
-
     std::cout << "vector construction - ";
     if (vector_construction<ft::vector<int> >())
         std::cout << GREEN << "SUCCESS\n" << RESET;
@@ -137,12 +131,37 @@ void    vector_construction_tests(void) {
 //============================ MODIFIER TESTS ============================//
 
 template <typename VectorClass>
-bool    vector_assign(int count, int data) {
-    VectorClass         myvec(count, data);
-    std::vector<int>    comp(count, data);
+bool    vector_assign() {
+    typedef typename VectorClass::size_type size_type;
+    VectorClass         myvec(10, 100);
+    std::vector<int>    comp(10, 100);
 
-    myvec.assign(1, 17);
-    comp.assign(1, 17);
+    // void  assign(size_type n, value_type const & val)
+    myvec.assign(10, size_type(35));
+    comp.assign(10, size_type(35));
+    if (!containers_equal(myvec, comp))
+        return (false);
+    myvec.assign(1, size_type(3700));
+    comp.assign(1, size_type(3700));
+    if (!containers_equal(myvec, comp))
+        return (false);
+    myvec.assign(100, size_type(17));
+    comp.assign(100, size_type(17));
+    if (!containers_equal(myvec, comp))
+        return (false);
+
+    //template <class InputIterator>
+    //void assign(InputIterator first, InputIterator last)
+    VectorClass         newvec(30, 7);
+    std::vector<int>    newcomp(30, 7);
+
+    typename VectorClass::iterator vecs = newvec.begin();
+    typename VectorClass::iterator vece = newvec.end();
+    std::vector<int>::iterator comps = newcomp.begin();
+    std::vector<int>::iterator compe = newcomp.end();
+    myvec.assign(vecs, vece);
+    newcomp.assign(comps, compe);
+    std::cout << "look here\n";
     if (!containers_equal(myvec, comp))
         return (false);
     return (true);
@@ -153,19 +172,19 @@ double vector_modifier_timed_tests(void) {
     clock_t begin, end;
 
     begin = clock();
-    vector_assign<Container>(10, 100);
+    vector_assign<Container>();
     //vector_push_back<Container>();
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
 
 void    vector_modifier_tests(void) {
-    double stdtime, fttime;
+    double stdtime = 0, fttime = 0;
 
     std::cout << CYAN << '\t' << SUBHDR << "Modifier Tests" << SUBHDR << RESET << '\n';
     // ASSIGN
     std::cout << "vector assign - ";
-    if (vector_assign<ft::vector<int> >(10, 100))
+    if (vector_assign<ft::vector<int> >())
         std::cout << GREEN << "SUCCESS\n" << RESET;
     else
         std::cout << RED << "FAILURE\n" << RESET;
