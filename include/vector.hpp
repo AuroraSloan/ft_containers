@@ -38,7 +38,7 @@ namespace ft {
         typedef size_t                                      size_type;
 
         // CONSTRUCTORS / DESTRUCTOR
-        explicit vector(allocator_type const & alloc = allocator_type()) : _begin(NULL), _end(NULL), _alloc(alloc) {}
+        explicit vector(allocator_type const & alloc = allocator_type()) : _begin(NULL), _end(NULL), _cap(NULL), _alloc(alloc) {}
         explicit vector(size_type n, value_type const & val = value_type(), allocator_type const & alloc = allocator_type()) : _alloc(alloc) {
             _allocate(n);
             _construct(_end, n, val);
@@ -95,7 +95,7 @@ namespace ft {
             if (!_passedMaxCapacity(n))
                 return ;
             _tmp = _alloc.allocate(n);
-            i = _construct(_tmp, size(), _begin);
+            i = _construct_from_begin(_tmp, size(), _begin);
             _dealoc(_begin, size());
             _begin = _tmp;
             _end = _begin + i;
@@ -123,7 +123,7 @@ namespace ft {
 
 
         // MODIFIERS
-        template <class InputIterator>
+        template <class InputIterator> //====NEED TO CHECK FOR AT LEAST FORWARD ITERATOR====//
         void assign(InputIterator first, InputIterator last) {
             size_type dist = std::distance(first, last);
             if (_passedMaxCapacity(dist)) {
@@ -145,8 +145,9 @@ namespace ft {
         }
         void        push_back(value_type const & val) {
             if (_atMaxCapacity())
-                reserve(size() * 2);
-            ++_end = val;
+                reserve((size() == 0 ? 1 : size()) * 2);
+            //*(_end++) = val;
+            *(_end++) = val;
         }
         void        pop_back() {
             pointer tmp;
@@ -321,6 +322,14 @@ namespace ft {
                 _alloc.construct(start++, *(src + i));
             return (i);
         }
+        size_type   _construct_from_begin(pointer & start, size_type n, pointer src) {
+            size_type i = 0;
+            for(; i < n; i++) {
+                _alloc.destroy(start + i);
+                _alloc.construct(start + i, *(src + i));
+            }
+            return (i);
+        }
 //        template <typename InputIterator>
         difference_type _construct(pointer & start, difference_type n, iterator src) {
             difference_type i = 0;
@@ -328,14 +337,14 @@ namespace ft {
                 _alloc.construct(start++, *(src + i));
             return (i);
         }
-        difference_type _construct_from_begin(pointer & start, difference_type n, iterator src) {
+        /*difference_type _construct_from_begin(pointer & start, difference_type n, iterator src) {
             difference_type i = 0;
             for(; i < n; i++) {
                 _alloc.destroy(start + i);
                 _alloc.construct(start + i, *(src + i));
             }
             return (i);
-        }
+        }*/
         void    _swap(pointer & a, pointer & b) {
             pointer tmp = a;
             a = b;

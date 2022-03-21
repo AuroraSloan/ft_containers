@@ -16,19 +16,26 @@ bool    containers_equal(ftContainer & vec, stdContainer & comp) {
 
     //check size
     size_type vecSize, compSize;
-
     vecSize = vec.size();
     compSize = comp.size();
     if (vecSize != compSize)
         return (false);
 
+   /* if ((unsigned long)vec.capacity() != comp.capacity())
+        std::cout << "my capacity " << vec.capacity() << " comp capacity " << comp.capacity() << '\n';*/
+
     //check items
     vecIterator = vec.begin();
     compIterator = comp.begin();
-
     for (size_type i = 0; i < vecSize; i++) {
         if (*(vecIterator + i) != *(compIterator + i))
             return (false);
+    }
+    while (vecIterator != vec.end() && compIterator != comp.end()) {
+        if ((*(vecIterator) != *(compIterator)) || vecIterator == vec.end() || compIterator == comp.end())
+            return (false);
+        vecIterator++;
+        compIterator++;
     }
     return (true);
 }
@@ -175,6 +182,45 @@ bool    vector_assign() {
         return (false);
     return (true);
 }
+template <typename VectorClass>
+bool    vector_push_back() {
+//    typedef typename VectorClass::size_type size_type;
+    VectorClass         myvec;
+    std::vector<int>    comp;
+
+    myvec.push_back(4444);
+    comp.push_back(4444);
+    if (!containers_equal(myvec, comp))
+        return (false);
+    for (int i = 0; i < 50; i++) {
+        myvec.push_back(i);
+        comp.push_back(i);
+    }
+    if (!containers_equal(myvec, comp))
+        return (false);
+
+    return (true);
+}
+
+template <typename VectorClass>
+bool    vector_pop_back() {
+//    typedef typename VectorClass::size_type size_type;
+    VectorClass         myvec;
+    std::vector<int>    comp;
+
+/*    myvec.push_back(4444);
+    comp.push_back(4444);
+    if (!containers_equal(myvec, comp))
+        return (false);
+    for (int i = 0; i < 50; i++) {
+        myvec.push_back(i);
+        comp.push_back(i);
+    }
+    if (!containers_equal(myvec, comp))
+        return (false);*/
+
+    return (true);
+}
 
 template < typename Container >
 double vector_modifier_timed_tests(void) {
@@ -182,7 +228,8 @@ double vector_modifier_timed_tests(void) {
 
     begin = clock();
     vector_assign<Container>();
-    //vector_push_back<Container>();
+    vector_push_back<Container>();
+    //vector_pop_back<Container>()
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
@@ -191,6 +238,7 @@ void    vector_modifier_tests(void) {
     double stdtime = 0, fttime = 0;
 
     std::cout << CYAN << '\t' << SUBHDR << "Modifier Tests" << SUBHDR << RESET << '\n';
+
     // ASSIGN
     std::cout << "vector assign - ";
     if (vector_assign<ft::vector<int> >())
@@ -199,8 +247,15 @@ void    vector_modifier_tests(void) {
         std::cout << RED << "FAILURE\n" << RESET;
 
     // PUSH_BACK
-    /*std::cout << "vector push_back - ";
+    std::cout << "vector push_back - ";
     if (vector_push_back<ft::vector<int> >())
+        std::cout << GREEN << "SUCCESS\n" << RESET;
+    else
+        std::cout << RED << "FAILURE\n" << RESET;
+
+    // POP_BACK
+/*    std::cout << "vector pop_back - ";
+    if (vector_pop_back<ft::vector<int> >())
         std::cout << GREEN << "SUCCESS\n" << RESET;
     else
         std::cout << RED << "FAILURE\n" << RESET;*/
