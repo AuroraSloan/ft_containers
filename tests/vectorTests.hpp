@@ -19,7 +19,6 @@ bool    containers_equal(ftContainer & vec, stdContainer & comp) {
 
     vecSize = vec.size();
     compSize = comp.size();
-    std::cout << "mysieze: " << vecSize << " std sieze: " << compSize << '\n';
     if (vecSize != compSize)
         return (false);
 
@@ -160,8 +159,18 @@ bool    vector_assign() {
     std::vector<int>::iterator comps = newcomp.begin();
     std::vector<int>::iterator compe = newcomp.end();
     myvec.assign(vecs, vece);
-    newcomp.assign(comps, compe);
-    std::cout << "look here\n";
+    comp.assign(comps, compe);
+    if (!containers_equal(myvec, comp))
+        return (false);
+
+    VectorClass         largervec(400, 987654);
+    std::vector<int>    largercomp(400, 987654);
+    vecs = largervec.begin();
+    vece = largervec.end();
+    comps = largercomp.begin();
+    compe = largercomp.end();
+    myvec.assign(vecs, vece);
+    comp.assign(comps, compe);
     if (!containers_equal(myvec, comp))
         return (false);
     return (true);

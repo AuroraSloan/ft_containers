@@ -129,7 +129,7 @@ namespace ft {
             if (_passedMaxCapacity(dist)) {
                 _dealoc(_begin, size());
                 _allocate(dist * 2);
-            } else {
+            }else {
                 clear();
             }
             _construct(_end, dist, first);
@@ -317,7 +317,6 @@ namespace ft {
         }
         size_type   _construct(pointer & start, size_type n, pointer src) {
             size_type i = 0;
-
             for(; i < n; i++)
                 _alloc.construct(start++, *(src + i));
             return (i);
@@ -325,9 +324,16 @@ namespace ft {
 //        template <typename InputIterator>
         difference_type _construct(pointer & start, difference_type n, iterator src) {
             difference_type i = 0;
-
             for(; i < n; i++)
                 _alloc.construct(start++, *(src + i));
+            return (i);
+        }
+        difference_type _construct_from_begin(pointer & start, difference_type n, iterator src) {
+            difference_type i = 0;
+            for(; i < n; i++) {
+                _alloc.destroy(start + i);
+                _alloc.construct(start + i, *(src + i));
+            }
             return (i);
         }
         void    _swap(pointer & a, pointer & b) {
