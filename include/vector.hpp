@@ -44,7 +44,7 @@ namespace ft {
             _construct(_end, n, val);
         }
         ~vector() {
-            _dealoc(_begin, capacity());
+            _dealoc();
         }
         /*template <class InputIterator>
         * ///////NEED TO ADD TESTS TO VECTOR CONSTRUCTOR TESTESt a
@@ -61,7 +61,7 @@ namespace ft {
             size_type rhs_size = rhs.size();
             if (this != &rhs) {
                 _alloc = rhs._alloc;
-                _dealoc(_begin, size());
+                _dealoc();
                 _allocate(rhs_size);
                 _construct(_end, rhs_size, rhs._begin);
             }
@@ -96,7 +96,7 @@ namespace ft {
                 return ;
             _tmp = _alloc.allocate(n);
             i = _construct_from_begin(_tmp, size(), _begin);
-            _dealoc(_begin, size());
+            _dealoc();
             _begin = _tmp;
             _end = _begin + i;
             _cap = _begin + n;
@@ -127,7 +127,7 @@ namespace ft {
         void assign(InputIterator first, InputIterator last) {
             size_type dist = std::distance(first, last);
             if (_passedMaxCapacity(dist)) {
-                _dealoc(_begin, size());
+                _dealoc();
                 _allocate(dist * 2);
             }else {
                 clear();
@@ -136,7 +136,7 @@ namespace ft {
         }
         void        assign(size_type n, value_type const & val) {
             if (_passedMaxCapacity(n)) {
-                _dealoc(_begin, capacity());
+                _dealoc();
                 _allocate(n);
             } else {
                 clear();
@@ -146,14 +146,10 @@ namespace ft {
         void        push_back(value_type const & val) {
             if (_atMaxCapacity())
                 reserve((size() == 0 ? 1 : size()) * 2);
-            //*(_end++) = val;
             *(_end++) = val;
         }
         void        pop_back() {
-            pointer tmp;
-            tmp = _end - 1;
-            _alloc.desroy(_end);
-            _end = tmp;
+            _alloc.destroy(--_end);
         }
         iterator    insert(iterator position, value_type const & val) {
             size_type i = 0;
@@ -171,7 +167,7 @@ namespace ft {
                         _alloc.construct(_tmp + i + j, *(_begin + i));
                     }
                 }
-                _dealoc(_begin, size());
+                _dealoc();
                 _begin = _tmp;
                 _end = _begin + i + j;
                 _cap = _begin + sze * 2;
@@ -205,7 +201,7 @@ namespace ft {
                         _alloc.construct(_tmp + i + j, *(_begin + i));
                     }
                 }
-                _dealoc(_begin, size());
+                _dealoc();
                 _begin = _tmp;
                 _end = _begin + i + j;
                 _cap = _begin + s * 2;
@@ -242,7 +238,7 @@ namespace ft {
                         _alloc.construct(_tmp + i + j, *(_begin + i));
                     }
                 }
-                _dealoc(_begin, size());
+                _dealoc();
                 _begin = _tmp;
                 _end = _begin + i + j;
                 _cap = _begin + s * 2;
@@ -299,9 +295,9 @@ namespace ft {
         pointer         _cap;
         allocator_type  _alloc;
 
-        void    _dealoc(pointer & begin, size_type n) {
+        void    _dealoc(void) {
             clear();
-            _alloc.deallocate(begin, n);
+            _alloc.deallocate(_begin, capacity());
         }
         void    _allocate(size_type n) {
             _begin = _alloc.allocate(n);

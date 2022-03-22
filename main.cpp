@@ -42,7 +42,12 @@ void print_usage(void) {
     exit(EXIT_FAILURE);
 }
 
-int main(int argc, char **argv)
+/*int main(void) {
+    std::vector<int>    vec;
+    vec.pop_back();
+    return (0);
+}*/
+/*int main(int argc, char **argv)
 {
     if (argc != 2 || !valid_arg(argv[1]))
         print_usage();
@@ -56,14 +61,15 @@ int main(int argc, char **argv)
         //vector_other_tests();
     }
     exit(EXIT_SUCCESS);
+}*/
 
-    //test_rev_it();
-    /*std::vector<int> stdvec;
-    ft::vector<int> ftvec;
-    ft::vector<int> ftvec2(1);
-    std::vector<int> stdvec2(1);
-    ft::vector<int> ftvec3(1, 1);
-    std::vector<int> stdvec3(1, 1);*/
+//test_rev_it();
+/*std::vector<int> stdvec;
+ft::vector<int> ftvec;
+ft::vector<int> ftvec2(1);
+std::vector<int> stdvec2(1);
+ft::vector<int> ftvec3(1, 1);
+std::vector<int> stdvec3(1, 1);*/
 /*    std::cout << "std: " << stdvec.empty() << " ft: " << ftvec.empty() << '\n';
     std::cout << "std: " << stdvec2.empty() << " ft: " << ftvec2.empty() << '\n';
     std::cout << "std: " << stdvec3.empty() << " ft: " << ftvec3.empty() << '\n';
@@ -73,29 +79,29 @@ int main(int argc, char **argv)
     ftvec3.reserve(100);
     std::cout << "stdsize: " << stdvec3.size() << " ft: " << ftvec3.size() << '\n';
     std::cout << "stdcap: " << stdvec3.capacity() << " ftcap: " << ftvec3.capacity() << '\n';*/
-    /*try {
-        std::cout << "std: " << ftvec3.at(50) << '\n';
-    }
-    catch (std::exception const & e) {
-        std::cout << e.what() << '\n';
-    }
-    std::cout << "NEW TEST\n";
-    stdvec.reserve(50);
-    stdvec.push_back(1);
-    stdvec.push_back(2);
-    stdvec.push_back(3);
-    std::vector<int>::iterator it = stdvec.begin();
-    stdvec.pop_back();
-    for (; it != stdvec.end(); it++)
-        std::cout << "it: " << *it << '\n';
-    it++;
-    std::cout << "MAJOR TEST: " << *it << '\n';*/
+/*try {
+    std::cout << "std: " << ftvec3.at(50) << '\n';
+}
+catch (std::exception const & e) {
+    std::cout << e.what() << '\n';
+}
+std::cout << "NEW TEST\n";
+stdvec.reserve(50);
+stdvec.push_back(1);
+stdvec.push_back(2);
+stdvec.push_back(3);
+std::vector<int>::iterator it = stdvec.begin();
+stdvec.pop_back();
+for (; it != stdvec.end(); it++)
+    std::cout << "it: " << *it << '\n';
+it++;
+std::cout << "MAJOR TEST: " << *it << '\n';*/
 
 //    std::cout << "ft: " << ftvec3[1] << '\n';
-    //stack_tests(" Stack Tests ");
-    //map_tests(" Map Tests ");
+//stack_tests(" Stack Tests ");
+//map_tests(" Map Tests ");
 
- //   vector_iterator_example(4, "hey");
+//   vector_iterator_example(4, "hey");
 
 
 /*    std::cout << "int vector\n";
@@ -109,35 +115,33 @@ int main(int argc, char **argv)
     std::cout << "str vector\n";*/
 
 
-    /*std::vector<std::string> sstdvec(4, "hey");
-    sstdvec.push_back("bye");
-    std::vector<std::string>::iterator sit = sstdvec.begin();
-    std::vector<std::string>::iterator se = sstdvec.end();
-    std::cout << *sit << '\n';
-    std::cout << *sit + "yes" << '\n';
-    std::cout << *sit << '\n';
-    std::cout << *--se << '\n';
-    std::cout << *sit + *se << '\n';*/
+/*std::vector<std::string> sstdvec(4, "hey");
+sstdvec.push_back("bye");
+std::vector<std::string>::iterator sit = sstdvec.begin();
+std::vector<std::string>::iterator se = sstdvec.end();
+std::cout << *sit << '\n';
+std::cout << *sit + "yes" << '\n';
+std::cout << *sit << '\n';
+std::cout << *--se << '\n';
+std::cout << *sit + *se << '\n';*/
 
-   // std::cout << (it + e) << '\n';
-    //std::cout << "std size: " << stdvec.size() << std::endl;
-    //std::cout << "ft size: " << vec.size() << std::endl;
-    //std::cout << "std capacity: " << stdvec.capacity() << std::endl;
-    //std::cout << "ft capacity: " << vec.capacity() << std::endl;
+// std::cout << (it + e) << '\n';
+//std::cout << "std size: " << stdvec.size() << std::endl;
+//std::cout << "ft size: " << vec.size() << std::endl;
+//std::cout << "std capacity: " << stdvec.capacity() << std::endl;
+//std::cout << "ft capacity: " << vec.capacity() << std::endl;
 //    for (std::vector<int>::iterator stdit = stdvec.begin(); stdit != stdvec.end(); stdit++)
- //       std::cout << "stdit: " << *stdit << '\n';
-    //for (ft::vector<int>::iterator ftit = vec.begin(); ftit != vec.end(); ftit++)
-    //    std::cout << "ftit: " << *ftit << '\n';
-    //std::cout << *vec._vec << std::endl;
-    //std::cout << stdvec.max_size() << '\n';
+//       std::cout << "stdit: " << *stdit << '\n';
+//for (ft::vector<int>::iterator ftit = vec.begin(); ftit != vec.end(); ftit++)
+//    std::cout << "ftit: " << *ftit << '\n';
+//std::cout << *vec._vec << std::endl;
+//std::cout << stdvec.max_size() << '\n';
 //    std::cout << vec.var << std::endl;
 
-    //std::allocator<int> j = std::allocator<int>();
-    //int* arr = j.allocate(1);
-    //j.construct(arr, 0);
-    /*ft::map<int, int> map;
-    std::cout << map.var << std::endl;
-    ft::stack<int> stack;
-    std::cout << stack.var << std::endl;*/
-
-}
+//std::allocator<int> j = std::allocator<int>();
+//int* arr = j.allocate(1);
+//j.construct(arr, 0);
+/*ft::map<int, int> map;
+std::cout << map.var << std::endl;
+ft::stack<int> stack;
+std::cout << stack.var << std::endl;*/

@@ -21,7 +21,9 @@ bool    containers_equal(ftContainer & vec, stdContainer & comp) {
     if (vecSize != compSize)
         return (false);
 
-   /* if ((unsigned long)vec.capacity() != comp.capacity())
+
+
+   /*if ((unsigned long)vec.capacity() != comp.capacity())
         std::cout << "my capacity " << vec.capacity() << " comp capacity " << comp.capacity() << '\n';*/
 
     //check items
@@ -184,12 +186,13 @@ bool    vector_assign() {
 }
 template <typename VectorClass>
 bool    vector_push_back() {
-//    typedef typename VectorClass::size_type size_type;
     VectorClass         myvec;
+    VectorClass         myvec2(10, 555);
     std::vector<int>    comp;
+    std::vector<int>    comp2(10, 555);
 
-    myvec.push_back(4444);
-    comp.push_back(4444);
+    myvec.push_back(-4444);
+    comp.push_back(-4444);
     if (!containers_equal(myvec, comp))
         return (false);
     for (int i = 0; i < 50; i++) {
@@ -197,6 +200,10 @@ bool    vector_push_back() {
         comp.push_back(i);
     }
     if (!containers_equal(myvec, comp))
+        return (false);
+    myvec2.push_back(987654);
+    comp2.push_back(987654);
+    if (!containers_equal(myvec2, comp2))
         return (false);
 
     return (true);
@@ -204,20 +211,20 @@ bool    vector_push_back() {
 
 template <typename VectorClass>
 bool    vector_pop_back() {
-//    typedef typename VectorClass::size_type size_type;
-    VectorClass         myvec;
-    std::vector<int>    comp;
+    VectorClass         myvec(30, 999);
+    std::vector<int>    comp(30, 999);
 
-/*    myvec.push_back(4444);
-    comp.push_back(4444);
+    myvec.pop_back();
+    comp.pop_back();
     if (!containers_equal(myvec, comp))
         return (false);
-    for (int i = 0; i < 50; i++) {
-        myvec.push_back(i);
-        comp.push_back(i);
+
+    for (int i = 0; i < 29; i++) {
+        myvec.pop_back();
+        comp.pop_back();
     }
     if (!containers_equal(myvec, comp))
-        return (false);*/
+        return (false);
 
     return (true);
 }
@@ -229,7 +236,7 @@ double vector_modifier_timed_tests(void) {
     begin = clock();
     vector_assign<Container>();
     vector_push_back<Container>();
-    //vector_pop_back<Container>()
+    vector_pop_back<Container>();
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
@@ -254,11 +261,11 @@ void    vector_modifier_tests(void) {
         std::cout << RED << "FAILURE\n" << RESET;
 
     // POP_BACK
-/*    std::cout << "vector pop_back - ";
+    std::cout << "vector pop_back - ";
     if (vector_pop_back<ft::vector<int> >())
         std::cout << GREEN << "SUCCESS\n" << RESET;
     else
-        std::cout << RED << "FAILURE\n" << RESET;*/
+        std::cout << RED << "FAILURE\n" << RESET;
 
     stdtime = vector_modifier_timed_tests<std::vector<int> >();
     fttime = vector_modifier_timed_tests<ft::vector<int> >();
