@@ -212,6 +212,7 @@ bool    vector_push_back() {
 template <typename VectorClass>
 bool    vector_pop_back() {
     VectorClass         myvec(30, 999);
+    VectorClass         myvec2;
     std::vector<int>    comp(30, 999);
 
     myvec.pop_back();
@@ -223,6 +224,9 @@ bool    vector_pop_back() {
         myvec.pop_back();
         comp.pop_back();
     }
+    if (!containers_equal(myvec, comp))
+        return (false);
+    myvec2.pop_back();
     if (!containers_equal(myvec, comp))
         return (false);
 

@@ -47,7 +47,7 @@ void print_usage(void) {
     vec.pop_back();
     return (0);
 }*/
-/*int main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     if (argc != 2 || !valid_arg(argv[1]))
         print_usage();
@@ -61,7 +61,7 @@ void print_usage(void) {
         //vector_other_tests();
     }
     exit(EXIT_SUCCESS);
-}*/
+}
 
 //test_rev_it();
 /*std::vector<int> stdvec;

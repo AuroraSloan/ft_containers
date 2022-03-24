@@ -149,7 +149,8 @@ namespace ft {
             *(_end++) = val;
         }
         void        pop_back() {
-            _alloc.destroy(--_end);
+            if (!empty())
+                _alloc.destroy(--_end);
         }
         iterator    insert(iterator position, value_type const & val) {
             size_type i = 0;
@@ -280,7 +281,7 @@ namespace ft {
            _swap(_alloc, x._alloc);
         }
         void        clear() {
-            while (_end != _begin)
+            while(_end > _begin)
                 _alloc.destroy(--_end);
         }
 
