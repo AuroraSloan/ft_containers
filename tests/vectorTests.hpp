@@ -233,6 +233,30 @@ bool    vector_pop_back() {
     return (true);
 }
 
+template <typename VectorClass>
+bool    vector_insert() {
+/*    VectorClass         myvec(30, 999);
+    VectorClass         myvec2;
+    std::vector<int>    comp(30, 999);
+
+    myvec.pop_back();
+    comp.pop_back();
+    if (!containers_equal(myvec, comp))
+        return (false);
+
+    for (int i = 0; i < 29; i++) {
+        myvec.pop_back();
+        comp.pop_back();
+    }
+    if (!containers_equal(myvec, comp))
+        return (false);
+    myvec2.pop_back();
+    if (!containers_equal(myvec, comp))
+        return (false);*/
+
+    return (true);
+}
+
 template < typename Container >
 double vector_modifier_timed_tests(void) {
     clock_t begin, end;
@@ -241,6 +265,7 @@ double vector_modifier_timed_tests(void) {
     vector_assign<Container>();
     vector_push_back<Container>();
     vector_pop_back<Container>();
+    vector_insert<Container>();
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
@@ -270,6 +295,14 @@ void    vector_modifier_tests(void) {
         std::cout << GREEN << "SUCCESS\n" << RESET;
     else
         std::cout << RED << "FAILURE\n" << RESET;
+
+    // INSERT
+    std::cout << "vector insert - ";
+    if (vector_insert<ft::vector<int> >())
+        std::cout << GREEN << "SUCCESS\n" << RESET;
+    else
+        std::cout << RED << "FAILURE\n" << RESET;
+
 
     stdtime = vector_modifier_timed_tests<std::vector<int> >();
     fttime = vector_modifier_timed_tests<ft::vector<int> >();
