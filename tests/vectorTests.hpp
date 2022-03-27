@@ -235,24 +235,13 @@ bool    vector_pop_back() {
 
 template <typename VectorClass>
 bool    vector_insert() {
-/*    VectorClass         myvec(30, 999);
-    VectorClass         myvec2;
-    std::vector<int>    comp(30, 999);
+    VectorClass         myvec(30, 5);
+    std::vector<int>    comp(30, 5);
 
-    myvec.pop_back();
-    comp.pop_back();
+    myvec.insert((myvec.begin() + 5), 7);
+    comp.insert((comp.begin() + 5), 7);
     if (!containers_equal(myvec, comp))
         return (false);
-
-    for (int i = 0; i < 29; i++) {
-        myvec.pop_back();
-        comp.pop_back();
-    }
-    if (!containers_equal(myvec, comp))
-        return (false);
-    myvec2.pop_back();
-    if (!containers_equal(myvec, comp))
-        return (false);*/
 
     return (true);
 }
