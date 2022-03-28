@@ -18,12 +18,10 @@ bool    containers_equal(ftContainer & vec, stdContainer & comp) {
     size_type vecSize, compSize;
     vecSize = vec.size();
     compSize = comp.size();
-    if (vecSize != compSize) {
-        std::cout << "vec: " << vecSize << " stl: " << compSize << '\n';
+    if (vecSize != compSize){
+        std::cout << "\nSIZE IS A PROBLEM\nme: " << vecSize << " std: " << compSize << '\n';
         return (false);
     }
-
-
 
 
    /*if ((unsigned long)vec.capacity() != comp.capacity())

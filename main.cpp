@@ -43,8 +43,13 @@ void print_usage(void) {
 }
 
 /*int main(void) {
-    std::vector<int>    vec;
-    vec.pop_back();
+    std::vector<int>    comp(30, 5);
+    std::vector<int>    comp2(10);
+    ft::vector<int>     myvec(30, 5);
+    ft::vector<int>     myvec2(10);
+
+    std::cout << "30: " << comp.size() << " 10: " << comp2.size() << '\n';
+    std::cout << "30: " << myvec.size() << " 10: " << myvec2.size() << '\n';
     return (0);
 }*/
 int main(int argc, char **argv)

@@ -166,7 +166,7 @@ namespace ft {
                 _size--;
             }
         }
-        iterator    insert(iterator position, value_type const & val) {
+        /*iterator    insert(iterator position, value_type const & val) {
             size_type i = 0;
             size_type j = 0;
             size_type sze = size() * 2;
@@ -191,6 +191,17 @@ namespace ft {
                 _construct_from_end(_p, val);
             }
             return (position);
+        }*/
+        iterator    insert(iterator position, value_type const & val) {
+            size_type dist = static_cast<size_type>(std::distance(begin(), position));
+            if (_atMaxCapacity()) {
+                reserve(size() * 2);
+            }
+            pointer _p = _begin + dist;
+            _construct_from_end(_p);
+            _alloc.destroy(_p);
+            _alloc.construct(_p, val);
+            return (iterator(_p));
         }
         void        insert(iterator position, size_type n, value_type const & val) {
             size_type i = 0;
@@ -335,17 +346,15 @@ namespace ft {
                 _size++;
             }
         }
-        void    _construct_from_end(pointer & position, value_type val) {
+        void    _construct_from_end(pointer & position) {
             pointer tmp = _end;
 
             _alloc.construct(_end++, *(--tmp));
+            _size++;
             for (; tmp != position; tmp--) {
                 _alloc.destroy(tmp);
                 _alloc.construct(tmp, *(tmp - 1));
             }
-            _alloc.destroy(tmp);
-            _alloc.construct(tmp, val);
-            _size++;
         }
         void    _swap(pointer & a, pointer & b) {
             pointer tmp = a;
