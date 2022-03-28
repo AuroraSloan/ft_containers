@@ -251,6 +251,11 @@ bool    vector_insert() {
     if (!containers_equal(myvec2, comp2))
         return (false);
 
+    myvec.insert(myvec.end(), 7);
+    comp.insert(comp.end(), 7);
+    if (!containers_equal(myvec, comp))
+        return (false);
+
     return (true);
 }
 

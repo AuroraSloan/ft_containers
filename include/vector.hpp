@@ -193,48 +193,31 @@ namespace ft {
             return (position);
         }*/
         iterator    insert(iterator position, value_type const & val) {
+            pointer _p;
             size_type dist = static_cast<size_type>(std::distance(begin(), position));
-            if (_atMaxCapacity()) {
+
+            if (_atMaxCapacity())
                 reserve(size() * 2);
-            }
-            pointer _p = _begin + dist;
+            _p = _begin + dist;
             _construct_from_end(_p);
             _alloc.destroy(_p);
             _alloc.construct(_p, val);
+            _size++;
             return (iterator(_p));
         }
         void        insert(iterator position, size_type n, value_type const & val) {
-            size_type i = 0;
-            size_type j = 0;
-            size_type s = size() + n;
-            if (_passedMaxCapacity(s)) {
-                pointer _tmp = _alloc.allocate(s * 2);
-                for(; _begin + i != _end; i++) {
-                    if (_begin + i == position) {
-                        position = _tmp + i;
-                        for(size_type k = 0; k < n; k++) {
-                            _alloc.construct(position + j, val);
-                            j++;
-                        }
-                        i--;
-                    } else {
-                        _alloc.construct(_tmp + i + j, *(_begin + i));
-                    }
-                }
-                _dealoc();
-                _begin = _tmp;
-                _end = _begin + i + j;
-            } else {
-                i = 1;
-                _end = _end + n;
-                for (; _end - i != position + n; i++) {
-                    _alloc.destroy(_end - i);
-                    _alloc.construct(_end - i, *(_end - (i + 1)));
-                }
-                while(n-- > 0) {
-                    _alloc.destroy(_end - i);
-                    _alloc.construct(_end - i, val);
-                }
+            pointer _pbegin, _pend;
+            size_type dist = static_cast<size_type>(std::distance(begin(), position));
+
+            if (_passedMaxCapacity(size() + n))
+                reserve((size() + n) * 2);
+            _pbegin = _begin + dist;
+            _pend = _begin + dist + n;
+            _construct_from_end(_pend);
+            for (_pend != _pbegin) {
+                _alloc.destroy(_pend);
+                _alloc.construct(_pend, val);
+                _size++;
             }
         }
         template <class InputIterator>// check that Input iterator is compatible with value_type
@@ -349,8 +332,8 @@ namespace ft {
         void    _construct_from_end(pointer & position) {
             pointer tmp = _end;
 
-            _alloc.construct(_end++, *(--tmp));
-            _size++;
+            if (position != _end)
+                _alloc.construct(_end++, *(--tmp));
             for (; tmp != position; tmp--) {
                 _alloc.destroy(tmp);
                 _alloc.construct(tmp, *(tmp - 1));

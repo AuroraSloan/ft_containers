@@ -50,6 +50,8 @@ void print_usage(void) {
 
     std::cout << "30: " << comp.size() << " 10: " << comp2.size() << '\n';
     std::cout << "30: " << myvec.size() << " 10: " << myvec2.size() << '\n';
+    comp.insert(comp.end(), 3);
+    std::cout << "size after " << comp.size() << '\n';
     return (0);
 }*/
 int main(int argc, char **argv)
