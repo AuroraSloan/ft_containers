@@ -178,6 +178,7 @@ namespace ft {
                         _alloc.construct(_tmp + i, val);
                         j = 1;
                         _p = _begin;
+                        _size++;
                         i--;
                     } else {
                         _alloc.construct(_tmp + i + j, *(_begin + i));
@@ -344,6 +345,7 @@ namespace ft {
             }
             _alloc.destroy(tmp);
             _alloc.construct(tmp, val);
+            _size++;
         }
         void    _swap(pointer & a, pointer & b) {
             pointer tmp = a;

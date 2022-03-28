@@ -18,8 +18,11 @@ bool    containers_equal(ftContainer & vec, stdContainer & comp) {
     size_type vecSize, compSize;
     vecSize = vec.size();
     compSize = comp.size();
-    if (vecSize != compSize)
+    if (vecSize != compSize) {
+        std::cout << "vec: " << vecSize << " stl: " << compSize << '\n';
         return (false);
+    }
+
 
 
 
@@ -237,10 +240,17 @@ template <typename VectorClass>
 bool    vector_insert() {
     VectorClass         myvec(30, 5);
     std::vector<int>    comp(30, 5);
+    VectorClass         myvec2(10);
+    std::vector<int>    comp2(10);
 
     myvec.insert((myvec.begin() + 5), 7);
     comp.insert((comp.begin() + 5), 7);
     if (!containers_equal(myvec, comp))
+        return (false);
+
+    myvec2.insert((myvec2.begin() + 5), 7);
+    comp2.insert((comp2.begin() + 5), 7);
+    if (!containers_equal(myvec2, comp2))
         return (false);
 
     return (true);
