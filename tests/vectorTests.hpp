@@ -30,7 +30,9 @@ bool    containers_equal(ftContainer & vec, stdContainer & comp) {
     //check items
     vecIterator = vec.begin();
     compIterator = comp.begin();
+    std::cout << "in tester\n";
     for (size_type i = 0; i < vecSize; i++) {
+        std::cout << "vec: " << *(vecIterator + i) << " comp: " << *(compIterator + i) << '\n';
         if (*(vecIterator + i) != *(compIterator + i))
             return (false);
     }
@@ -236,25 +238,74 @@ bool    vector_pop_back() {
 
 template <typename VectorClass>
 bool    vector_insert() {
-    VectorClass         myvec(30, 5);
-    std::vector<int>    comp(30, 5);
-    VectorClass         myvec2(10);
-    std::vector<int>    comp2(10);
+   // typedef typename VectorClass::iterator VecClassIterator;
+    VectorClass         myvec(5, 5);
+    std::vector<int>    comp(5, 5);
 
-    myvec.insert((myvec.begin() + 5), 7);
-    comp.insert((comp.begin() + 5), 7);
-    if (!containers_equal(myvec, comp))
-        return (false);
-
-    myvec2.insert((myvec2.begin() + 5), 7);
-    comp2.insert((comp2.begin() + 5), 7);
-    if (!containers_equal(myvec2, comp2))
-        return (false);
-
+    // ==== Edge casees ==== //
     myvec.insert(myvec.end(), 7);
     comp.insert(comp.end(), 7);
     if (!containers_equal(myvec, comp))
         return (false);
+    /*myvec.insert(myvec.end(), static_cast<size_t>(100), 555);
+    comp.insert(comp.end(), static_cast<size_t>(100), 555);
+    if (!containers_equal(myvec, comp))
+        return (false);*/
+    myvec.insert(myvec.end(), myvec.begin(), myvec.end() - 1);
+    comp.insert(comp.end(), comp.begin(), comp.end() - 1);
+    if (!containers_equal(myvec, comp))
+        return (false);
+    // ==== Insert one val ==== //
+    /*VecClassIterator            vecCheck;
+    std::vector<int>::iterator  compCheck;
+    // reallocate
+    vecCheck = myvec.insert((myvec.begin() + 5), 7);
+    compCheck = comp.insert((comp.begin() + 5), 7);
+    if (!containers_equal(myvec, comp) || *vecCheck != *compCheck)
+        return (false);
+    // No reallocate
+    vecCheck = myvec.insert((myvec.begin() + 5), 30);
+    compCheck = comp.insert((comp.begin() + 5), 30);
+    if (!containers_equal(myvec, comp) || *vecCheck != *compCheck)
+        return (false);
+
+    // ==== Insert Mult val ==== //
+    // reallocate
+    myvec.insert(myvec.begin() + 20, static_cast<size_t>(50), 44);
+    comp.insert(comp.begin() + 20, static_cast<size_t>(50), 44);
+    if (!containers_equal(myvec, comp))
+        return (false);
+    // No reallocate
+    myvec.insert((myvec.begin() + 30), static_cast<size_t>(3), 900);
+    comp.insert((comp.begin() + 30), static_cast<size_t>(3), 900);
+    if (!containers_equal(myvec, comp))
+        return (false);
+
+    // ==== Insert iterators ==== //
+    // reallocate
+    VectorClass         tmpvec(100);
+    std::vector<int>    tmpcomp(100);
+
+    VecClassIterator firstvec = tmpvec.begin();
+    std::vector<int>::iterator firstcomp = tmpcomp.begin();
+    VecClassIterator lastvec = tmpvec.end() - 1;
+    std::vector<int>::iterator lastcomp = tmpcomp.end() - 1;
+    myvec.insert(myvec.begin() + 10, firstvec, lastvec);
+    comp.insert(comp.begin() + 10, firstcomp, lastcomp);
+    if (!containers_equal(myvec, comp))
+        return (false);
+    // No reallocation
+    firstvec = tmpvec.begin() + 8;
+    lastvec = tmpvec.begin() + 45;
+    firstcomp = tmpcomp.begin() + 8;
+    lastcomp = tmpcomp.begin() + 45;
+    myvec.insert(myvec.begin() + 44, firstvec, lastvec);
+    comp.insert(comp.begin() + 44, firstcomp, lastcomp);
+    if (!containers_equal(myvec, comp))
+        return (false);*/
+
+
+
 
     return (true);
 }
@@ -273,12 +324,12 @@ double vector_modifier_timed_tests(void) {
 }
 
 void    vector_modifier_tests(void) {
-    double stdtime = 0, fttime = 0;
+    //double stdtime = 0, fttime = 0;
 
     std::cout << CYAN << '\t' << SUBHDR << "Modifier Tests" << SUBHDR << RESET << '\n';
 
     // ASSIGN
-    std::cout << "vector assign - ";
+    /*std::cout << "vector assign - ";
     if (vector_assign<ft::vector<int> >())
         std::cout << GREEN << "SUCCESS\n" << RESET;
     else
@@ -296,7 +347,7 @@ void    vector_modifier_tests(void) {
     if (vector_pop_back<ft::vector<int> >())
         std::cout << GREEN << "SUCCESS\n" << RESET;
     else
-        std::cout << RED << "FAILURE\n" << RESET;
+        std::cout << RED << "FAILURE\n" << RESET;*/
 
     // INSERT
     std::cout << "vector insert - ";
@@ -306,9 +357,9 @@ void    vector_modifier_tests(void) {
         std::cout << RED << "FAILURE\n" << RESET;
 
 
-    stdtime = vector_modifier_timed_tests<std::vector<int> >();
+/*    stdtime = vector_modifier_timed_tests<std::vector<int> >();
     fttime = vector_modifier_timed_tests<ft::vector<int> >();
-    print_results(stdtime, fttime);
+    print_results(stdtime, fttime);*/
 }
 //============================ ITERATOR TESTS ============================//
 template <typename VectorClass>

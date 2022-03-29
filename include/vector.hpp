@@ -166,40 +166,14 @@ namespace ft {
                 _size--;
             }
         }
-        /*iterator    insert(iterator position, value_type const & val) {
-            size_type i = 0;
-            size_type j = 0;
-            size_type sze = size() * 2;
-            pointer _p = _begin + (position - begin());
-            if (_atMaxCapacity()) {
-                pointer _tmp = _alloc.allocate(sze);
-                for(; _begin + i != _end; i++) {
-                    if (_begin + i == _p) {
-                        _alloc.construct(_tmp + i, val);
-                        j = 1;
-                        _p = _begin;
-                        _size++;
-                        i--;
-                    } else {
-                        _alloc.construct(_tmp + i + j, *(_begin + i));
-                    }
-                }
-                _dealoc();
-                _begin = _tmp;
-                _end = _begin + i + j;
-            } else {
-                _construct_from_end(_p, val);
-            }
-            return (position);
-        }*/
         iterator    insert(iterator position, value_type const & val) {
             pointer _p;
-            size_type dist = static_cast<size_type>(std::distance(begin(), position));
+            size_type location = static_cast<size_type>(std::distance(begin(), position));
 
             if (_atMaxCapacity())
                 reserve(size() * 2);
-            _p = _begin + dist;
-            _construct_from_end(_p);
+            _p = _begin + location;
+            _construct_from_end(_p, 1);
             _alloc.destroy(_p);
             _alloc.construct(_p, val);
             _size++;
@@ -207,14 +181,14 @@ namespace ft {
         }
         void        insert(iterator position, size_type n, value_type const & val) {
             pointer _pbegin, _pend;
-            size_type dist = static_cast<size_type>(std::distance(begin(), position));
+            size_type location = static_cast<size_type>(std::distance(begin(), position)) - 1;
 
             if (_passedMaxCapacity(size() + n))
                 reserve((size() + n) * 2);
-            _pbegin = _begin + dist;
-            _pend = _begin + dist + n;
-            _construct_from_end(_pend);
-            for (_pend != _pbegin) {
+            _pbegin = _begin + location;
+            _pend = _begin + location + n;
+            _construct_from_end(_pbegin, n);
+            for (; _pend != _pbegin; _pend--) {
                 _alloc.destroy(_pend);
                 _alloc.construct(_pend, val);
                 _size++;
@@ -222,38 +196,21 @@ namespace ft {
         }
         template <class InputIterator>// check that Input iterator is compatible with value_type
         void    insert(iterator position, InputIterator first, InputIterator last) {
-            size_type i = 0;
-            size_type j = 0;
-            size_type n = last - first;//std::distance(first, last);
-            size_type s = size() + n;
-            if (_passedMaxCapacity(s)) {
-                pointer _tmp = _alloc.allocate(s * 2);
-                for(; _begin + i != _end; i++) {
-                    if (_begin + i == position.get_data()) {
-                        position = _tmp + i;
-                        for(; first != last; first++) {
-                            _alloc.construct(position.get_data() + j, first);
-                            j++;
-                        }
-                        i--;
-                    } else {
-                        _alloc.construct(_tmp + i + j, *(_begin + i));
-                    }
-                }
-                _dealoc();
-                _begin = _tmp;
-                _end = _begin + i + j;
-            } else {
-                i = 1;
-                _end = _end + n;
-                for (; _end - i != position.get_data() + n; i++) {
-                    _alloc.destroy(_end - i);
-                    _alloc.construct(_end - i, *(_end - (i + 1)));
-                }
-                for(; last != first; last--) {
-                    _alloc.destroy(_end - i);
-                    _alloc.construct(_end - i, last);
-                }
+            pointer _pbegin, _pend;
+            size_type location = static_cast<size_type>(std::distance(begin(), position)) - 1;
+            size_type n = static_cast<size_type>(std::distance(first, last));
+
+            std::cout << "n: " << n << '\n';
+            std::cout << "location: " << location << '\n';
+            if (_passedMaxCapacity(size() + n))
+                reserve((size() + n) * 2);
+            _pbegin = _begin + location;
+            _pend = _begin + location + n;
+            _construct_from_end(_pbegin, n);
+            for (; _pend != _pbegin && last != first; _pend--) {
+                _alloc.destroy(_pend);
+                _alloc.construct(_pend, *(last--));
+                _size++;
             }
         }
         iterator    erase(iterator position) {
@@ -318,9 +275,8 @@ namespace ft {
             }
         }
         void    _construct(pointer & start, pointer src) {
-            for(size_type i = 0; i < _size; i++) {
+            for(size_type i = 0; i < _size; i++)
                 _alloc.construct(start++, *(src + i));
-            }
         }
 //        template <typename InputIterator>
         void    _construct(pointer & start, size_type n, iterator src) {
@@ -329,14 +285,18 @@ namespace ft {
                 _size++;
             }
         }
-        void    _construct_from_end(pointer & position) {
-            pointer tmp = _end;
+        void    _construct_from_end(pointer & position, size_type n) {
+            pointer tmpend = _end;
+            size_type i = 1;
 
-            if (position != _end)
-                _alloc.construct(_end++, *(--tmp));
-            for (; tmp != position; tmp--) {
-                _alloc.destroy(tmp);
-                _alloc.construct(tmp, *(tmp - 1));
+            _end += n;
+            if (position == tmpend) {
+                std::cout << "returning\n";
+                return ;
+            }
+            for (; tmpend - i >= position; i++) {
+                _alloc.destroy(_end - i);
+                _alloc.construct(_end - i, *(tmpend - i));
             }
         }
         void    _swap(pointer & a, pointer & b) {

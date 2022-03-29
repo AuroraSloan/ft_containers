@@ -43,15 +43,15 @@ void print_usage(void) {
 }
 
 /*int main(void) {
-    std::vector<int>    comp(30, 5);
-    std::vector<int>    comp2(10);
-    ft::vector<int>     myvec(30, 5);
-    ft::vector<int>     myvec2(10);
+    std::vector<int>    comp(10);
+    ft::vector<int>     vec(10);
 
-    std::cout << "30: " << comp.size() << " 10: " << comp2.size() << '\n';
-    std::cout << "30: " << myvec.size() << " 10: " << myvec2.size() << '\n';
-    comp.insert(comp.end(), 3);
-    std::cout << "size after " << comp.size() << '\n';
+    std::cout << "vec\n";
+    for(ft::vector<int>::iterator vi = vec.begin(); vi != vec.end(); vi++)
+        std::cout << *vi << " ";
+    std::cout << "\ncomp\n";
+    for(std::vector<int>::iterator i = comp.begin(); i != comp.end(); i++)
+        std::cout << *i << " ";
     return (0);
 }*/
 int main(int argc, char **argv)
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
         std::cout << MAGENTA << HDR << " Vector Tests " << HDR << RESET << '\n';
         vector_construction_tests();
         vector_modifier_tests();
-        vector_iterator_tests();
+        //vector_iterator_tests();
         //vector_capacity_tests();
         //vector_elementAccess_tests();
         //vector_other_tests();
