@@ -182,17 +182,17 @@ namespace ft {
             return (iterator(_p));
         }
         void        insert(iterator position, size_type n, value_type const & val) {
-            pointer _p, _pend;
+            pointer _pbegin, _pend;
             size_type location = static_cast<size_type>(std::distance(begin(), position));
 
             if (_passedMaxCapacity(_size + n))
                 reserve((_size + n) * 2);
-            _p = _begin + location;
+            _pbegin = _begin + location;
             _pend = _begin + location + n;
             _construct_from_end(_pend, n);
             for (size_type i = 0; i < n; i++) {
-                _alloc.destroy(_p + i);
-                _alloc.construct(_p + i, val);
+                _alloc.destroy(_pbegin + i);
+                _alloc.construct(_pbegin + i, val);
                 _size++;
             }
         }
@@ -305,8 +305,8 @@ namespace ft {
             b = tmp;
         }
 
-        bool    _atMaxCapacity(void) { return (size() == capacity()); }
-        bool    _passedMaxCapacity(size_type n) { return (n > capacity()); }
+        bool    _atMaxCapacity(void) { return (_size == _cap); }
+        bool    _passedMaxCapacity(size_type n) { return (n > _cap); }
 
     };
 }

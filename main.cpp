@@ -71,7 +71,7 @@ int main(int argc, char **argv)
         std::cout << MAGENTA << HDR << " Vector Tests " << HDR << RESET << '\n';
         vector_construction_tests();
         vector_modifier_tests();
-        //vector_iterator_tests();
+        vector_iterator_tests();
         //vector_capacity_tests();
         //vector_elementAccess_tests();
         //vector_other_tests();

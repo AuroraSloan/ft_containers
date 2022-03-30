@@ -7,6 +7,8 @@
 # include <ctime>           //clock
 # include <vector>
 
+
+//=================== Compare two containers ==============//
 template <typename ftContainer, typename stdContainer>
 bool    containers_equal(ftContainer & vec, stdContainer & comp) {
 
@@ -45,7 +47,7 @@ bool    containers_equal(ftContainer & vec, stdContainer & comp) {
     return (true);
 }
 
-//============================ CONSTRUCTION TESTS ============================//
+//=================== Compare three containers ==============//
 template <typename VectorClass>
 bool    containers_equal(VectorClass & A, VectorClass & B, VectorClass & C) {
 
@@ -75,6 +77,16 @@ bool    containers_equal(VectorClass & A, VectorClass & B, VectorClass & C) {
     return (true);
 }
 
+
+
+//============================================================================//
+//                                                                            //
+//                              CONSTRUCTOR TESTS                             //
+//                                                                            //
+//============================================================================//
+//====================================//
+//        VECTOR CONSTRUCTION         //
+//====================================//
 template <typename VectorClass>
 bool    vector_construction(void)
 {
@@ -114,7 +126,7 @@ bool    vector_construction(void)
         return (false);
     return (true);
 }
-
+//==============Calculate time===========//
 template < typename Container >
 double vector_construction_timed_tests(void) {
     clock_t begin, end;
@@ -124,7 +136,7 @@ double vector_construction_timed_tests(void) {
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
-
+//=====Perform all tests and time tests =====//
 void    vector_construction_tests(void) {
     double stdtime, fttime;
 
@@ -139,8 +151,22 @@ void    vector_construction_tests(void) {
     print_results(stdtime, fttime);
 }
 
-//============================ MODIFIER TESTS ============================//
 
+
+
+
+
+
+
+//============================================================================//
+//                                                                            //
+//                              MODIFIER TESTS                                //
+//                                                                            //
+//============================================================================//
+
+//====================================//
+//               ASSIGN               //
+//====================================//
 template <typename VectorClass>
 bool    vector_assign() {
     typedef typename VectorClass::size_type size_type;
@@ -187,6 +213,10 @@ bool    vector_assign() {
         return (false);
     return (true);
 }
+
+//====================================//
+//            PUSH_BACK               //
+//====================================//
 template <typename VectorClass>
 bool    vector_push_back() {
     VectorClass         myvec;
@@ -212,6 +242,9 @@ bool    vector_push_back() {
     return (true);
 }
 
+//====================================//
+//             POP_BACK               //
+//====================================//
 template <typename VectorClass>
 bool    vector_pop_back() {
     VectorClass         myvec(30, 999);
@@ -236,6 +269,9 @@ bool    vector_pop_back() {
     return (true);
 }
 
+//====================================//
+//              INSERT                //
+//====================================//
 template <typename VectorClass>
 bool    vector_insert() {
     typedef typename VectorClass::iterator VecClassIterator;
@@ -281,6 +317,7 @@ bool    vector_insert() {
     comp.insert(comp.begin() + 10, firstcomp, lastcomp);
     if (!containers_equal(myvec, comp))
         return (false);
+
     // No reallocation
     firstvec = tmpvec.begin() + 8;
     lastvec = tmpvec.begin() + 45;
@@ -304,11 +341,21 @@ bool    vector_insert() {
     comp.insert(comp.end(), comp.begin(), comp.end() - 1);
     if (!containers_equal(myvec, comp))
         return (false);
+    myvec.insert(myvec.begin(), myvec.begin(), myvec.end());
+    comp.insert(comp.begin(), comp.begin(), comp.end());
+    if (!containers_equal(myvec, comp))
+        return (false);
 
 
     return (true);
 }
 
+/*template <typename VectorClass>
+bool    vector_erase() {
+    return (true);
+}*/
+
+//==============Calculate time===========//
 template < typename Container >
 double vector_modifier_timed_tests(void) {
     clock_t begin, end;
@@ -318,10 +365,12 @@ double vector_modifier_timed_tests(void) {
     vector_push_back<Container>();
     vector_pop_back<Container>();
     vector_insert<Container>();
+    //vector_erase<Container>();
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
 
+//=====Perform all tests and time tests =====//
 void    vector_modifier_tests(void) {
     double stdtime = 0, fttime = 0;
 
@@ -355,12 +404,33 @@ void    vector_modifier_tests(void) {
     else
         std::cout << RED << "FAILURE\n" << RESET;
 
+    /*// ERASE
+    std::cout << "vector erase- ";
+    if (vector_erase<ft::vector<int> >())
+        std::cout << GREEN << "SUCCESS\n" << RESET;
+    else
+        std::cout << RED << "FAILURE\n" << RESET;*/
 
     stdtime = vector_modifier_timed_tests<std::vector<int> >();
     fttime = vector_modifier_timed_tests<ft::vector<int> >();
     print_results(stdtime, fttime);
 }
-//============================ ITERATOR TESTS ============================//
+
+
+
+
+
+
+
+//============================================================================//
+//                                                                            //
+//                              ITERATOR TESTS                                //
+//                                                                            //
+//============================================================================//
+
+//====================================//
+//      ITERATOR CONSTRUCTION         //
+//====================================//
 template <typename VectorClass>
 bool    vector_iterator_construction(int count, int data)
 {
@@ -384,6 +454,7 @@ bool    vector_iterator_construction(int count, int data)
     return (true);
 }
 
+//==============Calculate time===========//
 template < typename Container >
 double vector_iterator_timed_tests(void) {
     clock_t begin, end;
@@ -395,7 +466,7 @@ double vector_iterator_timed_tests(void) {
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
-
+//=====Perform all tests and time tests =====//
 void    vector_iterator_tests(void) {
     double stdtime, fttime;
 
