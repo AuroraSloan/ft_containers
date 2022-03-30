@@ -43,15 +43,24 @@ void print_usage(void) {
 }
 
 /*int main(void) {
-    std::vector<int>    comp(10);
-    ft::vector<int>     vec(10);
+    std::vector<int>    comp(4);
+    //ft::vector<int>     vec(4);
 
-    std::cout << "vec\n";
-    for(ft::vector<int>::iterator vi = vec.begin(); vi != vec.end(); vi++)
-        std::cout << *vi << " ";
-    std::cout << "\ncomp\n";
+
+    comp.insert(comp.begin(), 3, 7);
+    comp.insert(comp.begin() + 60, comp.begin(), comp.end() - 1);
+    //comp.reserve(70);
+    std::cout << "comp size: " << comp.size() << " - Capacity: " << comp.capacity() << '\n';
     for(std::vector<int>::iterator i = comp.begin(); i != comp.end(); i++)
         std::cout << *i << " ";
+
+
+    vec.insert(vec.begin(), static_cast<size_t>(3), 7);
+    vec.insert(vec.begin() + 15, vec.begin(), vec.end() - 1);
+    //vec.reserve(70);
+    std::cout << "\nvec - size: " << vec.size() << " - Capacigty: " << vec.capacity() << '\n';
+    for(ft::vector<int>::iterator vi = vec.begin(); vi != vec.end(); vi++)
+        std::cout << *vi << " ";
     return (0);
 }*/
 int main(int argc, char **argv)
