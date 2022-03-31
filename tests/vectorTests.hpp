@@ -109,8 +109,7 @@ void    print_test_result(std::string testName, bool success) {
 template <typename VectorClass>
 bool    vector_construction(void)
 {
-//    VectorClass vec(count, data);
-
+    //typedef typename VectorClass::iterator iterator;
     // Default construction
     VectorClass dflt;
     // Default construction overload
@@ -143,6 +142,12 @@ bool    vector_construction(void)
         || !containers_equal(large, largeCP, largeEQ)
         || !containers_equal(dflt, sizeXdata, sizeXdataEQ))
         return (false);
+
+    /*iterator bg = sizeXdata.begin();
+    iterator end = sizeXdata.end();
+    VectorClass templateTest(bg, end);
+    if (!containers_equal(sizeXdata, templateTest))
+        return (false);*/
     return (true);
 }
 //==============Calculate time===========//

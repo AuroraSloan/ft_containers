@@ -39,32 +39,32 @@ namespace ft {
 
         // CONSTRUCTORS / DESTRUCTOR
         explicit vector(allocator_type const & alloc = allocator_type()) : _begin(NULL), _end(NULL), _size(0), _cap(0), _alloc(alloc) {}
-        explicit vector(size_type n, value_type const & val = value_type(), allocator_type const & alloc = allocator_type()) : _size(0), _cap(n), _alloc(alloc) {
+        explicit vector(size_type n, value_type const & val = value_type(), allocator_type const & alloc = allocator_type()) : _alloc(alloc) {
             _allocate(n);
             _construct(_end, n, val);
         }
         ~vector() {
             _dealoc();
         }
+        // do enable if, ad tests...... figure out test main.cpp
         /*template <class InputIterator>
-        * ///////NEED TO ADD TESTS TO VECTOR CONSTRUCTOR TESTESt a
-        vector(InputIterator first, InputIterator last, allocator_type const & alloc = allocator_type()) {
-
+        vector(InputIterator first, InputIterator last, allocator_type const & alloc = allocator_type()) : _alloc(alloc) {
+            size_type n = static_cast<size_type>(std::distance(first, last));
+            _allocate(n);
+            _construct(_end, n, first);
         }*/
-        vector(vector const & x) : _size(0), _alloc(allocator_type()) {
-            _cap = x.size();
-            _allocate(_cap);
-            _construct(_end, _cap, x._begin);
+        vector(vector const & x) : _alloc(allocator_type()) {
+            _allocate(x._cap);
+            _construct(_end, x._size, x._begin);
         }
 
         vector& operator=(const vector& rhs) {
-            _cap = rhs.size();
             if (this != &rhs) {
+                _dealoc();
                 _alloc = rhs._alloc;
                 _size = 0;
-                _dealoc();
-                _allocate(_cap);
-                _construct(_end, _cap, rhs._begin);
+                _allocate(rhs.capacity());
+                _construct(_end, rhs.size(), rhs._begin);
             }
             return (*this);
         }
@@ -144,7 +144,6 @@ namespace ft {
             }else {
                 clear();
             }
-            _size = 0;
             _construct(_end, dist, first);
         }
         void        assign(size_type n, value_type const & val) {
@@ -155,7 +154,6 @@ namespace ft {
             } else {
                 clear();
             }
-            _size = 0;
             _construct(_end, n, val);
         }
         void        push_back(value_type const & val) {
@@ -253,6 +251,8 @@ namespace ft {
         void    _allocate(size_type n) {
             _begin = _alloc.allocate(n);
             _end = _begin;
+            _cap = n;
+            _size = 0;
         }
 
         void    _construct(pointer & start, size_type n, value_type val) {
