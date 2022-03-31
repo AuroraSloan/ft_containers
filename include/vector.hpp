@@ -91,6 +91,7 @@ namespace ft {
         void                    reserve(size_type n) {
             // try to use _dealloc _alloc and _construct later
             pointer     _newBegin, _newEnd;
+            size_type   tmpSize = _size;
 
             if (!_passedMaxCapacity(n)) {
                 std::cout << "returning\n";
@@ -102,6 +103,7 @@ namespace ft {
             _dealoc();
             _begin = _newBegin;
             _end = _newEnd;
+            _size = tmpSize;
             _cap = n;
         }
 
@@ -214,31 +216,22 @@ namespace ft {
             }
         }
         iterator    erase(iterator position) {
-            for(pointer tmp = position.get_data() + 1; tmp != _end; tmp++) {
-                _alloc.destroy(position);
-                _alloc.construct(position, *(tmp));
-                position++;
-            }
-            _alloc.destroy(position);
-            _end = position;
+            return (_erase(position, 1));
         }
         iterator    erase(iterator first, iterator last) {
-            for (size_type i = 0; first + i != last; i++)
-                _alloc.destroy(first + i);
-            for(; last != _end; last++) {
-                _alloc.construct(first, *(last));
-                first++;
-            }
-            _end = first;
+            return (_erase(first, static_cast<size_type>(std::distance(first, last))));
         }
         void        swap(vector & x) {
            _swap(_begin, x._begin);
            _swap(_end, x._end);
+           _swap(_size, x._size);
+           _swap(_cap, x._cap);
            _swap(_alloc, x._alloc);
         }
         void        clear() {
             while(_end > _begin)
                 _alloc.destroy(--_end);
+            _size = 0;
         }
 
 
@@ -294,13 +287,27 @@ namespace ft {
                 _alloc.construct(_end - i, *(_end - i - n));
             }
         }
-        void    _swap(pointer & a, pointer & b) {
-            pointer tmp = a;
-            a = b;
-            b = tmp;
+        iterator    _erase(iterator position, size_type n) {
+            pointer start = _begin + static_cast<size_type>(std::distance(begin(), position));
+            size_type j = 0;
+
+            for (; j < n; j++) {
+                _alloc.destroy(start + j);
+                _size--;
+            }
+            for(size_type i = 0; start + j != _end; i++) {
+                _alloc.destroy(start + i);
+                _alloc.construct(start + i, *(start + j));
+                j++;
+            }
+            _end = _begin + _size;
+            _alloc.destroy(_end);
+
+            return (iterator(start));
         }
-        void    _swap(allocator_type & a, allocator_type & b) {
-            allocator_type tmp = a;
+        template <typename S>
+        void    _swap(S & a, S & b) {
+            S tmp = a;
             a = b;
             b = tmp;
         }

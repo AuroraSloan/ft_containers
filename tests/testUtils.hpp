@@ -3,7 +3,7 @@
 
 # include <iostream>
 
-void print_results(double stdtime, double fttime)
+void print_time_results(double stdtime, double fttime)
 {
     if (stdtime < fttime)
     {

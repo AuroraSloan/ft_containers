@@ -38,7 +38,7 @@ bool    containers_equal(ftContainer & vec, stdContainer & comp) {
         if (*(vecIterator + i) != *(compIterator + i))
             return (false);
     }
-    while (vecIterator != vec.end() && compIterator != comp.end()) {
+    while (vecIterator != vec.end() || compIterator != comp.end()) {
         if ((*(vecIterator) != *(compIterator)) || vecIterator == vec.end() || compIterator == comp.end())
             return (false);
         vecIterator++;
@@ -77,7 +77,26 @@ bool    containers_equal(VectorClass & A, VectorClass & B, VectorClass & C) {
     return (true);
 }
 
+//========================= Print Containers ====================//
+template <typename Container>
+void    print_container(Container container, std::string name) {
+    typedef typename Container::iterator iterator;
 
+    std::cout << name << '\n';
+    for(iterator it = container.begin(); it != container.end(); it++) {
+        std::cout << *it << ' ';
+    }
+    std::cout << '\n';
+}
+
+//========================= Print Results ====================//
+void    print_test_result(std::string testName, bool success) {
+    std::cout << testName;
+    if (success)
+        std::cout << GREEN << "SUCCESS\n" << RESET;
+    else
+        std::cout << RED << "FAILURE\n" << RESET;
+}
 
 //============================================================================//
 //                                                                            //
@@ -128,7 +147,7 @@ bool    vector_construction(void)
 }
 //==============Calculate time===========//
 template < typename Container >
-double vector_construction_timed_tests(void) {
+double vec_construction_timer(void) {
     clock_t begin, end;
 
     begin = clock();
@@ -138,22 +157,10 @@ double vector_construction_timed_tests(void) {
 }
 //=====Perform all tests and time tests =====//
 void    vector_construction_tests(void) {
-    double stdtime, fttime;
-
     std::cout << CYAN << '\t' << SUBHDR << "Construction Tests" << SUBHDR << RESET << '\n';
-    std::cout << "vector construction - ";
-    if (vector_construction<ft::vector<int> >())
-        std::cout << GREEN << "SUCCESS\n" << RESET;
-    else
-        std::cout << RED << "FAILURE\n" << RESET;
-    stdtime = vector_construction_timed_tests<std::vector<int> >();
-    fttime = vector_construction_timed_tests<ft::vector<int> >();
-    print_results(stdtime, fttime);
+    print_test_result("vector construction - ",vector_construction<ft::vector<int> >());
+    print_time_results(vec_construction_timer<std::vector<int> >(),vec_construction_timer<ft::vector<int> >());
 }
-
-
-
-
 
 
 
@@ -346,18 +353,118 @@ bool    vector_insert() {
     if (!containers_equal(myvec, comp))
         return (false);
 
+    return (true);
+}
+
+//====================================//
+//               ERASE                //
+//====================================//
+template <typename VectorClass>
+bool    vector_erase() {
+    typedef typename VectorClass::iterator  vecIterator;
+    typedef std::vector<int>::iterator      compIterator;
+
+    VectorClass         vec;
+    vecIterator         vecIt;
+    std::vector<int>    comp;
+    compIterator        compIt;
+
+    for(size_t i = 0; i < 20; i++) {
+        vec.push_back(i);
+        comp.push_back(i);
+    }
+
+    vecIt = vec.erase(vec.begin());
+    compIt = comp.erase(comp.begin());
+    if (!containers_equal(vec, comp) || *vecIt != *compIt)
+        return (false);
+
+    vecIt = vec.erase(vec.begin() + 6, vec.end());
+    compIt = comp.erase(comp.begin() + 6, comp.end());
+    if (!containers_equal(vec, comp) || *vecIt != *compIt)
+        return (false);
+
+    vecIt = vec.erase(vec.end() - 1);
+    compIt = comp.erase(comp.end() - 1);
+    if (!containers_equal(vec, comp) || *vecIt != *compIt)
+        return (false);
+
+    vecIt = vec.erase(vec.begin(), vec.end());
+    compIt = comp.erase(comp.begin(), comp.end());
+    if (!containers_equal(vec, comp) || *vecIt != *compIt)
+        return (false);
 
     return (true);
 }
 
-/*template <typename VectorClass>
-bool    vector_erase() {
+//====================================//
+//               SWAP                 //
+//====================================//
+template <typename VectorClass>
+bool    vector_swap() {
+    VectorClass         vecA(50, 155);
+    VectorClass         vecB;
+    VectorClass         vecC;
+    std::vector<int>    compA(50, 155);
+    std::vector<int>    compB;
+    std::vector<int>    compC;
+
+    for(size_t i = 0; i < 30; i++) {
+        vecB.push_back(i);
+        compB.push_back(i);
+    }
+
+    vecA.swap(vecB);
+    compA.swap(compB);
+    if (!containers_equal(vecA, compA) || !containers_equal(vecB, compB))
+        return (false);
+
+    vecA.swap(vecC);
+    compA.swap(compC);
+    if (!containers_equal(vecA, compA) || !containers_equal(vecC, compC))
+        return (false);
+
     return (true);
-}*/
+}
+
+//====================================//
+//              CLEAR                 //
+//====================================//
+template <typename VectorClass>
+bool    vector_clear() {
+    VectorClass         vecA(50, 155);
+    VectorClass         vecB;
+    VectorClass         vecC;
+    std::vector<int>    compA(50, 155);
+    std::vector<int>    compB;
+    std::vector<int>    compC;
+
+    for(size_t i = 0; i < 30; i++) {
+        vecB.push_back(i);
+        compB.push_back(i);
+    }
+
+    vecA.clear();
+    compA.clear();
+    if (!containers_equal(vecA, compA))
+        return (false);
+
+    vecB.clear();
+    compB.clear();
+    if (!containers_equal(vecB, compB))
+        return (false);
+
+    vecC.clear();
+    compC.clear();
+    if (!containers_equal(vecC, compC))
+        return (false);
+
+    return (true);
+}
 
 //==============Calculate time===========//
 template < typename Container >
-double vector_modifier_timed_tests(void) {
+double vec_modifiers_timer(void) {
     clock_t begin, end;
 
     begin = clock();
@@ -365,59 +472,27 @@ double vector_modifier_timed_tests(void) {
     vector_push_back<Container>();
     vector_pop_back<Container>();
     vector_insert<Container>();
-    //vector_erase<Container>();
+    vector_erase<Container>();
+    vector_swap<Container>();
+    vector_clear<Container>();
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
 
-//=====Perform all tests and time tests =====//
-void    vector_modifier_tests(void) {
-    double stdtime = 0, fttime = 0;
+//============= Perform all tests =============//
+void    vector_modifiers_tests(void) {
+    std::cout << CYAN << '\t' << SUBHDR << "Modifiers Tests" << SUBHDR << RESET << '\n';
 
-    std::cout << CYAN << '\t' << SUBHDR << "Modifier Tests" << SUBHDR << RESET << '\n';
+    print_test_result("vector assign - ", vector_assign<ft::vector<int> >());
+    print_test_result("vector push_back - ", vector_push_back<ft::vector<int> >());
+    print_test_result("vector pop_back - ", vector_pop_back<ft::vector<int> >());
+    print_test_result("vector insert - ", vector_insert<ft::vector<int> >());
+    print_test_result("vector erase - ", vector_erase<ft::vector<int> >());
+    print_test_result("vector swap - ", vector_swap<ft::vector<int> >());
+    print_test_result("vector clear - ", vector_clear<ft::vector<int> >());
 
-    // ASSIGN
-    std::cout << "vector assign - ";
-    if (vector_assign<ft::vector<int> >())
-        std::cout << GREEN << "SUCCESS\n" << RESET;
-    else
-        std::cout << RED << "FAILURE\n" << RESET;
-
-    // PUSH_BACK
-    std::cout << "vector push_back - ";
-    if (vector_push_back<ft::vector<int> >())
-        std::cout << GREEN << "SUCCESS\n" << RESET;
-    else
-        std::cout << RED << "FAILURE\n" << RESET;
-
-    // POP_BACK
-    std::cout << "vector pop_back - ";
-    if (vector_pop_back<ft::vector<int> >())
-        std::cout << GREEN << "SUCCESS\n" << RESET;
-    else
-        std::cout << RED << "FAILURE\n" << RESET;
-
-    // INSERT
-    std::cout << "vector insert - ";
-    if (vector_insert<ft::vector<int> >())
-        std::cout << GREEN << "SUCCESS\n" << RESET;
-    else
-        std::cout << RED << "FAILURE\n" << RESET;
-
-    /*// ERASE
-    std::cout << "vector erase- ";
-    if (vector_erase<ft::vector<int> >())
-        std::cout << GREEN << "SUCCESS\n" << RESET;
-    else
-        std::cout << RED << "FAILURE\n" << RESET;*/
-
-    stdtime = vector_modifier_timed_tests<std::vector<int> >();
-    fttime = vector_modifier_timed_tests<ft::vector<int> >();
-    print_results(stdtime, fttime);
+    print_time_results(vec_modifiers_timer<std::vector<int> >(), vec_modifiers_timer<ft::vector<int> >());
 }
-
-
-
 
 
 
@@ -456,38 +531,23 @@ bool    vector_iterator_construction(int count, int data)
 
 //==============Calculate time===========//
 template < typename Container >
-double vector_iterator_timed_tests(void) {
+double vec_iterator_timed_tests(void) {
     clock_t begin, end;
 
     begin = clock();
-    // Vector iterator construction
     vector_iterator_construction<Container>(10, 1000);
-    // others
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
 //=====Perform all tests and time tests =====//
 void    vector_iterator_tests(void) {
-    double stdtime, fttime;
 
     std::cout << CYAN << '\t' << SUBHDR << "Iterator Tests" << SUBHDR << RESET << '\n';
 
-    // Vector iterator construction
-    std::cout << "vector iterator construction - ";
-    if (vector_iterator_construction<ft::vector<int> >(4, 100))
-        std::cout << GREEN << "SUCCESS\n" << RESET;
-    else
-        std::cout << RED << "FAILURE\n" << RESET;
-/*    // others
-    std::cout << "vector iterator construction - ";
-    if (vector_iterator_construction<ft::vector<int> >(4, 100))
-        std::cout << GREEN << "SUCCESS\n" << RESET;
-    else
-        std::cout << RED << "FAILURE\n" << RESET;*/
+    print_test_result("vector iterator construction - ", vector_iterator_construction<ft::vector<int> >(4, 100));
 
-    stdtime = vector_iterator_timed_tests<std::vector<int> >();
-    fttime = vector_iterator_timed_tests<ft::vector<int> >();
-    print_results(stdtime, fttime);
+    print_time_results(vec_iterator_timed_tests<std::vector<int> >(), vec_iterator_timed_tests<ft::vector<int> >());
+
 }
 
 #endif

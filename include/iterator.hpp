@@ -120,7 +120,6 @@ namespace ft {
 
         reference   operator[](difference_type i) const { return (*(_data + i)); }
 
-        pointer     get_data() const { return (_data); }
     private:
         pointer _data;
     };
