@@ -3,6 +3,7 @@
 #include "include/stack.hpp"
 #include "include/utils.hpp"
 #include "tests/vectorTests.hpp"
+#include "include/type_traits.hpp"
 #include <iostream>
 #include <vector>
 #include <cstring> //strcmp
@@ -42,25 +43,14 @@ void print_usage(void) {
     exit(EXIT_FAILURE);
 }
 
-/*int main(void) {
-    std::vector<int>    comp;
-    //ft::vector<int>     vec(4);
+int main(void) {
 
-    for(size_t i = 0; i < 20; i++) {
-        comp.push_back(i);
-    }
-    comp.erase(comp.begin() + 5, comp.end());
-    comp.erase(comp.end() - 1);
-    std::cout << "comp size: " << comp.size() << " - Capacity: " << comp.capacity() << '\n';
-    for(std::vector<int>::iterator i = comp.begin(); i != comp.end(); i++)
-        std::cout << *i << " ";
-
-    std::cout << "\nvec - size: " << vec.size() << " - Capacigty: " << vec.capacity() << '\n';
-    for(ft::vector<int>::iterator vi = vec.begin(); vi != vec.end(); vi++)
-        std::cout << *vi << " ";
+    std::cout << "std: " << std::is_integral<int>::value << '\n';
+    std::cout << "std: " << ft::is_integral<int>::value << '\n';
+    std::cout << "std: " << ft::is_integral<char>::value << '\n';
     return (0);
-}*/
-int main(int argc, char **argv)
+}
+/*int main(int argc, char **argv)
 {
     if (argc != 2 || !valid_arg(argv[1]))
         print_usage();
@@ -74,7 +64,7 @@ int main(int argc, char **argv)
         //vector_other_tests();
     }
     exit(EXIT_SUCCESS);
-}
+}*/
 
 //test_rev_it();
 /*std::vector<int> stdvec;
