@@ -109,7 +109,7 @@ void    print_test_result(std::string testName, bool success) {
 template <typename VectorClass>
 bool    vector_construction(void)
 {
-    //typedef typename VectorClass::iterator iterator;
+    typedef typename VectorClass::iterator iterator;
     // Default construction
     VectorClass dflt;
     // Default construction overload
@@ -143,11 +143,15 @@ bool    vector_construction(void)
         || !containers_equal(dflt, sizeXdata, sizeXdataEQ))
         return (false);
 
-    /*iterator bg = sizeXdata.begin();
+    std::vector<int>    compsxd(100, 5);
+    std::vector<int>::iterator compbg = compsxd.begin();
+    std::vector<int>::iterator compend = compsxd.end();
+    std::vector<int> comp(compbg, compend);
+    iterator bg = sizeXdata.begin();
     iterator end = sizeXdata.end();
     VectorClass templateTest(bg, end);
-    if (!containers_equal(sizeXdata, templateTest))
-        return (false);*/
+    if (!containers_equal(comp, templateTest))
+        return (false);
     return (true);
 }
 //==============Calculate time===========//
@@ -306,13 +310,13 @@ bool    vector_insert() {
 
     // ==== Insert Mult val ==== //
     // reallocate
-    myvec.insert(myvec.begin() + 20, static_cast<size_t>(50), 44);
-    comp.insert(comp.begin() + 20, static_cast<size_t>(50), 44);
+    myvec.insert(myvec.begin() + 20, 50, 44);
+    comp.insert(comp.begin() + 20, 50, 44);
     if (!containers_equal(myvec, comp))
         return (false);
     // No reallocate
-    myvec.insert((myvec.begin() + 30), static_cast<size_t>(3), 900);
-    comp.insert((comp.begin() + 30), static_cast<size_t>(3), 900);
+    myvec.insert((myvec.begin() + 30), 3, 900);
+    comp.insert((comp.begin() + 30), 3, 900);
     if (!containers_equal(myvec, comp))
         return (false);
 
@@ -345,8 +349,8 @@ bool    vector_insert() {
     comp.insert(comp.end(), 7);
     if (!containers_equal(myvec, comp))
         return (false);
-    myvec.insert(myvec.end(), static_cast<size_t>(4), 555);
-    comp.insert(comp.end(), static_cast<size_t>(4), 555);
+    myvec.insert(myvec.end(), 4, 555);
+    comp.insert(comp.end(), 4, 555);
     if (!containers_equal(myvec, comp))
         return (false);
     myvec.insert(myvec.end(), myvec.begin(), myvec.end() - 1);

@@ -8,6 +8,7 @@
 # include <stdexcept>
 # include "iterator.hpp"
 # include "utils.hpp"
+# include "type_traits.hpp"
 
 namespace ft {
     template<typename T, class Alloc = std::allocator<T> >
@@ -46,13 +47,12 @@ namespace ft {
         ~vector() {
             _dealoc();
         }
-        // do enable if, ad tests...... figure out test main.cpp
-        /*template <class InputIterator>
-        vector(InputIterator first, InputIterator last, allocator_type const & alloc = allocator_type()) : _alloc(alloc) {
+        template <class InputIterator>
+        vector(InputIterator first, typename ft::enable_if<ft::is_random_access_iterator<InputIterator>::value,InputIterator>::type last, allocator_type const & alloc = allocator_type()) : _alloc(alloc) {
             size_type n = static_cast<size_type>(std::distance(first, last));
             _allocate(n);
             _construct(_end, n, first);
-        }*/
+        }
         vector(vector const & x) : _alloc(allocator_type()) {
             _allocate(x._cap);
             _construct(_end, x._size, x._begin);
@@ -134,7 +134,7 @@ namespace ft {
 
 
         // MODIFIERS
-        template <class InputIterator> //====NEED TO CHECK FOR AT LEAST FORWARD ITERATOR====//
+        template <class InputIterator>
         void assign(InputIterator first, InputIterator last) {
             size_type  dist = static_cast<size_type>(std::distance(first, last));
             if (_passedMaxCapacity(dist)) {
@@ -196,8 +196,8 @@ namespace ft {
                 _size++;
             }
         }
-        template <class InputIterator>// check that Input iterator is compatible with value_type
-        void    insert(iterator position, InputIterator first, InputIterator last) {
+        template <class InputIterator>
+        void    insert(iterator position, typename ft::enable_if<ft::is_random_access_iterator<InputIterator>::value,InputIterator>::type first, InputIterator last) {
             pointer _pbegin, _pend;
             size_type location = static_cast<size_type>(std::distance(begin(), position));
             size_type n = static_cast<size_type>(std::distance(first, last));

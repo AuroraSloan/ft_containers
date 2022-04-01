@@ -43,14 +43,15 @@ void print_usage(void) {
     exit(EXIT_FAILURE);
 }
 
-int main(void) {
+/*int main(void) {
 
     std::cout << "std: " << std::is_integral<int>::value << '\n';
+    std::cout << "std: " << std::is_integral<double>::value << '\n';
     std::cout << "std: " << ft::is_integral<int>::value << '\n';
     std::cout << "std: " << ft::is_integral<char>::value << '\n';
     return (0);
-}
-/*int main(int argc, char **argv)
+}*/
+int main(int argc, char **argv)
 {
     if (argc != 2 || !valid_arg(argv[1]))
         print_usage();
