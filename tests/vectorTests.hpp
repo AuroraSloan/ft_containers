@@ -559,4 +559,151 @@ void    vector_iterator_tests(void) {
 
 }
 
+//============================================================================//
+//                                                                            //
+//                              CAPACITY TESTS                                //
+//                                                                            //
+//============================================================================//
+
+//====================================//
+//         SIZE & MAX SIZE            //
+//====================================//
+template <typename VectorClass>
+bool    vector_size(void)
+{
+    VectorClass         vec;
+    std::vector<int>    comp;
+
+    if (!containers_equal(vec, comp) || vec.size() != comp.size())
+        return (false);
+    for (size_t i = 0; i < 30; i++) {
+        vec.push_back(i);
+        comp.push_back(i);
+    }
+    if (!containers_equal(vec, comp) || vec.size() != comp.size())
+        return (false);
+    if (vec.max_size() != comp.max_size())
+        std::cout << YELLOW << "max size differs\nstl: " << comp.max_size() << "\nft: " << vec.max_size() << RESET << '\n';
+
+    vec.insert(vec.begin() + 7, 8, 550);
+    comp.insert(comp.begin() + 7, 8, 550);
+    if (!containers_equal(vec, comp) || vec.size() != comp.size())
+        return (false);
+    if (vec.max_size() != comp.max_size())
+        std::cout << YELLOW << "max size differs\nstl: " << comp.max_size() << "\nft: " << vec.max_size() << RESET << '\n';
+
+    for (size_t i = 0; i < 4; i++) {
+        vec.pop_back();
+        comp.pop_back();
+    }
+    if (!containers_equal(vec, comp) || vec.size() != comp.size())
+        return (false);
+    if (vec.max_size() != comp.max_size())
+        std::cout << YELLOW << "max size differs\nstl: " << comp.max_size() << "\nft: " << vec.max_size() << RESET << '\n';
+
+    return (true);
+}
+
+//====================================//
+//               RESIZE               //
+//====================================//
+template <typename VectorClass>
+bool    vector_resize(void)
+{
+    VectorClass         vec(50, 300);
+    std::vector<int>    comp(50, 300);
+
+    vec.resize(2);
+    comp.resize(2);
+    if (!containers_equal(vec, comp))
+        return (false);
+
+    vec.resize(30, 80);
+    comp.resize(30, 80);
+    if (!containers_equal(vec, comp))
+        return (false);
+
+    vec.resize(60);
+    comp.resize(60);
+    if (!containers_equal(vec, comp))
+        return (false);
+
+    return (true);
+}
+
+//====================================//
+//         CAPACITY & EMPTY           //
+//====================================//
+template <typename VectorClass>
+bool    vector_capacity(void)
+{
+    VectorClass         vec(50, 300);
+    std::vector<int>    comp(50, 300);
+
+    if (vec.capacity() != comp.capacity())
+        return (false);
+
+    vec.reserve(100);
+    comp.reserve(100);
+    if (vec.capacity() != comp.capacity())
+        return (false);
+
+    if (vec.empty() != comp.empty())
+        return (false);
+
+    vec.clear();
+    comp.clear();
+    if (vec.empty() != comp.empty())
+        return (false);
+
+    return (true);
+}
+//====================================//
+//               RESERVE              //
+//====================================//
+template <typename VectorClass>
+bool    vector_reserve(void)
+{
+    VectorClass         vec(50, 300);
+    std::vector<int>    comp(50, 300);
+
+    vec.reserve(0);
+    comp.reserve(0);
+    if (!containers_equal(vec, comp))
+        return (false);
+
+    vec.reserve(133);
+    comp.reserve(133);
+    if (!containers_equal(vec, comp))
+        return (false);
+
+    return (true);
+}
+
+//==============Calculate time===========//
+template < typename Container >
+double vec_capacity_timed_tests(void) {
+    clock_t begin, end;
+
+    begin = clock();
+    vector_size<Container>();
+    vector_resize<Container>();
+    vector_capacity<Container>();
+    vector_reserve<Container>();
+    end = clock();
+    return ((double)(end - begin) / CLOCKS_PER_SEC);
+}
+//=====Perform all tests and time tests =====//
+void    vector_capacity_tests(void) {
+
+    std::cout << CYAN << '\t' << SUBHDR << "Capacity Tests" << SUBHDR << RESET << '\n';
+
+    print_test_result("vector size - ", vector_size<ft::vector<int> >());
+    print_test_result("vector resize - ", vector_resize<ft::vector<int> >());
+    print_test_result("vector capacity - ", vector_capacity<ft::vector<int> >());
+    print_test_result("vector reserve - ", vector_reserve<ft::vector<int> >());
+
+    print_time_results(vec_capacity_timed_tests<std::vector <int> > (), vec_capacity_timed_tests<ft::vector<int> >());
+}
+
 #endif

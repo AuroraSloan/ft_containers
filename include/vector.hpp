@@ -83,9 +83,14 @@ namespace ft {
         // CAPACITY
         size_type               size() const { return (_size); }
         size_type               max_size() { return (_alloc.max_size()); }
-        /*void                    resize(size_type n, value_type val = value_type()) {
-        //inserts and erases
-        }*/
+        void                    resize(size_type n, value_type val = value_type()) {
+            if (_passedMaxCapacity(n))
+                reserve(n);
+            for (; _size < n; _size++)
+                _alloc.construct(_end++,  val);
+            for (; n < _size; _size--, _end--)
+                _alloc.destroy(_end - 1);
+        }
         size_type               capacity() const { return (_cap); }
         bool                    empty() const { return (!size()); }
         void                    reserve(size_type n) {
@@ -93,10 +98,8 @@ namespace ft {
             pointer     _newBegin, _newEnd;
             size_type   tmpSize = _size;
 
-            if (!_passedMaxCapacity(n)) {
-                std::cout << "returning\n";
+            if (!_passedMaxCapacity(n))
                 return ;
-            }
             _newBegin = _alloc.allocate(n);
             _newEnd = _newBegin;
             _construct(_newEnd, _begin);
@@ -271,7 +274,6 @@ namespace ft {
             for(size_type i = 0; i < _size; i++)
                 _alloc.construct(start++, *(src + i));
         }
-//        template <typename InputIterator>
         void    _construct(pointer & start, size_type n, iterator src) {
             for(size_type i = 0; i < n; i++) {
                 _alloc.construct(start++, *(src + i));
