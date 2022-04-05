@@ -43,15 +43,27 @@ void print_usage(void) {
     exit(EXIT_FAILURE);
 }
 
-/*int main(void) {
+int main(void) {
+    std::vector<int>    comp;
 
-    std::cout << "std: " << std::is_integral<int>::value << '\n';
-    std::cout << "std: " << std::is_integral<double>::value << '\n';
-    std::cout << "std: " << ft::is_integral<int>::value << '\n';
-    std::cout << "std: " << ft::is_integral<char>::value << '\n';
+    std::cout << "back: " << comp.back() << '\n';
+/*    for (size_t i = 0; i < 30; i++) {
+        comp.push_back(i);
+    }
+    int & hey = comp.at(4);
+    std::cout << "rlt: " << hey << '\n';
+    try {
+        int & err = comp.at(55);
+        std::cout << "err: " << err << '\n';
+    } catch (std::exception & e){
+        std::cout << e.what() << '\n';
+    }*/
+
+
     return (0);
-}*/
-int main(int argc, char **argv)
+}
+
+/*int main(int argc, char **argv)
 {
     if (argc != 2 || !valid_arg(argv[1]))
         print_usage();
@@ -61,11 +73,11 @@ int main(int argc, char **argv)
         vector_modifiers_tests();
         vector_iterator_tests();
         vector_capacity_tests();
-        //vector_elementAccess_tests();
+        vector_elem_access_tests();
         //vector_other_tests();
     }
     exit(EXIT_SUCCESS);
-}
+}*/
 
 /*test_rev_it();
 std::vector<int> stdvec;

@@ -706,4 +706,49 @@ void    vector_capacity_tests(void) {
     print_time_results(vec_capacity_timed_tests<std::vector <int> > (), vec_capacity_timed_tests<ft::vector<int> >());
 }
 
+//============================================================================//
+//                                                                            //
+//                          ELEMENT ACCESS TESTS                              //
+//                                                                            //
+//============================================================================//
+
+//====================================//
+//             operator[]             //
+//====================================//
+template <typename VectorClass>
+bool    vector_operator_brack(void)
+{
+    VectorClass         vec;
+    std::vector<int>    comp;
+
+    for (size_t i = 0; i < 25; i++) {
+        vec.push_back(i);
+        comp.push_back(i);
+    }
+    if (vec[0] != comp[0] || vec[20] != comp[20] || vec[24] != comp[24])
+        return (false);
+
+    return (true);
+}
+
+//==============Calculate time===========//
+template < typename Container >
+double vec_elem_access_timed_tests(void) {
+    clock_t begin, end;
+
+    begin = clock();
+    vector_operator_brack<Container>();
+    end = clock();
+    return ((double)(end - begin) / CLOCKS_PER_SEC);
+}
+//=====Perform all tests and time tests =====//
+void    vector_elem_access_tests(void) {
+
+    std::cout << CYAN << '\t' << SUBHDR << "Element Access Tests" << SUBHDR << RESET << '\n';
+
+    print_test_result("operator[] - ", vector_operator_brack<ft::vector<int> >());
+
+    print_time_results(vec_elem_access_timed_tests<std::vector <int> > (), vec_elem_access_timed_tests<ft::vector<int> >());
+}
+
 #endif
