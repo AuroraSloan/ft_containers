@@ -43,11 +43,10 @@ void print_usage(void) {
     exit(EXIT_FAILURE);
 }
 
-int main(void) {
+/*int main(void) {
     std::vector<int>    comp;
 
-    std::cout << "back: " << comp.back() << '\n';
-/*    for (size_t i = 0; i < 30; i++) {
+    for (size_t i = 0; i < 30; i++) {
         comp.push_back(i);
     }
     int & hey = comp.at(4);
@@ -57,13 +56,13 @@ int main(void) {
         std::cout << "err: " << err << '\n';
     } catch (std::exception & e){
         std::cout << e.what() << '\n';
-    }*/
+    }
 
 
     return (0);
-}
+}*/
 
-/*int main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     if (argc != 2 || !valid_arg(argv[1]))
         print_usage();
@@ -77,7 +76,7 @@ int main(void) {
         //vector_other_tests();
     }
     exit(EXIT_SUCCESS);
-}*/
+}
 
 /*test_rev_it();
 std::vector<int> stdvec;

@@ -713,10 +713,10 @@ void    vector_capacity_tests(void) {
 //============================================================================//
 
 //====================================//
-//             operator[]             //
+//    opeerator[], at, front, back    //
 //====================================//
 template <typename VectorClass>
-bool    vector_operator_brack(void)
+bool    vector_element_access(void)
 {
     VectorClass         vec;
     std::vector<int>    comp;
@@ -725,7 +725,21 @@ bool    vector_operator_brack(void)
         vec.push_back(i);
         comp.push_back(i);
     }
+
+    // OPERATOR []
     if (vec[0] != comp[0] || vec[20] != comp[20] || vec[24] != comp[24])
+        return (false);
+
+    // AT
+    if (vec.at(4) != comp.at(4) || vec.at(0) != comp.at(0) || vec.at(24) != comp.at(24))
+        return (false);
+
+    // FRONT
+    if (vec.front() != comp.front())
+        return (false);
+
+    // BACK
+    if (vec.back() != comp.back())
         return (false);
 
     return (true);
@@ -737,7 +751,7 @@ double vec_elem_access_timed_tests(void) {
     clock_t begin, end;
 
     begin = clock();
-    vector_operator_brack<Container>();
+    vector_element_access<Container>();
     end = clock();
     return ((double)(end - begin) / CLOCKS_PER_SEC);
 }
@@ -746,7 +760,7 @@ void    vector_elem_access_tests(void) {
 
     std::cout << CYAN << '\t' << SUBHDR << "Element Access Tests" << SUBHDR << RESET << '\n';
 
-    print_test_result("operator[] - ", vector_operator_brack<ft::vector<int> >());
+    print_test_result("operator[], at, front, back - ", vector_element_access<ft::vector<int> >());
 
     print_time_results(vec_elem_access_timed_tests<std::vector <int> > (), vec_elem_access_timed_tests<ft::vector<int> >());
 }

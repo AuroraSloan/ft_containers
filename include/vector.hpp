@@ -9,6 +9,7 @@
 # include "iterator.hpp"
 # include "utils.hpp"
 # include "type_traits.hpp"
+# include "algorithm.hpp"
 
 namespace ft {
     template<typename T, class Alloc = std::allocator<T> >
@@ -126,14 +127,8 @@ namespace ft {
         }
         reference               front() { return (*_begin); }
         const_reference         front() const { return (*_begin); }
-        reference               back() {
-            if (!empty())
-                return (*(_end - 1));
-        }
-        const_reference         back() const {
-            if (!empty())
-                return (*(_end - 1));
-        }
+        reference               back() { return (*(_end - 1)); }
+        const_reference         back() const { return (*(_end - 1)); }
 
 
         // MODIFIERS
@@ -320,12 +315,20 @@ namespace ft {
     };
 }
 
-/*template <typename T, class Alloc>
-    bool    operator==(ft::vector<T,Alloc> const & lhs, ft::vector<T,Alloc> const & rhs) {}
 template <typename T, class Alloc>
-    bool    operator!=(ft::vector<T,Alloc> const & lhs, ft::vector<T,Alloc> const & rhs) {}
+bool    operator==(ft::vector<T,Alloc> const & lhs, ft::vector<T,Alloc> const & rhs) {
+    return (lhs.size() == rhs.size() && lhs.begin() == rhs.begin() && (lhs.end() - 1 == rhs.end() - 1));
+}
+
 template <typename T, class Alloc>
-    bool    operator<(ft::vector<T,Alloc> const & lhs, ft::vector<T,Alloc> const & rhs) {}
+bool    operator!=(ft::vector<T,Alloc> const & lhs, ft::vector<T,Alloc> const & rhs) {
+    return (!(lhs == rhs));
+}
+
+template <typename T, class Alloc>
+bool    operator<(ft::vector<T,Alloc> const & lhs, ft::vector<T,Alloc> const & rhs) {
+    return (ft::lexicographical_compare())
+}
 template <typename T, class Alloc>
     bool    operator<=(ft::vector<T,Alloc> const & lhs, ft::vector<T,Alloc> const & rhs) {}
 template <typename T, class Alloc>
@@ -334,5 +337,4 @@ template <typename T, class Alloc>
     bool    operator>=(ft::vector<T,Alloc> const & lhs, ft::vector<T,Alloc> const & rhs) {}
 template <typename T, class Alloc>
     void    swap(ft::vector<T,Alloc> const & lhs, ft::vector<T,Alloc> const & rhs) {}
-*/
 #endif
