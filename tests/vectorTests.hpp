@@ -765,4 +765,74 @@ void    vector_elem_access_tests(void) {
     print_time_results(vec_elem_access_timed_tests<std::vector <int> > (), vec_elem_access_timed_tests<ft::vector<int> >());
 }
 
+
+
+
+
+
+//============================================================================//
+//                                                                            //
+//                      RELATIONAL OPERATORS TESTS                            //
+//                                                                            //
+//============================================================================//
+
+//====================================//
+//   relational operators and swap    //
+//====================================//
+template <typename VectorClass>
+bool    vector_relational_operators(void)
+{
+    VectorClass         vec1;
+    VectorClass         vec2;
+
+    // RELATIONAL OPERATORS
+    if (!(vec1 == vec2) || vec1 != vec2 || vec1 < vec2 || vec1 > vec2 || !(vec1 <= vec2) || !(vec1 >= vec2))
+        return (false);
+
+    for (size_t i = 0; i < 25; i++) {
+        vec1.push_back(i);
+        vec2.push_back(i);
+    }
+
+    if (!(vec1 == vec2) || vec1 != vec2 || vec1 < vec2 || vec1 > vec2 || !(vec1 <= vec2) || !(vec1 >= vec2))
+        return (false);
+
+    vec1.pop_back();
+    if (vec1 == vec2 || !(vec1 != vec2) || !(vec1 < vec2) || vec2 < vec1 || vec1 > vec2 || !(vec2 > vec1))
+        return (false);
+    if (!(vec1 <= vec2) || vec2 <= vec1 || vec1 >= vec2 || !(vec2 >= vec1))
+        return (false);
+
+    // SWAP && RELATIONAL OPERATORS
+    VectorClass         swapA(vec1);
+    VectorClass         swapB;
+
+    swap(vec1, swapB);
+    if (swapA != swapB || !(swapA == swapB) || !vec1.empty())
+        return (false);
+
+    return (true);
+}
+
+//==============Calculate time===========//
+template < typename Container >
+double vec_relational_operators_timed_tests(void) {
+    clock_t begin, end;
+
+    begin = clock();
+    vector_relational_operators<Container>();
+    end = clock();
+    return ((double)(end - begin) / CLOCKS_PER_SEC);
+}
+
+//=====Perform all tests and time tests =====//
+void    vector_relational_operators_tests(void) {
+
+    std::cout << CYAN << '\t' << SUBHDR << "Relational Operators Tests" << SUBHDR << RESET << '\n';
+
+    print_test_result("relational operators and swap - ", vector_relational_operators<ft::vector<int> >());
+
+    print_time_results(vec_relational_operators_timed_tests<std::vector <int> > (), vec_relational_operators_timed_tests<ft::vector<int> >());
+}
+
 #endif

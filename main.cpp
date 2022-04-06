@@ -73,7 +73,7 @@ int main(int argc, char **argv)
         vector_iterator_tests();
         vector_capacity_tests();
         vector_elem_access_tests();
-        //vector_other_tests();
+        vector_relational_operators_tests();
     }
     exit(EXIT_SUCCESS);
 }
