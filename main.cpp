@@ -10,6 +10,7 @@
 
 
 #include <iterator>
+# include <cstddef>
 
 
 /*void test_rev_it(void) {
@@ -51,9 +52,21 @@ void print_usage(void) {
     std::vector<int> vec;
     for (size_t i = 0; i < 10; i++)
         vec.push_back(i);
+    vec.insert(vec.begin(), 100);
+    vec.insert(vec.begin(), 20);
 
     std::vector<int>::iterator it = vec.begin();
-    std::cout << *it++ << std::endl;
+    std::vector<int>::iterator tmp = it + 1;
+
+    std::cout << *it << std::endl;
+    std::cout << *(it + 1) << std::endl;
+    std::cout << *(1 + it) << std::endl;
+
+    std::cout << "it: " << *it << "tmp: " << *tmp << std::endl;
+    std::cout << "*(tmp - 1): " << *(tmp - 1) << std::endl;
+    ptrdiff_t check = tmp - it;
+    std::cout << "tmp - it: " << check << std::endl;
+    std::cout << tmp + it << std::endl;
 
     return (0);
 }*/

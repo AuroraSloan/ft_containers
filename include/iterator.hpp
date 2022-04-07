@@ -66,15 +66,9 @@ namespace ft {
         random_access_iterator operator++(int) {
             random_access_iterator tmp(*this);
             _data++;
-            //operator++();
             return tmp;
         }
-        /*random_access_iterator * operator++(T*) {
-            random_access_iterator tmp(*this);
-            *_data++;
-            //operator++();
-            return tmp;
-        }*/
+
         random_access_iterator & operator--(void) {
             --_data;
             return (*this);
@@ -83,25 +77,12 @@ namespace ft {
         random_access_iterator operator--(int) {
             random_access_iterator tmp(*this);
             _data--;
-            //operator++();
             return tmp;
         }
-        /*random_access_iterator * operator--(T*) {
-            random_access_iterator tmp(*this);
-            *_data--;
-            //operator--();
-            return tmp;
-        }*/
-        //       random_access_iterator operator
 
         random_access_iterator operator+(difference_type x) { return (_data + x); }
-        difference_type operator+(random_access_iterator const & rhs) { return (_data + rhs._data); }
         random_access_iterator operator-(difference_type x) { return (_data - x); }
-        //random_access_iterator operator-(random_access_iterator const & rhs) { return (*_data - *rhs._data); }
-        //difference_type operator-(difference_type x) { return (_data - x); }
         difference_type operator-(random_access_iterator const & rhs) { return (_data - rhs._data); }
-
-
 
         random_access_iterator const & operator+=(random_access_iterator const &rhs) {
             _data += rhs._data;
