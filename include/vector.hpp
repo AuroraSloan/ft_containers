@@ -40,9 +40,7 @@ namespace ft {
         typedef size_t size_type;
 
         // CONSTRUCTORS / DESTRUCTOR
-        explicit vector(allocator_type const &alloc = allocator_type()) : _begin(NULL), _end(NULL), _size(0), _cap(0),
-                                                                          _alloc(alloc) {}
-
+        explicit vector(allocator_type const &alloc = allocator_type()) : _begin(NULL), _end(NULL), _size(0), _cap(0), _alloc(alloc) {}
         explicit vector(size_type n, value_type const &val = value_type(),
                         allocator_type const &alloc = allocator_type()) : _alloc(alloc) {
             _allocate(n);
