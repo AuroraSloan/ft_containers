@@ -9,6 +9,9 @@
 #include <cstring> //strcmp
 
 
+#include <iterator>
+
+
 /*void test_rev_it(void) {
     std::vector<int> vec;
     ft::vector<int> myvec(10, 10);
@@ -43,21 +46,14 @@ void print_usage(void) {
     exit(EXIT_FAILURE);
 }
 
+
 /*int main(void) {
-    std::vector<int>    comp;
+    std::vector<int> vec;
+    for (size_t i = 0; i < 10; i++)
+        vec.push_back(i);
 
-    for (size_t i = 0; i < 30; i++) {
-        comp.push_back(i);
-    }
-    int & hey = comp.at(4);
-    std::cout << "rlt: " << hey << '\n';
-    try {
-        int & err = comp.at(55);
-        std::cout << "err: " << err << '\n';
-    } catch (std::exception & e){
-        std::cout << e.what() << '\n';
-    }
-
+    std::vector<int>::iterator it = vec.begin();
+    std::cout << *it++ << std::endl;
 
     return (0);
 }*/

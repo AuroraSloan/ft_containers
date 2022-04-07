@@ -49,9 +49,6 @@ namespace ft {
         random_access_iterator(random_access_iterator const & src) : _data(src._data) {}
         ~random_access_iterator(void) {}
 
-        bool operator==(random_access_iterator const &rhs) const { return (_data == rhs._data); }
-        bool operator!=(random_access_iterator const &rhs) const { return (_data != rhs._data); }
-
         reference   operator*() { return (*_data); }
         pointer     operator->() { return (_data); }
 
@@ -66,7 +63,7 @@ namespace ft {
             return (*this);
         }
 
-        random_access_iterator operator++(T) {
+        random_access_iterator operator++(int) {
             random_access_iterator tmp(*this);
             _data++;
             //operator++();
@@ -83,7 +80,7 @@ namespace ft {
             return (*this);
         }
 
-        random_access_iterator operator--(T) {
+        random_access_iterator operator--(int) {
             random_access_iterator tmp(*this);
             _data--;
             //operator++();
@@ -104,10 +101,7 @@ namespace ft {
         //difference_type operator-(difference_type x) { return (_data - x); }
         difference_type operator-(random_access_iterator const & rhs) { return (_data - rhs._data); }
 
-        bool operator<(random_access_iterator const & rhs) { return (*_data < *rhs._data); }
-        bool operator>(random_access_iterator const & rhs) { return (*_data > *rhs._data); }
-        bool operator<=(random_access_iterator const & rhs) { return (*_data <= *rhs._data); }
-        bool operator>=(random_access_iterator const & rhs) { return (*_data >= *rhs._data); }
+
 
         random_access_iterator const & operator+=(random_access_iterator const &rhs) {
             _data += rhs._data;
@@ -119,10 +113,28 @@ namespace ft {
         }
 
         reference   operator[](difference_type i) const { return (*(_data + i)); }
-
+        pointer base() const { return (_data); }
+        /*bool operator==(random_access_iterator const &rhs) const { return (_data == rhs._data); }
+        bool operator!=(random_access_iterator const &rhs) const { return (_data != rhs._data); }
+        bool operator<(random_access_iterator const & rhs) { return (*_data < *rhs._data); }
+        bool operator>(random_access_iterator const & rhs) { return (*_data > *rhs._data); }
+        bool operator<=(random_access_iterator const & rhs) { return (*_data <= *rhs._data); }
+        bool operator>=(random_access_iterator const & rhs) { return (*_data >= *rhs._data); }*/
     private:
         pointer _data;
     };
+    template <typename T>
+    bool operator==(ft::random_access_iterator<T> const &lhs, ft::random_access_iterator<T> const &rhs) { return (lhs.base() == rhs.base()); }
+    template <typename T>
+    bool operator!=(ft::random_access_iterator<T> const &lhs, ft::random_access_iterator<T> const &rhs) { return (lhs.base() != rhs.base()); }
+    template <typename T>
+    bool operator<(ft::random_access_iterator<T> const &lhs, ft::random_access_iterator<T> const & rhs) { return (lhs.base() < rhs.base()); }
+    template <typename T>
+    bool operator>(ft::random_access_iterator<T> const &lhs, ft::random_access_iterator<T> const & rhs) { return (lhs.base() > rhs.base()); }
+    template <typename T>
+    bool operator<=(ft::random_access_iterator<T> const &lhs, ft::random_access_iterator<T> const & rhs) { return (lhs.base() <= rhs.base()); }
+    template <typename T>
+    bool operator>=(ft::random_access_iterator<T> const &lhs, ft::random_access_iterator<T> const & rhs) { return (lhs.base() >= rhs.base()); }
 
 
     // REVERSE_ITERATOR
