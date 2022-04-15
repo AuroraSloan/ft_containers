@@ -1,4 +1,4 @@
 #!/bin/bash
 
 make re
-./ft_containers vector
+./ft_containers all

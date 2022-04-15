@@ -4,6 +4,7 @@
 #include "include/utils.hpp"
 #include "tests/vectorTests.hpp"
 #include "include/type_traits.hpp"
+#include "tests/iteratorTests.hpp"
 #include <iostream>
 #include <vector>
 #include <cstring> //strcmp
@@ -37,7 +38,7 @@
 }*/
 
 bool    valid_arg(std::string arg) {
-    return (arg == "vector" || arg == "stack" || arg == "map");
+    return (arg == "vector" || arg == "stack" || arg == "map" || arg == "iterator" || arg == "all");
 }
 
 void print_usage(void) {
@@ -49,24 +50,23 @@ void print_usage(void) {
 
 
 /*int main(void) {
-    std::vector<int> vec;
-    for (size_t i = 0; i < 10; i++)
+    std::vector<int> comp;
+    ft::vector<int> vec;
+    for (size_t i = 0; i < 10; i++) {
+        comp.push_back(i);
         vec.push_back(i);
-    vec.insert(vec.begin(), 100);
-    vec.insert(vec.begin(), 20);
+    }
+    std::cout << "comp" << std::endl;
+    std::vector<int>::reverse_iterator crit = comp.rbegin();
+    std::cout << *crit << std::endl;
+    crit++;
+    std::cout << *crit << std::endl;
 
-    std::vector<int>::iterator it = vec.begin();
-    std::vector<int>::iterator tmp = it + 1;
-
-    std::cout << *it << std::endl;
-    std::cout << *(it + 1) << std::endl;
-    std::cout << *(1 + it) << std::endl;
-
-    std::cout << "it: " << *it << "tmp: " << *tmp << std::endl;
-    std::cout << "*(tmp - 1): " << *(tmp - 1) << std::endl;
-    ptrdiff_t check = tmp - it;
-    std::cout << "tmp - it: " << check << std::endl;
-    std::cout << tmp + it << std::endl;
+    std::cout << "vec" << std::endl;
+    ft::vector<int>::reverse_iterator vrit = vec.rbegin();
+    std::cout << *vrit << std::endl;
+    vrit++;
+    std::cout << *vrit << std::endl;
 
     return (0);
 }*/
@@ -75,11 +75,15 @@ int main(int argc, char **argv)
 {
     if (argc != 2 || !valid_arg(argv[1]))
         print_usage();
-    if (strcmp(argv[1], "vector") == 0) {
+    if (strcmp(argv[1], "iterator") == 0 || strcmp(argv[1], "all") == 0) {
+        std::cout << MAGENTA << HDR << " Iterator Tests " << HDR << RESET << '\n';
+        iterator_tests();
+    }
+    if (strcmp(argv[1], "vector") == 0 || strcmp(argv[1], "all") == 0) {
         std::cout << MAGENTA << HDR << " Vector Tests " << HDR << RESET << '\n';
         vector_construction_tests();
-        vector_modifiers_tests();
         vector_iterator_tests();
+        vector_modifiers_tests();
         vector_capacity_tests();
         vector_elem_access_tests();
         vector_relational_operators_tests();

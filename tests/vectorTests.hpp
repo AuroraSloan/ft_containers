@@ -98,6 +98,8 @@ void    print_test_result(std::string testName, bool success) {
         std::cout << RED << "FAILURE\n" << RESET;
 }
 
+
+
 //============================================================================//
 //                                                                            //
 //                              CONSTRUCTOR TESTS                             //
@@ -169,6 +171,39 @@ void    vector_construction_tests(void) {
     std::cout << CYAN << '\t' << SUBHDR << "Construction Tests" << SUBHDR << RESET << '\n';
     print_test_result("vector construction - ",vector_construction<ft::vector<int> >());
     print_time_results(vec_construction_timer<std::vector<int> >(),vec_construction_timer<ft::vector<int> >());
+}
+
+
+
+
+//============================================================================//
+//                                                                            //
+//                              ITERATOR TESTS                                //
+//                                                                            //
+//============================================================================//
+template < typename Container >
+bool    vector_iterator_methods(void) {
+    return (true);
+}
+//==============Calculate time===========//
+template < typename Container >
+double vec_iterator_timed_tests(void) {
+    clock_t begin, end;
+
+    begin = clock();
+    vector_iterator_methods<Container>();
+    end = clock();
+    return ((double)(end - begin) / CLOCKS_PER_SEC);
+}
+//=====Perform all tests and time tests =====//
+void    vector_iterator_tests(void) {
+
+    std::cout << CYAN << '\t' << SUBHDR << "Iterator Tests" << SUBHDR << RESET << '\n';
+
+    print_test_result("vector iterator methods - ", vector_iterator_methods<ft::vector<int> >());
+
+    print_time_results(vec_iterator_timed_tests<std::vector<int> >(), vec_iterator_timed_tests<ft::vector<int> >());
+
 }
 
 
@@ -505,59 +540,6 @@ void    vector_modifiers_tests(void) {
 
 
 
-
-//============================================================================//
-//                                                                            //
-//                              ITERATOR TESTS                                //
-//                                                                            //
-//============================================================================//
-
-//====================================//
-//      ITERATOR CONSTRUCTION         //
-//====================================//
-template <typename VectorClass>
-bool    vector_iterator_construction(int count, int data)
-{
-    VectorClass vec(count, data);
-
-    // Default construction
-    typename VectorClass::iterator default_it;
-    // Default construction overload
-    typename VectorClass::iterator begin = vec.begin();
-    if (*begin != data)
-        return (false);
-    // Copy Construction
-    typename VectorClass::iterator copy_it(begin);
-    if (*copy_it != data)
-        return (false);
-    // Equal overload
-    default_it = begin;
-    if (*default_it != data)
-        return (false);
-
-    return (true);
-}
-
-//==============Calculate time===========//
-template < typename Container >
-double vec_iterator_timed_tests(void) {
-    clock_t begin, end;
-
-    begin = clock();
-    vector_iterator_construction<Container>(10, 1000);
-    end = clock();
-    return ((double)(end - begin) / CLOCKS_PER_SEC);
-}
-//=====Perform all tests and time tests =====//
-void    vector_iterator_tests(void) {
-
-    std::cout << CYAN << '\t' << SUBHDR << "Iterator Tests" << SUBHDR << RESET << '\n';
-
-    print_test_result("vector iterator construction - ", vector_iterator_construction<ft::vector<int> >(4, 100));
-
-    print_time_results(vec_iterator_timed_tests<std::vector<int> >(), vec_iterator_timed_tests<ft::vector<int> >());
-
-}
 
 //============================================================================//
 //                                                                            //
