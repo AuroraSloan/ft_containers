@@ -50,24 +50,13 @@ void print_usage(void) {
 
 
 /*int main(void) {
-    std::vector<int> comp;
-    ft::vector<int> vec;
-    for (size_t i = 0; i < 10; i++) {
-        comp.push_back(i);
-        vec.push_back(i);
-    }
-    std::cout << "comp" << std::endl;
-    std::vector<int>::reverse_iterator crit = comp.rbegin();
-    std::cout << *crit << std::endl;
-    crit++;
-    std::cout << *crit << std::endl;
 
-    std::cout << "vec" << std::endl;
-    ft::vector<int>::reverse_iterator vrit = vec.rbegin();
-    std::cout << *vrit << std::endl;
-    vrit++;
-    std::cout << *vrit << std::endl;
+//    ft::vector<int> vec;
+    int  array[100];
+    int* array_end = array + 100;
 
+    std::vector<int> comp(array, array_end);
+    ft::vector<int> vec(array, array_end);
     return (0);
 }*/
 

@@ -181,8 +181,31 @@ void    vector_construction_tests(void) {
 //                              ITERATOR TESTS                                //
 //                                                                            //
 //============================================================================//
-template < typename Container >
+template < typename VectorClass >
 bool    vector_iterator_methods(void) {
+    typedef typename VectorClass::reverse_iterator reverse_iterator;
+    VectorClass         vec;
+    std::vector<int>    comp;
+
+    for (size_t i = 1; i < 25; i++) {
+        vec.push_back(i);
+        comp.push_back(i);
+    }
+
+    std::vector<int>::reverse_iterator  crit_b = comp.rbegin();
+    std::vector<int>::reverse_iterator  crit_e = comp.rend();
+    reverse_iterator                    vrit_b = vec.rbegin();
+    reverse_iterator                    vrit_e = vec.rend();
+    if (*crit_b != *vrit_b || *crit_e != *vrit_e)
+        return (false);
+    for (size_t i = 0; i < 4; i++) {
+        vrit_b++;
+        crit_b++;
+        vrit_e--;
+        crit_e--;
+    }
+    if (*crit_b != *vrit_b || *crit_e != *vrit_e)
+        return (false);
     return (true);
 }
 //==============Calculate time===========//
@@ -202,7 +225,7 @@ void    vector_iterator_tests(void) {
 
     print_test_result("vector iterator methods - ", vector_iterator_methods<ft::vector<int> >());
 
-    print_time_results(vec_iterator_timed_tests<std::vector<int> >(), vec_iterator_timed_tests<ft::vector<int> >());
+//    print_time_results(vec_iterator_timed_tests<std::vector<int> >(), vec_iterator_timed_tests<ft::vector<int> >());
 
 }
 
