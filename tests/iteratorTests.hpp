@@ -106,6 +106,22 @@ bool    iterator_modification(FtIterator vecit, StdIterator compit) {
     return (true);
 }
 
+double reverse_iterator_timer(void) {
+    clock_t begin, end;
+    ft::vector<int>     vec;
+    std::vector<int>    comp;
+    for (size_t i = 0; i < 30; i++) {
+        vec.push_back(i);
+        comp.push_back(i);
+    }
+    begin = clock();
+
+    iterator_construction<ft::vector<int> >();
+    iterator_modification<ft::vector<int>::iterator, std::vector<int>::iterator>(vec.begin(), comp.begin());
+    iterator_modification<ft::vector<int>::reverse_iterator, std::vector<int>::reverse_iterator>(vec.rbegin(), comp.rbegin());
+    end = clock();
+    return ((double)(end - begin) / CLOCKS_PER_SEC);
+}
 void    iterator_tests(void) {
     print_test_result("Iterator/Reverse Iterator Construction - ", iterator_construction<ft::vector<int> >());
 
@@ -117,6 +133,7 @@ void    iterator_tests(void) {
     }
     print_test_result("Iterator Modification - ", iterator_modification<ft::vector<int>::iterator, std::vector<int>::iterator>(vec.begin(), comp.begin()));
     print_test_result("Reverse Iterator Modification - ", iterator_modification<ft::vector<int>::reverse_iterator, std::vector<int>::reverse_iterator>(vec.rbegin(), comp.rbegin()));
+    print_time_results(reverse_iterator_timer(), reverse_iterator_timer());
 }
 
 #endif
