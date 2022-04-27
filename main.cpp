@@ -1,41 +1,12 @@
-#include "include/vector.hpp"
-#include "include/map.hpp"
-#include "include/stack.hpp"
-#include "include/utils.hpp"
-#include "tests/vectorTests.hpp"
+#include "tests/VectorTests.cpp"
 #include "include/type_traits.hpp"
-#include "tests/iteratorTests.hpp"
+
 #include <iostream>
-#include <vector>
-#include <cstring> //strcmp
+#include <cstring> //strcmp // find better way
 
+#include "include/vector.hpp"
+#include "ft_containers.hpp"
 
-#include <iterator>
-# include <cstddef>
-
-
-/*void test_rev_it(void) {
-    std::vector<int> vec;
-    ft::vector<int> myvec(10, 10);
-    vec.push_back(10);
-    vec.push_back(11);
-    vec.push_back(12);
-    vec.push_back(13);
-    vec.push_back(14);
-    std::vector<int>::reverse_iterator begin = vec.rbegin();
-    ft::vector<int>::reverse_iterator mybegin = myvec.rbegin();
-    std::vector<int>::reverse_iterator tbegin(vec.begin());
-    ft::vector<int>::reverse_iterator mytbegin(myvec.begin());
-    std::cout << "begin: " << *begin << " tbegin: " << *tbegin << '\n';
-    begin++;
-    tbegin--;
-    std::cout << "begin: " << *begin << " tbegin: " << *tbegin << '\n';
-    begin++;
-    tbegin--;
-    std::cout << "begin: " << *begin << " tbegin: " << *tbegin << '\n';
-    std::vector<int>::reverse_iterator end = vec.rend();
-    std::cout << *end << '\n';
-}*/
 
 bool    valid_arg(std::string arg) {
     return (arg == "vector" || arg == "stack" || arg == "map" || arg == "iterator" || arg == "all");
@@ -66,16 +37,22 @@ int main(int argc, char **argv)
         print_usage();
     if (strcmp(argv[1], "iterator") == 0 || strcmp(argv[1], "all") == 0) {
         std::cout << MAGENTA << HDR << " Iterator Tests " << HDR << RESET << '\n';
-        iterator_tests();
+       // iterator_tests();
     }
     if (strcmp(argv[1], "vector") == 0 || strcmp(argv[1], "all") == 0) {
         std::cout << MAGENTA << HDR << " Vector Tests " << HDR << RESET << '\n';
-        vector_construction_tests();
+        VectorTests vector;
+        vector.testOutput();
+#ifdef TEST
+        vector.testPerformance();
+#endif
+
+/*        vector_construction_tests();
         vector_iterator_tests();
         vector_modifiers_tests();
         vector_capacity_tests();
         vector_elem_access_tests();
-        vector_relational_operators_tests();
+        vector_relational_operators_tests();*/
     }
     exit(EXIT_SUCCESS);
 }
@@ -162,3 +139,28 @@ ft::map<int, int> map;
 std::cout << map.var << std::endl;
 ft::stack<int> stack;
 std::cout << stack.var << std::endl;*/
+
+
+
+/*void test_rev_it(void) {
+    std::vector<int> vec;
+    ft::vector<int> myvec(10, 10);
+    vec.push_back(10);
+    vec.push_back(11);
+    vec.push_back(12);
+    vec.push_back(13);
+    vec.push_back(14);
+    std::vector<int>::reverse_iterator begin = vec.rbegin();
+    ft::vector<int>::reverse_iterator mybegin = myvec.rbegin();
+    std::vector<int>::reverse_iterator tbegin(vec.begin());
+    ft::vector<int>::reverse_iterator mytbegin(myvec.begin());
+    std::cout << "begin: " << *begin << " tbegin: " << *tbegin << '\n';
+    begin++;
+    tbegin--;
+    std::cout << "begin: " << *begin << " tbegin: " << *tbegin << '\n';
+    begin++;
+    tbegin--;
+    std::cout << "begin: " << *begin << " tbegin: " << *tbegin << '\n';
+    std::vector<int>::reverse_iterator end = vec.rend();
+    std::cout << *end << '\n';
+}*/

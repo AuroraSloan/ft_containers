@@ -7,7 +7,7 @@
 # include <iostream>        // std::cout
 # include <stdexcept>
 # include "iterator.hpp"
-# include "utils.hpp"
+
 # include "type_traits.hpp"
 # include "algorithm.hpp"
 
