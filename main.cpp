@@ -1,164 +1,117 @@
-#include "include/vector.hpp"
-#include "include/map.hpp"
-#include "include/stack.hpp"
-#include "include/utils.hpp"
-#include "tests/vectorTests.hpp"
-#include "include/type_traits.hpp"
-#include "tests/iteratorTests.hpp"
 #include <iostream>
-#include <vector>
-#include <cstring> //strcmp
+#include <string>
+#include <deque>
+#if 0 //CREATE A REAL STL EXAMPLE
+	#include <map>
+	#include <stack>
+	#include <vector>
+	namespace ft = std;
+#else
+	//#include <map.hpp>
+	//#include <stack.hpp>
+	//#include <vector.hpp>
+    #include "include/vector.hpp"
+#endif
 
+#include <stdlib.h>
 
-#include <iterator>
-# include <cstddef>
-
-
-/*void test_rev_it(void) {
-    std::vector<int> vec;
-    ft::vector<int> myvec(10, 10);
-    vec.push_back(10);
-    vec.push_back(11);
-    vec.push_back(12);
-    vec.push_back(13);
-    vec.push_back(14);
-    std::vector<int>::reverse_iterator begin = vec.rbegin();
-    ft::vector<int>::reverse_iterator mybegin = myvec.rbegin();
-    std::vector<int>::reverse_iterator tbegin(vec.begin());
-    ft::vector<int>::reverse_iterator mytbegin(myvec.begin());
-    std::cout << "begin: " << *begin << " tbegin: " << *tbegin << '\n';
-    begin++;
-    tbegin--;
-    std::cout << "begin: " << *begin << " tbegin: " << *tbegin << '\n';
-    begin++;
-    tbegin--;
-    std::cout << "begin: " << *begin << " tbegin: " << *tbegin << '\n';
-    std::vector<int>::reverse_iterator end = vec.rend();
-    std::cout << *end << '\n';
-}*/
-
-bool    valid_arg(std::string arg) {
-    return (arg == "vector" || arg == "stack" || arg == "map" || arg == "iterator" || arg == "all");
-}
-
-void print_usage(void) {
-    std::cout << "usage: ./ft_containers <test name>\n"
-    << "available tests:\nvector\nstack\nmap\n";
-
-    exit(EXIT_FAILURE);
-}
-
-
-/*int main(void) {
-
-//    ft::vector<int> vec;
-    int  array[100];
-    int* array_end = array + 100;
-
-    std::vector<int> comp(array, array_end);
-    ft::vector<int> vec(array, array_end);
-    return (0);
-}*/
-
-int main(int argc, char **argv)
+#define MAX_RAM 4294967296
+#define BUFFER_SIZE 4096
+struct Buffer
 {
-    if (argc != 2 || !valid_arg(argv[1]))
-        print_usage();
-    if (strcmp(argv[1], "iterator") == 0 || strcmp(argv[1], "all") == 0) {
-        std::cout << MAGENTA << HDR << " Iterator Tests " << HDR << RESET << '\n';
-        iterator_tests();
-    }
-    if (strcmp(argv[1], "vector") == 0 || strcmp(argv[1], "all") == 0) {
-        std::cout << MAGENTA << HDR << " Vector Tests " << HDR << RESET << '\n';
-        vector_construction_tests();
-        vector_iterator_tests();
-        vector_modifiers_tests();
-        vector_capacity_tests();
-        vector_elem_access_tests();
-        vector_relational_operators_tests();
-    }
-    exit(EXIT_SUCCESS);
+	int idx;
+	char buff[BUFFER_SIZE];
+};
+
+
+#define COUNT (MAX_RAM / (int)sizeof(Buffer))
+
+/*template<typename T>
+class MutantStack : public ft::stack<T>
+{
+public:
+	MutantStack() {}
+	MutantStack(const MutantStack<T>& src) { *this = src; }
+	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
+	{
+		this->c = rhs.c;
+		return *this;
+	}
+	~MutantStack() {}
+
+	typedef typename ft::stack<T>::container_type::iterator iterator;
+
+	iterator begin() { return this->c.begin(); }
+	iterator end() { return this->c.end(); }
+};*/
+
+int main(int argc, char** argv) {
+	if (argc != 2)
+	{
+		std::cerr << "Usage: ./test seed" << std::endl;
+		std::cerr << "Provide a seed please" << std::endl;
+		std::cerr << "Count value:" << COUNT << std::endl;
+		return 1;
+	}
+	const int seed = atoi(argv[1]);
+	srand(seed);
+
+	ft::vector<std::string> vector_str;
+	ft::vector<int> vector_int;
+//	ft::stack<int> stack_int;
+	ft::vector<Buffer> vector_buffer;
+//	ft::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
+//	ft::map<int, int> map_int;
+
+	for (int i = 0; i < COUNT; i++)
+	{
+		vector_buffer.push_back(Buffer());
+	}
+
+	for (int i = 0; i < COUNT; i++)
+	{
+		const int idx = rand() % COUNT;
+		vector_buffer[idx].idx = 5;
+	}
+	ft::vector<Buffer>().swap(vector_buffer);
+
+	try
+	{
+		for (int i = 0; i < COUNT; i++)
+		{
+			const int idx = rand() % COUNT;
+			vector_buffer.at(idx);
+			std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" <<std::endl;
+		}
+	}
+	catch(const std::exception& e)
+	{
+		//NORMAL ! :P
+	}
+	
+/*	for (int i = 0; i < COUNT; ++i)
+	{
+		map_int.insert(ft::make_pair(rand(), rand()));
+	}
+
+	int sum = 0;
+	for (int i = 0; i < 10000; i++)
+	{
+		int access = rand();
+		sum += map_int[access];
+	}
+	std::cout << "should be constant with the same seed: " << sum << std::endl;
+
+	{
+		ft::map<int, int> copy = map_int;
+	}
+	MutantStack<char> iterable_stack;
+	for (char letter = 'a'; letter <= 'z'; letter++)
+		iterable_stack.push(letter);
+	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
+	{
+		std::cout << *it;
+	}
+	std::cout << std::endl;*/
+	return (0);
 }
-
-/*test_rev_it();
-std::vector<int> stdvec;
-ft::vector<int> ftvec;
-ft::vector<int> ftvec2(1);
-std::vector<int> stdvec2(1);
-ft::vector<int> ftvec3(1, 1);
-std::vector<int> stdvec3(1, 1);
-    std::cout << "std: " << stdvec.empty() << " ft: " << ftvec.empty() << '\n';
-    std::cout << "std: " << stdvec2.empty() << " ft: " << ftvec2.empty() << '\n';
-    std::cout << "std: " << stdvec3.empty() << " ft: " << ftvec3.empty() << '\n';
-    std::cout << "stdsize: " << stdvec3.size() << " ftsize: " << ftvec3.size() << '\n';
-    std::cout << "stdcap: " << stdvec3.capacity() << " ftcap: " << ftvec3.capacity() << '\n';
-    stdvec3.reserve(100);
-    ftvec3.reserve(100);
-    std::cout << "stdsize: " << stdvec3.size() << " ft: " << ftvec3.size() << '\n';
-    std::cout << "stdcap: " << stdvec3.capacity() << " ftcap: " << ftvec3.capacity() << '\n';
-try {
-    std::cout << "std: " << ftvec3.at(50) << '\n';
-}
-catch (std::exception const & e) {
-    std::cout << e.what() << '\n';
-}
-std::cout << "NEW TEST\n";
-stdvec.reserve(50);
-stdvec.push_back(1);
-stdvec.push_back(2);
-stdvec.push_back(3);
-std::vector<int>::iterator it = stdvec.begin();
-stdvec.pop_back();
-for (; it != stdvec.end(); it++)
-    std::cout << "it: " << *it << '\n';
-it++;
-std::cout << "MAJOR TEST: " << *it << '\n';
-
-    std::cout << "ft: " << ftvec3[1] << '\n';
-stack_tests(" Stack Tests ");
-map_tests(" Map Tests ");
-
-   vector_iterator_example(4, "hey");
-
-
-    std::cout << "int vector\n";
-    std::cout << *it << '\n';
-    std::cout << *it + 1 << '\n';
-    std::cout << *it << '\n';
-    std::cout << *--e << '\n';
-    std::cout << *it + *e << '\n';
-    std::cout << (it - e) << '\n';;
-    std::cout << *(it + 1) << '\n';
-    std::cout << "str vector\n";
-
-
-std::vector<std::string> sstdvec(4, "hey");
-sstdvec.push_back("bye");
-std::vector<std::string>::iterator sit = sstdvec.begin();
-std::vector<std::string>::iterator se = sstdvec.end();
-std::cout << *sit << '\n';
-std::cout << *sit + "yes" << '\n';
-std::cout << *sit << '\n';
-std::cout << *--se << '\n';
-std::cout << *sit + *se << '\n';
-
-std::cout << (it + e) << '\n';
-std::cout << "std size: " << stdvec.size() << std::endl;
-std::cout << "ft size: " << vec.size() << std::endl;
-std::cout << "std capacity: " << stdvec.capacity() << std::endl;
-std::cout << "ft capacity: " << vec.capacity() << std::endl;
-    for (std::vector<int>::iterator stdit = stdvec.begin(); stdit != stdvec.end(); stdit++)
-       std::cout << "stdit: " << *stdit << '\n';
-for (ft::vector<int>::iterator ftit = vec.begin(); ftit != vec.end(); ftit++)
-    std::cout << "ftit: " << *ftit << '\n';
-std::cout << *vec._vec << std::endl;
-std::cout << stdvec.max_size() << '\n';
-    std::cout << vec.var << std::endl;
-
-std::allocator<int> j = std::allocator<int>();
-int* arr = j.allocate(1);
-j.construct(arr, 0);
-ft::map<int, int> map;
-std::cout << map.var << std::endl;
-ft::stack<int> stack;
-std::cout << stack.var << std::endl;*/
