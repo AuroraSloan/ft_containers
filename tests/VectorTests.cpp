@@ -7,27 +7,27 @@ VectorTests::~VectorTests() {}
 
 void VectorTests::testOutput() {
     print_subheader("Construction Tests");
-    print_test_result("vector construction - ", construction());
+    print_test_result("construction - ", construction());
 
     print_subheader("Iterator Tests");
     print_test_result("iterator methods - ", iterator_methods());
-    print_test_result("vector iterator methods - ", reverse_iterator_methods());
+    print_test_result("reverse iterator methods - ", reverse_iterator_methods());
 
     print_subheader("Modifiers Tests");
-    print_test_result("vector assign - ", assign());
-    print_test_result("vector push_back - ", push_back());
-    print_test_result("vector pop_back - ", pop_back());
-    print_test_result("vector insert - ", insert());
-    print_test_result("vector erase - ", erase());
-    print_test_result("vector swap - ", swap());
-    print_test_result("vector clear - ", clear());
+    print_test_result("assign - ", assign());
+    print_test_result("push_back - ", push_back());
+    print_test_result("pop_back - ", pop_back());
+    print_test_result("insert - ", insert());
+    print_test_result("erase - ", erase());
+    print_test_result("swap - ", swap());
+    print_test_result("clear - ", clear());
 
 
     print_subheader("Capacity Tests");
-    print_test_result("vector size - ", size());
-    print_test_result("vector resize - ", resize());
-    print_test_result("vector capacity - ", capacity());
-    print_test_result("vector reserve - ", reserve());
+    print_test_result("size - ", size());
+    print_test_result("resize - ", resize());
+    print_test_result("capacity - ", capacity());
+    print_test_result("reserve - ", reserve());
 
     print_subheader("Element Access Tests");
     print_test_result("operator[], at, front, back - ", element_access());
@@ -102,7 +102,7 @@ bool    VectorTests::construction(void)
     VectorClass empty(0);
     VectorClass emptyXdata(0, 100);
     VectorClass sizeOnly(100);
-    VectorClass sizeXdata(100, 12345);
+    VectorClass sizeXdata(100, 99999);
     VectorClass large(1000000, 99999);
 #endif
 #ifdef STR
@@ -115,8 +115,8 @@ bool    VectorTests::construction(void)
     VectorClass empty(0);
     VectorClass emptyXdata(0, "hey");
     VectorClass sizeOnly(100);
-    VectorClass sizeXdata(100, "no");
-    VectorClass large(1000000, "goodbye");
+    VectorClass sizeXdata(100, "YELLOW");
+    VectorClass large(1000000, "YELLOW");
 #endif
     // Copy Construction
     VectorClass emptyCP(empty);
@@ -143,7 +143,7 @@ bool    VectorTests::construction(void)
         return (false);
 
 #ifdef INT
-    std::vector<int>    compsxd(100, 5);
+    std::vector<int>    compsxd(100, 99999);
     std::vector<int>::iterator compbg = compsxd.begin();
     std::vector<int>::iterator compend = compsxd.end();
     std::vector<int> comp(compbg, compend);

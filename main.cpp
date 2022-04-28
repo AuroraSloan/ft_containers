@@ -1,5 +1,6 @@
 #include "ft_containers.hpp"
 #include "tests/VectorTests.cpp"
+#include "tests/IteratorTests.cpp"
 #include <iostream>
 #include <cstring> //strcmp // find better way
 
@@ -40,7 +41,11 @@ int main(int argc, char **argv)
         print_usage();
     if (str_equal(argv[1], "iterator")) {
         print_header(" Iterator Tests ");
-       // iterator_tests();
+        IteratorTests iterator;
+        iterator.testOutput();
+#ifdef TEST
+        iterator.testPerformance();
+#endif
     }
     if (str_equal(argv[1], "vector")) {
         print_header(" Vector Tests ");
@@ -53,20 +58,3 @@ int main(int argc, char **argv)
     }
     exit(EXIT_SUCCESS);
 }
-
-
-    /*std::cout << "int vector\n";
-    std::cout << *it << '\n';
-    std::cout << *it + 1 << '\n';
-    std::cout << *it << '\n';
-    std::cout << *--e << '\n';
-    std::cout << *it + *e << '\n';
-    std::cout << (it - e) << '\n';;
-    std::cout << *(it + 1) << '\n';
-    std::cout << "str vector\n";
-std::cout << *sit << '\n';
-std::cout << *sit + "yes" << '\n';
-std::cout << *sit << '\n';
-std::cout << *--se << '\n';
-std::cout << *sit + *se << '\n';
-std::cout << (it + e) << '\n';*/

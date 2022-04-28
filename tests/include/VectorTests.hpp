@@ -14,7 +14,6 @@ public:
     void testOutput(void);
     void testPerformance(void);
 
-
 private:
 
     double    timeTests(void);
