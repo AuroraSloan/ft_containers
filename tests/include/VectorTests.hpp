@@ -8,11 +8,11 @@
 class VectorTests : public TestClass {
 
 public:
-    VectorTests();
-    ~VectorTests();
+    VectorTests(void);
+    ~VectorTests(void);
 
-    void testOutput();
-    void testPerformance();
+    void testOutput(void);
+    void testPerformance(void);
 
 
 private:
@@ -23,16 +23,17 @@ private:
     bool    construction(void);
 
     // Iterator tests
+    bool    iterator_methods(void);
     bool    reverse_iterator_methods(void);
 
     // Modifier tests
-    bool    assign();
-    bool    push_back();
-    bool    pop_back();
-    bool    insert();
-    bool    erase();
-    bool    swap();
-    bool    clear();
+    bool    assign(void);
+    bool    push_back(void);
+    bool    pop_back(void);
+    bool    insert(void);
+    bool    erase(void);
+    bool    swap(void);
+    bool    clear(void);
 
     // Capacity Tests
     bool    size(void);

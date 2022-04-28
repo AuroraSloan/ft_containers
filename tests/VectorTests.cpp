@@ -1,8 +1,6 @@
+#include "../ft_containers.hpp"
 #include "include/VectorTests.hpp"
 #include "TestClass.cpp"
-#include "../ft_containers.hpp"
-#include <vector>
-
 
 VectorTests::VectorTests() : TestClass() {}
 VectorTests::~VectorTests() {}
@@ -12,6 +10,7 @@ void VectorTests::testOutput() {
     print_test_result("vector construction - ", construction());
 
     print_subheader("Iterator Tests");
+    print_test_result("iterator methods - ", iterator_methods());
     print_test_result("vector iterator methods - ", reverse_iterator_methods());
 
     print_subheader("Modifiers Tests");
@@ -54,6 +53,7 @@ double  VectorTests::timeTests() {
     construction();
 
     // iterator
+    iterator_methods();
     reverse_iterator_methods();
 
     //modifier
@@ -64,13 +64,16 @@ double  VectorTests::timeTests() {
     erase();
     swap();
     clear();
+
     // capacity
     size();
     resize();
     capacity();
     reserve();
+
     // element access
     element_access();
+
     // relational operators
     relational_operators();
 
@@ -89,17 +92,32 @@ double  VectorTests::timeTests() {
 //====================================//
 bool    VectorTests::construction(void)
 {
-    typedef ns::vector<int> VectorClass;
-    typedef ns::vector<int>::iterator iterator;
+#ifdef INT
+    typedef ft::vector<int> VectorClass;
+    typedef ft::vector<int>::iterator iterator;
+
     // Default construction
     VectorClass dflt;
     // Default construction overload
     VectorClass empty(0);
     VectorClass emptyXdata(0, 100);
     VectorClass sizeOnly(100);
-    VectorClass sizeXdata(100, 5);
-    VectorClass large(1000000, 5);
+    VectorClass sizeXdata(100, 12345);
+    VectorClass large(1000000, 99999);
+#endif
+#ifdef STR
+    typedef ft::vector<std::string> VectorClass;
+    typedef ft::vector<std::string>::iterator iterator;
 
+    // Default construction
+    VectorClass dflt;
+    // Default construction overload
+    VectorClass empty(0);
+    VectorClass emptyXdata(0, "hey");
+    VectorClass sizeOnly(100);
+    VectorClass sizeXdata(100, "no");
+    VectorClass large(1000000, "goodbye");
+#endif
     // Copy Construction
     VectorClass emptyCP(empty);
     VectorClass emptyXdataCP(emptyXdata);
@@ -124,10 +142,18 @@ bool    VectorTests::construction(void)
         || !containers_equal(dflt, sizeXdata, sizeXdataEQ))
         return (false);
 
+#ifdef INT
     std::vector<int>    compsxd(100, 5);
     std::vector<int>::iterator compbg = compsxd.begin();
     std::vector<int>::iterator compend = compsxd.end();
     std::vector<int> comp(compbg, compend);
+#endif
+#ifdef STR
+    std::vector<std::string>    compsxd(100, "YELLOW");
+    std::vector<std::string>::iterator compbg = compsxd.begin();
+    std::vector<std::string>::iterator compend = compsxd.end();
+    std::vector<std::string> comp(compbg, compend);
+#endif
     iterator bg = sizeXdata.begin();
     iterator end = sizeXdata.end();
     VectorClass templateTest(bg, end);
@@ -142,8 +168,34 @@ bool    VectorTests::construction(void)
 //                              ITERATOR TESTS                                //
 //                                                                            //
 //============================================================================//
+bool    VectorTests::iterator_methods(void) {
+    ft::vector<int>     vec;
+    std::vector<int>    comp;
+
+    for (int i = 1; i < 25; i++) {
+        vec.push_back(i);
+        comp.push_back(i);
+    }
+
+    std::vector<int>::iterator  cit_b = comp.begin();
+    std::vector<int>::iterator  cit_e = comp.end();
+    ft::vector<int>::iterator   vit_b = vec.begin();
+    ft::vector<int>::iterator   vit_e = vec.end();
+    if (*cit_b != *vit_b || *--cit_e != *--vit_e)
+        return (false);
+    for (size_t i = 0; i < 4; i++) {
+        vit_b++;
+        cit_b++;
+        vit_e--;
+        cit_e--;
+    }
+    if (*cit_b != *vit_b || *cit_e != *vit_e)
+        return (false);
+    return (true);
+}
+
 bool    VectorTests::reverse_iterator_methods(void) {
-    ns::vector<int>     vec;
+    ft::vector<int>     vec;
     std::vector<int>    comp;
 
     for (int i = 1; i < 25; i++) {
@@ -153,8 +205,8 @@ bool    VectorTests::reverse_iterator_methods(void) {
 
     std::vector<int>::reverse_iterator  crit_b = comp.rbegin();
     std::vector<int>::reverse_iterator  crit_e = comp.rend();
-    ns::vector<int>::reverse_iterator   vrit_b = vec.rbegin();
-    ns::vector<int>::reverse_iterator   vrit_e = vec.rend();
+    ft::vector<int>::reverse_iterator   vrit_b = vec.rbegin();
+    ft::vector<int>::reverse_iterator   vrit_e = vec.rend();
     if (*crit_b != *vrit_b || *--crit_e != *--vrit_e)
         return (false);
     for (size_t i = 0; i < 4; i++) {
@@ -181,36 +233,36 @@ bool    VectorTests::reverse_iterator_methods(void) {
 //====================================//
 bool    VectorTests::assign() {
 
-    ns::vector<int>     myvec(10, 100);
+    ft::vector<int>     myvec(10, 100);
     std::vector<int>    comp(10, 100);
 
     // void  assign(size_type n, value_type const & val)
-    myvec.assign(10, size_t(35));
+    myvec.assign(10, 35);
     comp.assign(10, 35);
     if (!containers_equal(myvec, comp))
         return (false);
-    myvec.assign(1, size_t(3700));
+    myvec.assign(1, 3700);
     comp.assign(1, 3700);
     if (!containers_equal(myvec, comp))
         return (false);
-    myvec.assign(100, size_t(17));
+    myvec.assign(100, 17);
     comp.assign(100, 17);
     if (!containers_equal(myvec, comp))
         return (false);
     //template <class InputIterator>
     //void assign(InputIterator first, InputIterator last)
-    ns::vector<int>     newvec(30, 7);
+    ft::vector<int>     newvec(30, 7);
     std::vector<int>    newcomp(30, 7);
 
-    ns::vector<int>::iterator vecs = newvec.begin();
-    ns::vector<int>::iterator vece = newvec.end();
+    ft::vector<int>::iterator vecs = newvec.begin();
+    ft::vector<int>::iterator vece = newvec.end();
     std::vector<int>::iterator comps = newcomp.begin();
     std::vector<int>::iterator compe = newcomp.end();
     myvec.assign(vecs, vece);
     comp.assign(comps, compe);
     if (!containers_equal(myvec, comp))
         return (false);
-    ns::vector<int>     largervec(400, 987654);
+    ft::vector<int>     largervec(400, 987654);
     std::vector<int>    largercomp(400, 987654);
     vecs = largervec.begin();
     vece = largervec.end();
@@ -227,8 +279,8 @@ bool    VectorTests::assign() {
 //            PUSH_BACK               //
 //====================================//
 bool    VectorTests::push_back() {
-    ns::vector<int>     myvec;
-    ns::vector<int>     myvec2(10, 555);
+    ft::vector<int>     myvec;
+    ft::vector<int>     myvec2(10, 555);
     std::vector<int>    comp;
     std::vector<int>    comp2(10, 555);
 
@@ -254,8 +306,8 @@ bool    VectorTests::push_back() {
 //             POP_BACK               //
 //====================================//
 bool    VectorTests::pop_back() {
-    ns::vector<int>     myvec(30, 999);
-    ns::vector<int>     myvec2;
+    ft::vector<int>     myvec(30, 999);
+    ft::vector<int>     myvec2;
     std::vector<int>    comp(30, 999);
 
     myvec.pop_back();
@@ -281,11 +333,11 @@ bool    VectorTests::pop_back() {
 //====================================//
 bool    VectorTests::insert() {
 
-    ns::vector<int>     myvec(30, 5);
+    ft::vector<int>     myvec(30, 5);
     std::vector<int>    comp(30, 5);
 
     // ==== Insert one val ==== //
-    ns::vector<int>::iterator   vecCheck;
+    ft::vector<int>::iterator   vecCheck;
     std::vector<int>::iterator  compCheck;
     // reallocate
     vecCheck = myvec.insert((myvec.begin() + 5), 7);
@@ -312,12 +364,12 @@ bool    VectorTests::insert() {
 
     // ==== Insert iterators ==== //
     // reallocate
-    ns::vector<int>     tmpvec(100);
+    ft::vector<int>     tmpvec(100);
     std::vector<int>    tmpcomp(100);
 
-    ns::vector<int>::iterator   firstvec = tmpvec.begin();
+    ft::vector<int>::iterator   firstvec = tmpvec.begin();
     std::vector<int>::iterator  firstcomp = tmpcomp.begin();
-    ns::vector<int>::iterator   lastvec = tmpvec.end() - 1;
+    ft::vector<int>::iterator   lastvec = tmpvec.end() - 1;
     std::vector<int>::iterator  lastcomp = tmpcomp.end() - 1;
     myvec.insert(myvec.begin() + 10, firstvec, lastvec);
     comp.insert(comp.begin() + 10, firstcomp, lastcomp);
@@ -359,10 +411,10 @@ bool    VectorTests::insert() {
 //               ERASE                //
 //====================================//
 bool    VectorTests::erase() {
-    typedef ns::vector<int>::iterator   vecIterator;
+    typedef ft::vector<int>::iterator   vecIterator;
     typedef std::vector<int>::iterator  compIterator;
 
-    ns::vector<int>     vec;
+    ft::vector<int>     vec;
     vecIterator         vecIt;
     std::vector<int>    comp;
     compIterator        compIt;
@@ -399,9 +451,9 @@ bool    VectorTests::erase() {
 //               SWAP                 //
 //====================================//
 bool    VectorTests::swap() {
-    ns::vector<int>     vecA(50, 155);
-    ns::vector<int>     vecB;
-    ns::vector<int>     vecC;
+    ft::vector<int>     vecA(50, 155);
+    ft::vector<int>     vecB;
+    ft::vector<int>     vecC;
     std::vector<int>    compA(50, 155);
     std::vector<int>    compB;
     std::vector<int>    compC;
@@ -428,9 +480,9 @@ bool    VectorTests::swap() {
 //              CLEAR                 //
 //====================================//
 bool    VectorTests::clear() {
-    ns::vector<int>     vecA(50, 155);
-    ns::vector<int>     vecB;
-    ns::vector<int>     vecC;
+    ft::vector<int>     vecA(50, 155);
+    ft::vector<int>     vecB;
+    ft::vector<int>     vecC;
     std::vector<int>    compA(50, 155);
     std::vector<int>    compB;
     std::vector<int>    compC;
@@ -471,7 +523,7 @@ bool    VectorTests::clear() {
 //====================================//
 bool    VectorTests::size(void)
 {
-    ns::vector<int>     vec;
+    ft::vector<int>     vec;
     std::vector<int>    comp;
 
     if (!containers_equal(vec, comp) || vec.size() != comp.size())
@@ -509,7 +561,7 @@ bool    VectorTests::size(void)
 //====================================//
 bool    VectorTests::resize(void)
 {
-    ns::vector<int>     vec(50, 300);
+    ft::vector<int>     vec(50, 300);
     std::vector<int>    comp(50, 300);
 
     vec.resize(2);
@@ -535,7 +587,7 @@ bool    VectorTests::resize(void)
 //====================================//
 bool    VectorTests::capacity(void)
 {
-    ns::vector<int>     vec(50, 300);
+    ft::vector<int>     vec(50, 300);
     std::vector<int>    comp(50, 300);
 
     if (vec.capacity() != comp.capacity())
@@ -561,7 +613,7 @@ bool    VectorTests::capacity(void)
 //====================================//
 bool    VectorTests::reserve(void)
 {
-    ns::vector<int>     vec(50, 300);
+    ft::vector<int>     vec(50, 300);
     std::vector<int>    comp(50, 300);
 
     vec.reserve(0);
@@ -588,7 +640,7 @@ bool    VectorTests::reserve(void)
 //====================================//
 bool    VectorTests::element_access(void)
 {
-    ns::vector<int>      vec;
+    ft::vector<int>      vec;
     std::vector<int>    comp;
 
     for (size_t i = 0; i < 25; i++) {
@@ -612,6 +664,20 @@ bool    VectorTests::element_access(void)
     if (vec.back() != comp.back())
         return (false);
 
+    bool thrownExcpeption = false;
+    try
+    {
+        vec.at(50);
+    }
+    catch(...)
+    {
+        thrownExcpeption = true;
+    }
+    if (!thrownExcpeption) {
+        std::cout << RED << "no thrown exception for at() \n" << RESET;
+        return (false);
+    }
+
     return (true);
 }
 
@@ -626,8 +692,8 @@ bool    VectorTests::element_access(void)
 //====================================//
 bool    VectorTests::relational_operators(void)
 {
-    ns::vector<int>     vec1;
-    ns::vector<int>     vec2;
+    ft::vector<int>     vec1;
+    ft::vector<int>     vec2;
 
     // RELATIONAL OPERATORS
     if (!(vec1 == vec2) || vec1 != vec2 || vec1 < vec2 || vec1 > vec2 || !(vec1 <= vec2) || !(vec1 >= vec2))
@@ -648,12 +714,12 @@ bool    VectorTests::relational_operators(void)
         return (false);
 
     // SWAP && RELATIONAL OPERATORS
-    /*ns::vector<int>     swapA(vec1);
-    ns::vector<int>     swapB;
+    ft::vector<int>     swapA(vec1);
+    ft::vector<int>     swapB;
 
-    swap(vec1, swapB);
+    ft::swap(vec1, swapB);
     if (swapA != swapB || !(swapA == swapB) || !vec1.empty())
-        return (false);*/
+        return (false);
 
     return (true);
 }
