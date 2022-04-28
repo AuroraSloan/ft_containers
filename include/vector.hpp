@@ -7,7 +7,7 @@
 # include <iostream>        // std::cout
 # include <stdexcept>
 # include "iterator.hpp"
-# include "utils.hpp"
+
 # include "type_traits.hpp"
 # include "algorithm.hpp"
 
@@ -53,7 +53,7 @@ namespace ft {
 
         template<class InputIterator>
         vector(InputIterator first,
-               typename ft::enable_if<ft::is_random_access_iterator<InputIterator>::value, InputIterator>::type last,
+               typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last,
                allocator_type const &alloc = allocator_type()) : _alloc(alloc) {
             size_type n = static_cast<size_type>(std::distance(first, last));
             _allocate(n);
@@ -158,7 +158,7 @@ namespace ft {
 
         // MODIFIERS
         template<class InputIterator>
-        void assign(InputIterator first, InputIterator last) {
+        void assign(InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last) {
             size_type dist = static_cast<size_type>(std::distance(first, last));
             if (_passedMaxCapacity(dist)) {
                 _dealoc();
@@ -227,7 +227,7 @@ namespace ft {
 
         template<class InputIterator>
         void insert(iterator position,
-                    typename ft::enable_if<ft::is_random_access_iterator<InputIterator>::value, InputIterator>::type first,
+                    typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first,
                     InputIterator last) {
             pointer _pbegin, _pend;
             size_type location = static_cast<size_type>(std::distance(begin(), position));

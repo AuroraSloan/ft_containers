@@ -1,103 +1,85 @@
-#ifndef VECTORTESTS_HPP
-# define VECTORTESTS_HPP
+#include "../ft_containers.hpp"
+#include "include/VectorTests.hpp"
+#include "TestClass.cpp"
 
-# include "../include/vector.hpp"
-# include "../include/utils.hpp"
-# include "testUtils.hpp"
-# include <ctime>           //clock
-# include <vector>
+VectorTests::VectorTests() : TestClass() {}
+VectorTests::~VectorTests() {}
 
+void VectorTests::testOutput() {
+    print_subheader("Construction Tests");
+    print_test_result("construction - ", construction());
 
-//=================== Compare two containers ==============//
-template <typename ftContainer, typename stdContainer>
-bool    containers_equal(ftContainer & vec, stdContainer & comp) {
+    print_subheader("Iterator Tests");
+    print_test_result("iterator methods - ", iterator_methods());
+    print_test_result("reverse iterator methods - ", reverse_iterator_methods());
 
-    typedef typename ftContainer::size_type size_type;
-    typename ftContainer::iterator  vecIterator;
-    typename stdContainer::iterator compIterator;
-
-    //check size
-    size_type vecSize, compSize;
-    vecSize = vec.size();
-    compSize = comp.size();
-    if (vecSize != compSize){
-        std::cout << "\nSIZE IS A PROBLEM\nme: " << vecSize << " std: " << compSize << '\n';
-        return (false);
-    }
+    print_subheader("Modifiers Tests");
+    print_test_result("assign - ", assign());
+    print_test_result("push_back - ", push_back());
+    print_test_result("pop_back - ", pop_back());
+    print_test_result("insert - ", insert());
+    print_test_result("erase - ", erase());
+    print_test_result("swap - ", swap());
+    print_test_result("clear - ", clear());
 
 
-   /*if ((unsigned long)vec.capacity() != comp.capacity())
-        std::cout << "my capacity " << vec.capacity() << " comp capacity " << comp.capacity() << '\n';*/
+    print_subheader("Capacity Tests");
+    print_test_result("size - ", size());
+    print_test_result("resize - ", resize());
+    print_test_result("capacity - ", capacity());
+    print_test_result("reserve - ", reserve());
 
-    //check items
-    vecIterator = vec.begin();
-    compIterator = comp.begin();
-//    std::cout << "in tester\n";
-    for (size_type i = 0; i < vecSize; i++) {
- //       std::cout << "vec: " << *(vecIterator + i) << " comp: " << *(compIterator + i) << '\n';
-        if (*(vecIterator + i) != *(compIterator + i))
-            return (false);
-    }
-    while (vecIterator != vec.end() || compIterator != comp.end()) {
-        if ((*(vecIterator) != *(compIterator)) || vecIterator == vec.end() || compIterator == comp.end())
-            return (false);
-        vecIterator++;
-        compIterator++;
-    }
-    return (true);
+    print_subheader("Element Access Tests");
+    print_test_result("operator[], at, front, back - ", element_access());
+
+    print_subheader("Relational operator tests");
+    print_test_result("relational operators and swap - ", relational_operators());
 }
 
-//=================== Compare three containers ==============//
-template <typename VectorClass>
-bool    containers_equal(VectorClass & A, VectorClass & B, VectorClass & C) {
-
-    typedef typename VectorClass::size_type size_type;
-    typedef typename VectorClass::iterator  iterator;
-
-    //check size
-    size_type Asize, Bsize, Csize;
-
-    Asize = A.size();
-    Bsize = B.size();
-    Csize = C.size();
-    if (Asize != Bsize || Asize != Csize || Bsize != Csize)
-        return (false);
-
-    //check items
-    iterator Aiterator, Biterator, Citerator;
-    Aiterator = A.begin();
-    Biterator = B.begin();
-    Citerator = C.begin();
-    for (size_type i = 0; i < Asize; i++) {
-        if (*(Aiterator + i) != *(Biterator + i)
-            || *(Aiterator + i) != *(Citerator + i)
-            || *(Biterator + i) != *(Citerator + i))
-            return (false);
-    }
-    return (true);
+void VectorTests::testPerformance() {
+    ftTime = timeTests();
+    namespace ft = std;
+    stdTime = timeTests();
+    print_time_results(stdTime, ftTime);
 }
 
-//========================= Print Containers ====================//
-template <typename Container>
-void    print_container(Container container, std::string name) {
-    typedef typename Container::iterator iterator;
 
-    std::cout << name << '\n';
-    for(iterator it = container.begin(); it != container.end(); it++) {
-        std::cout << *it << ' ';
-    }
-    std::cout << '\n';
+double  VectorTests::timeTests() {
+    clock_t begin, end;
+
+    begin = clock();
+
+    // construction
+    construction();
+
+    // iterator
+    iterator_methods();
+    reverse_iterator_methods();
+
+    //modifier
+    assign();
+    push_back();
+    pop_back();
+    insert();
+    erase();
+    swap();
+    clear();
+
+    // capacity
+    size();
+    resize();
+    capacity();
+    reserve();
+
+    // element access
+    element_access();
+
+    // relational operators
+    relational_operators();
+
+    end = clock();
+    return ((double) (end - begin) / CLOCKS_PER_SEC);
 }
-
-//========================= Print Results ====================//
-void    print_test_result(std::string testName, bool success) {
-    std::cout << testName;
-    if (success)
-        std::cout << GREEN << "SUCCESS\n" << RESET;
-    else
-        std::cout << RED << "FAILURE\n" << RESET;
-}
-
 
 
 //============================================================================//
@@ -108,19 +90,34 @@ void    print_test_result(std::string testName, bool success) {
 //====================================//
 //        VECTOR CONSTRUCTION         //
 //====================================//
-template <typename VectorClass>
-bool    vector_construction(void)
+bool    VectorTests::construction(void)
 {
-    typedef typename VectorClass::iterator iterator;
+#ifdef INT
+    typedef ft::vector<int> VectorClass;
+    typedef ft::vector<int>::iterator iterator;
+
     // Default construction
     VectorClass dflt;
     // Default construction overload
     VectorClass empty(0);
     VectorClass emptyXdata(0, 100);
     VectorClass sizeOnly(100);
-    VectorClass sizeXdata(100, 5);
-    VectorClass large(1000000, 5);
+    VectorClass sizeXdata(100, 99999);
+    VectorClass large(1000000, 99999);
+#endif
+#ifdef STR
+    typedef ft::vector<std::string> VectorClass;
+    typedef ft::vector<std::string>::iterator iterator;
 
+    // Default construction
+    VectorClass dflt;
+    // Default construction overload
+    VectorClass empty(0);
+    VectorClass emptyXdata(0, "hey");
+    VectorClass sizeOnly(100);
+    VectorClass sizeXdata(100, "YELLOW");
+    VectorClass large(1000000, "YELLOW");
+#endif
     // Copy Construction
     VectorClass emptyCP(empty);
     VectorClass emptyXdataCP(emptyXdata);
@@ -145,10 +142,18 @@ bool    vector_construction(void)
         || !containers_equal(dflt, sizeXdata, sizeXdataEQ))
         return (false);
 
-    std::vector<int>    compsxd(100, 5);
+#ifdef INT
+    std::vector<int>    compsxd(100, 99999);
     std::vector<int>::iterator compbg = compsxd.begin();
     std::vector<int>::iterator compend = compsxd.end();
     std::vector<int> comp(compbg, compend);
+#endif
+#ifdef STR
+    std::vector<std::string>    compsxd(100, "YELLOW");
+    std::vector<std::string>::iterator compbg = compsxd.begin();
+    std::vector<std::string>::iterator compend = compsxd.end();
+    std::vector<std::string> comp(compbg, compend);
+#endif
     iterator bg = sizeXdata.begin();
     iterator end = sizeXdata.end();
     VectorClass templateTest(bg, end);
@@ -156,24 +161,6 @@ bool    vector_construction(void)
         return (false);
     return (true);
 }
-//==============Calculate time===========//
-template < typename Container >
-double vec_construction_timer(void) {
-    clock_t begin, end;
-
-    begin = clock();
-    vector_construction<Container>();
-    end = clock();
-    return ((double)(end - begin) / CLOCKS_PER_SEC);
-}
-//=====Perform all tests and time tests =====//
-void    vector_construction_tests(void) {
-    std::cout << CYAN << '\t' << SUBHDR << "Construction Tests" << SUBHDR << RESET << '\n';
-    print_test_result("vector construction - ",vector_construction<ft::vector<int> >());
-    print_time_results(vec_construction_timer<std::vector<int> >(),vec_construction_timer<ft::vector<int> >());
-}
-
-
 
 
 //============================================================================//
@@ -181,10 +168,34 @@ void    vector_construction_tests(void) {
 //                              ITERATOR TESTS                                //
 //                                                                            //
 //============================================================================//
-template < typename VectorClass >
-bool    vector_iterator_methods(void) {
-    typedef typename VectorClass::reverse_iterator reverse_iterator;
-    VectorClass         vec;
+bool    VectorTests::iterator_methods(void) {
+    ft::vector<int>     vec;
+    std::vector<int>    comp;
+
+    for (int i = 1; i < 25; i++) {
+        vec.push_back(i);
+        comp.push_back(i);
+    }
+
+    std::vector<int>::iterator  cit_b = comp.begin();
+    std::vector<int>::iterator  cit_e = comp.end();
+    ft::vector<int>::iterator   vit_b = vec.begin();
+    ft::vector<int>::iterator   vit_e = vec.end();
+    if (*cit_b != *vit_b || *--cit_e != *--vit_e)
+        return (false);
+    for (size_t i = 0; i < 4; i++) {
+        vit_b++;
+        cit_b++;
+        vit_e--;
+        cit_e--;
+    }
+    if (*cit_b != *vit_b || *cit_e != *vit_e)
+        return (false);
+    return (true);
+}
+
+bool    VectorTests::reverse_iterator_methods(void) {
+    ft::vector<int>     vec;
     std::vector<int>    comp;
 
     for (int i = 1; i < 25; i++) {
@@ -194,8 +205,8 @@ bool    vector_iterator_methods(void) {
 
     std::vector<int>::reverse_iterator  crit_b = comp.rbegin();
     std::vector<int>::reverse_iterator  crit_e = comp.rend();
-    reverse_iterator                    vrit_b = vec.rbegin();
-    reverse_iterator                    vrit_e = vec.rend();
+    ft::vector<int>::reverse_iterator   vrit_b = vec.rbegin();
+    ft::vector<int>::reverse_iterator   vrit_e = vec.rend();
     if (*crit_b != *vrit_b || *--crit_e != *--vrit_e)
         return (false);
     for (size_t i = 0; i < 4; i++) {
@@ -208,27 +219,6 @@ bool    vector_iterator_methods(void) {
         return (false);
     return (true);
 }
-//==============Calculate time===========//
-template < typename Container >
-double vec_iterator_timed_tests(void) {
-    clock_t begin, end;
-
-    begin = clock();
-    vector_iterator_methods<Container>();
-    end = clock();
-    return ((double)(end - begin) / CLOCKS_PER_SEC);
-}
-//=====Perform all tests and time tests =====//
-void    vector_iterator_tests(void) {
-
-    std::cout << CYAN << '\t' << SUBHDR << "Iterator Tests" << SUBHDR << RESET << '\n';
-
-    print_test_result("vector iterator methods - ", vector_iterator_methods<ft::vector<int> >());
-
-    print_time_results(vec_iterator_timed_tests<std::vector<int> >(), vec_iterator_timed_tests<ft::vector<int> >());
-
-}
-
 
 
 
@@ -241,41 +231,38 @@ void    vector_iterator_tests(void) {
 //====================================//
 //               ASSIGN               //
 //====================================//
-template <typename VectorClass>
-bool    vector_assign() {
-    typedef typename VectorClass::size_type size_type;
-    VectorClass         myvec(10, 100);
+bool    VectorTests::assign() {
+
+    ft::vector<int>     myvec(10, 100);
     std::vector<int>    comp(10, 100);
 
     // void  assign(size_type n, value_type const & val)
-    myvec.assign(10, size_type(35));
-    comp.assign(10, size_type(35));
+    myvec.assign(10, 35);
+    comp.assign(10, 35);
     if (!containers_equal(myvec, comp))
         return (false);
-    myvec.assign(1, size_type(3700));
-    comp.assign(1, size_type(3700));
+    myvec.assign(1, 3700);
+    comp.assign(1, 3700);
     if (!containers_equal(myvec, comp))
         return (false);
-    myvec.assign(100, size_type(17));
-    comp.assign(100, size_type(17));
+    myvec.assign(100, 17);
+    comp.assign(100, 17);
     if (!containers_equal(myvec, comp))
         return (false);
-
     //template <class InputIterator>
     //void assign(InputIterator first, InputIterator last)
-    VectorClass         newvec(30, 7);
+    ft::vector<int>     newvec(30, 7);
     std::vector<int>    newcomp(30, 7);
 
-    typename VectorClass::iterator vecs = newvec.begin();
-    typename VectorClass::iterator vece = newvec.end();
+    ft::vector<int>::iterator vecs = newvec.begin();
+    ft::vector<int>::iterator vece = newvec.end();
     std::vector<int>::iterator comps = newcomp.begin();
     std::vector<int>::iterator compe = newcomp.end();
     myvec.assign(vecs, vece);
     comp.assign(comps, compe);
     if (!containers_equal(myvec, comp))
         return (false);
-
-    VectorClass         largervec(400, 987654);
+    ft::vector<int>     largervec(400, 987654);
     std::vector<int>    largercomp(400, 987654);
     vecs = largervec.begin();
     vece = largervec.end();
@@ -291,10 +278,9 @@ bool    vector_assign() {
 //====================================//
 //            PUSH_BACK               //
 //====================================//
-template <typename VectorClass>
-bool    vector_push_back() {
-    VectorClass         myvec;
-    VectorClass         myvec2(10, 555);
+bool    VectorTests::push_back() {
+    ft::vector<int>     myvec;
+    ft::vector<int>     myvec2(10, 555);
     std::vector<int>    comp;
     std::vector<int>    comp2(10, 555);
 
@@ -319,10 +305,9 @@ bool    vector_push_back() {
 //====================================//
 //             POP_BACK               //
 //====================================//
-template <typename VectorClass>
-bool    vector_pop_back() {
-    VectorClass         myvec(30, 999);
-    VectorClass         myvec2;
+bool    VectorTests::pop_back() {
+    ft::vector<int>     myvec(30, 999);
+    ft::vector<int>     myvec2;
     std::vector<int>    comp(30, 999);
 
     myvec.pop_back();
@@ -346,14 +331,13 @@ bool    vector_pop_back() {
 //====================================//
 //              INSERT                //
 //====================================//
-template <typename VectorClass>
-bool    vector_insert() {
-    typedef typename VectorClass::iterator VecClassIterator;
-    VectorClass         myvec(30, 5);
+bool    VectorTests::insert() {
+
+    ft::vector<int>     myvec(30, 5);
     std::vector<int>    comp(30, 5);
 
     // ==== Insert one val ==== //
-    VecClassIterator            vecCheck;
+    ft::vector<int>::iterator   vecCheck;
     std::vector<int>::iterator  compCheck;
     // reallocate
     vecCheck = myvec.insert((myvec.begin() + 5), 7);
@@ -380,13 +364,13 @@ bool    vector_insert() {
 
     // ==== Insert iterators ==== //
     // reallocate
-    VectorClass         tmpvec(100);
+    ft::vector<int>     tmpvec(100);
     std::vector<int>    tmpcomp(100);
 
-    VecClassIterator firstvec = tmpvec.begin();
-    std::vector<int>::iterator firstcomp = tmpcomp.begin();
-    VecClassIterator lastvec = tmpvec.end() - 1;
-    std::vector<int>::iterator lastcomp = tmpcomp.end() - 1;
+    ft::vector<int>::iterator   firstvec = tmpvec.begin();
+    std::vector<int>::iterator  firstcomp = tmpcomp.begin();
+    ft::vector<int>::iterator   lastvec = tmpvec.end() - 1;
+    std::vector<int>::iterator  lastcomp = tmpcomp.end() - 1;
     myvec.insert(myvec.begin() + 10, firstvec, lastvec);
     comp.insert(comp.begin() + 10, firstcomp, lastcomp);
     if (!containers_equal(myvec, comp))
@@ -426,12 +410,11 @@ bool    vector_insert() {
 //====================================//
 //               ERASE                //
 //====================================//
-template <typename VectorClass>
-bool    vector_erase() {
-    typedef typename VectorClass::iterator  vecIterator;
-    typedef std::vector<int>::iterator      compIterator;
+bool    VectorTests::erase() {
+    typedef ft::vector<int>::iterator   vecIterator;
+    typedef std::vector<int>::iterator  compIterator;
 
-    VectorClass         vec;
+    ft::vector<int>     vec;
     vecIterator         vecIt;
     std::vector<int>    comp;
     compIterator        compIt;
@@ -467,11 +450,10 @@ bool    vector_erase() {
 //====================================//
 //               SWAP                 //
 //====================================//
-template <typename VectorClass>
-bool    vector_swap() {
-    VectorClass         vecA(50, 155);
-    VectorClass         vecB;
-    VectorClass         vecC;
+bool    VectorTests::swap() {
+    ft::vector<int>     vecA(50, 155);
+    ft::vector<int>     vecB;
+    ft::vector<int>     vecC;
     std::vector<int>    compA(50, 155);
     std::vector<int>    compB;
     std::vector<int>    compC;
@@ -497,11 +479,10 @@ bool    vector_swap() {
 //====================================//
 //              CLEAR                 //
 //====================================//
-template <typename VectorClass>
-bool    vector_clear() {
-    VectorClass         vecA(50, 155);
-    VectorClass         vecB;
-    VectorClass         vecC;
+bool    VectorTests::clear() {
+    ft::vector<int>     vecA(50, 155);
+    ft::vector<int>     vecB;
+    ft::vector<int>     vecC;
     std::vector<int>    compA(50, 155);
     std::vector<int>    compB;
     std::vector<int>    compC;
@@ -529,39 +510,6 @@ bool    vector_clear() {
     return (true);
 }
 
-//==============Calculate time===========//
-template < typename Container >
-double vec_modifiers_timer(void) {
-    clock_t begin, end;
-
-    begin = clock();
-    vector_assign<Container>();
-    vector_push_back<Container>();
-    vector_pop_back<Container>();
-    vector_insert<Container>();
-    vector_erase<Container>();
-    vector_swap<Container>();
-    vector_clear<Container>();
-    end = clock();
-    return ((double)(end - begin) / CLOCKS_PER_SEC);
-}
-
-//============= Perform all tests =============//
-void    vector_modifiers_tests(void) {
-    std::cout << CYAN << '\t' << SUBHDR << "Modifiers Tests" << SUBHDR << RESET << '\n';
-
-    print_test_result("vector assign - ", vector_assign<ft::vector<int> >());
-    print_test_result("vector push_back - ", vector_push_back<ft::vector<int> >());
-    print_test_result("vector pop_back - ", vector_pop_back<ft::vector<int> >());
-    print_test_result("vector insert - ", vector_insert<ft::vector<int> >());
-    print_test_result("vector erase - ", vector_erase<ft::vector<int> >());
-    print_test_result("vector swap - ", vector_swap<ft::vector<int> >());
-    print_test_result("vector clear - ", vector_clear<ft::vector<int> >());
-
-    print_time_results(vec_modifiers_timer<std::vector<int> >(), vec_modifiers_timer<ft::vector<int> >());
-}
-
-
 
 
 //============================================================================//
@@ -573,10 +521,9 @@ void    vector_modifiers_tests(void) {
 //====================================//
 //         SIZE & MAX SIZE            //
 //====================================//
-template <typename VectorClass>
-bool    vector_size(void)
+bool    VectorTests::size(void)
 {
-    VectorClass         vec;
+    ft::vector<int>     vec;
     std::vector<int>    comp;
 
     if (!containers_equal(vec, comp) || vec.size() != comp.size())
@@ -612,10 +559,9 @@ bool    vector_size(void)
 //====================================//
 //               RESIZE               //
 //====================================//
-template <typename VectorClass>
-bool    vector_resize(void)
+bool    VectorTests::resize(void)
 {
-    VectorClass         vec(50, 300);
+    ft::vector<int>     vec(50, 300);
     std::vector<int>    comp(50, 300);
 
     vec.resize(2);
@@ -639,10 +585,9 @@ bool    vector_resize(void)
 //====================================//
 //         CAPACITY & EMPTY           //
 //====================================//
-template <typename VectorClass>
-bool    vector_capacity(void)
+bool    VectorTests::capacity(void)
 {
-    VectorClass         vec(50, 300);
+    ft::vector<int>     vec(50, 300);
     std::vector<int>    comp(50, 300);
 
     if (vec.capacity() != comp.capacity())
@@ -666,10 +611,9 @@ bool    vector_capacity(void)
 //====================================//
 //               RESERVE              //
 //====================================//
-template <typename VectorClass>
-bool    vector_reserve(void)
+bool    VectorTests::reserve(void)
 {
-    VectorClass         vec(50, 300);
+    ft::vector<int>     vec(50, 300);
     std::vector<int>    comp(50, 300);
 
     vec.reserve(0);
@@ -685,32 +629,6 @@ bool    vector_reserve(void)
     return (true);
 }
 
-//==============Calculate time===========//
-template < typename Container >
-double vec_capacity_timed_tests(void) {
-    clock_t begin, end;
-
-    begin = clock();
-    vector_size<Container>();
-    vector_resize<Container>();
-    vector_capacity<Container>();
-    vector_reserve<Container>();
-    end = clock();
-    return ((double)(end - begin) / CLOCKS_PER_SEC);
-}
-//=====Perform all tests and time tests =====//
-void    vector_capacity_tests(void) {
-
-    std::cout << CYAN << '\t' << SUBHDR << "Capacity Tests" << SUBHDR << RESET << '\n';
-
-    print_test_result("vector size - ", vector_size<ft::vector<int> >());
-    print_test_result("vector resize - ", vector_resize<ft::vector<int> >());
-    print_test_result("vector capacity - ", vector_capacity<ft::vector<int> >());
-    print_test_result("vector reserve - ", vector_reserve<ft::vector<int> >());
-
-    print_time_results(vec_capacity_timed_tests<std::vector <int> > (), vec_capacity_timed_tests<ft::vector<int> >());
-}
-
 //============================================================================//
 //                                                                            //
 //                          ELEMENT ACCESS TESTS                              //
@@ -720,10 +638,9 @@ void    vector_capacity_tests(void) {
 //====================================//
 //    opeerator[], at, front, back    //
 //====================================//
-template <typename VectorClass>
-bool    vector_element_access(void)
+bool    VectorTests::element_access(void)
 {
-    VectorClass         vec;
+    ft::vector<int>      vec;
     std::vector<int>    comp;
 
     for (size_t i = 0; i < 25; i++) {
@@ -747,33 +664,22 @@ bool    vector_element_access(void)
     if (vec.back() != comp.back())
         return (false);
 
+    bool thrownExcpeption = false;
+    try
+    {
+        vec.at(50);
+    }
+    catch(...)
+    {
+        thrownExcpeption = true;
+    }
+    if (!thrownExcpeption) {
+        std::cout << RED << "no thrown exception for at() \n" << RESET;
+        return (false);
+    }
+
     return (true);
 }
-
-//==============Calculate time===========//
-template < typename Container >
-double vec_elem_access_timed_tests(void) {
-    clock_t begin, end;
-
-    begin = clock();
-    vector_element_access<Container>();
-    end = clock();
-    return ((double)(end - begin) / CLOCKS_PER_SEC);
-}
-//=====Perform all tests and time tests =====//
-void    vector_elem_access_tests(void) {
-
-    std::cout << CYAN << '\t' << SUBHDR << "Element Access Tests" << SUBHDR << RESET << '\n';
-
-    print_test_result("operator[], at, front, back - ", vector_element_access<ft::vector<int> >());
-
-    print_time_results(vec_elem_access_timed_tests<std::vector <int> > (), vec_elem_access_timed_tests<ft::vector<int> >());
-}
-
-
-
-
-
 
 //============================================================================//
 //                                                                            //
@@ -784,11 +690,10 @@ void    vector_elem_access_tests(void) {
 //====================================//
 //   relational operators and swap    //
 //====================================//
-template <typename VectorClass>
-bool    vector_relational_operators(void)
+bool    VectorTests::relational_operators(void)
 {
-    VectorClass         vec1;
-    VectorClass         vec2;
+    ft::vector<int>     vec1;
+    ft::vector<int>     vec2;
 
     // RELATIONAL OPERATORS
     if (!(vec1 == vec2) || vec1 != vec2 || vec1 < vec2 || vec1 > vec2 || !(vec1 <= vec2) || !(vec1 >= vec2))
@@ -809,35 +714,24 @@ bool    vector_relational_operators(void)
         return (false);
 
     // SWAP && RELATIONAL OPERATORS
-    VectorClass         swapA(vec1);
-    VectorClass         swapB;
+    ft::vector<int>     swapA(vec1);
+    ft::vector<int>     swapB;
 
-    swap(vec1, swapB);
+    ft::swap(vec1, swapB);
     if (swapA != swapB || !(swapA == swapB) || !vec1.empty())
         return (false);
 
     return (true);
 }
 
-//==============Calculate time===========//
-template < typename Container >
-double vec_relational_operators_timed_tests(void) {
-    clock_t begin, end;
 
-    begin = clock();
-    vector_relational_operators<Container>();
-    end = clock();
-    return ((double)(end - begin) / CLOCKS_PER_SEC);
+
+
+VectorTests::VectorTests(const VectorTests& src) : TestClass(src) {}
+const VectorTests& VectorTests::operator=(const VectorTests& rhs) {
+    if (this != &rhs) {
+        this->stdTime = rhs.stdTime;
+        this->ftTime = rhs.ftTime;
+    }
+    return (*this);
 }
-
-//=====Perform all tests and time tests =====//
-void    vector_relational_operators_tests(void) {
-
-    std::cout << CYAN << '\t' << SUBHDR << "Relational Operators Tests" << SUBHDR << RESET << '\n';
-
-    print_test_result("relational operators and swap - ", vector_relational_operators<ft::vector<int> >());
-
-    print_time_results(vec_relational_operators_timed_tests<std::vector <int> > (), vec_relational_operators_timed_tests<ft::vector<int> >());
-}
-
-#endif
