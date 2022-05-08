@@ -51,10 +51,13 @@ int main(int argc, char **argv)
         print_header(" Vector Tests ");
         VectorTests vector;
         vector.testOutput();
-
 #ifdef TEST
         vector.testPerformance();
 #endif
+    }
+    if (str_equal(argv[1], "other")) {
+        print_header("algorithms & Utility");
+
     }
     exit(EXIT_SUCCESS);
 }
