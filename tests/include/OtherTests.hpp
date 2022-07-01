@@ -22,7 +22,7 @@ private:
     bool lexicographical_compare(void);
 
     // Uility tests
-    //bool utility(void);
+    bool pair(void);
 
     OtherTests(const OtherTests& src);
     const OtherTests& operator=(const OtherTests & rhs);

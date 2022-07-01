@@ -11,8 +11,8 @@ void OtherTests::testOutput(void) {
     print_test_result("equal - ", equal());
     print_test_result("lexicographical_compare - ", lexicographical_compare());
 
-    /*print_subheader("Utility Tests");
-    print_test_result("utility - ", utility());*/
+    print_subheader("Utility Tests");
+    print_test_result("pair - ", pair());
 }
 
 void OtherTests::testPerformance(void) {
@@ -39,6 +39,14 @@ double OtherTests::timeTests(void) {
     return ((double) (end - begin) / CLOCKS_PER_SEC);
 }
 
+//============================================================================//
+//                                                                            //
+//                              ALGORITHM TESTS                               //
+//                                                                            //
+//============================================================================//
+//====================================//
+//                EQUAL               //
+//====================================//
 bool equal_toPredicate(int a, int b) {
     return (a == b);
 }
@@ -76,7 +84,9 @@ bool OtherTests::equal(void) {
     return (true);
 }
 
-
+//====================================//
+//      LEXICOGRAPHICAL COMPARE       //
+//====================================//
 bool less_than_predicate(int a, int b) {
     return (a < b);
 }
@@ -117,6 +127,19 @@ bool OtherTests::lexicographical_compare(void) {
     }
     return (true);
 }
+
+//============================================================================//
+//                                                                            //
+//                              UTILITY TESTS                                 //
+//                                                                            //
+//============================================================================//
+//====================================//
+//                PAIR                //
+//====================================//
+bool OtherTests::pair() {
+   return (true);
+}
+
 
 OtherTests::OtherTests(const OtherTests& src) : TestClass(src) {}
 const OtherTests& OtherTests::operator=(const OtherTests & rhs) {
