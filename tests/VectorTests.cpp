@@ -1,6 +1,6 @@
 #include "../ft_containers.hpp"
 #include "include/VectorTests.hpp"
-#include "TestClass.cpp"
+
 
 VectorTests::VectorTests() : TestClass() {}
 VectorTests::~VectorTests() {}

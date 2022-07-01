@@ -17,7 +17,12 @@ private:
 
     double timeTests(void);
 
+    // Algorithm tests
     bool algorithms(void);
+
+    // Uility tests
+    //bool utility(void);
+
     template <typename T>
     bool equal_to(T a, T b) {
         return (a == b);

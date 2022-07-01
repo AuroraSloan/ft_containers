@@ -3,8 +3,8 @@
 
 # include <vector>
 
-//# define INT
-# define STR
+# define INT
+//# define STR
 
 # if 1
 #  define TEST

@@ -1,6 +1,7 @@
 #include "ft_containers.hpp"
 #include "tests/VectorTests.cpp"
 #include "tests/IteratorTests.cpp"
+#include "tests/OtherTests.cpp"
 #include <iostream>
 #include <cstring> //strcmp // find better way
 
@@ -57,7 +58,11 @@ int main(int argc, char **argv)
     }
     if (str_equal(argv[1], "other")) {
         print_header("algorithms & Utility");
-
+        OtherTests other;
+        other.testOutput();
+#ifdef TEST
+        other.testPerformance();
+#endif
     }
     exit(EXIT_SUCCESS);
 }

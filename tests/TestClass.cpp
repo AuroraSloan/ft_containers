@@ -18,13 +18,11 @@ void TestClass::print_time_results(double stdtime, double fttime)
 
     if (stdtime < fttime) {
         winner = "STL is ";
-        loser = "FT is ";
         ratio = (int)(fttime/stdtime);
         color = ratio > 20 ? RED : YELLOW;
     }
     else {
         winner = "FT is ";
-        loser = "STL is ";
         ratio = (int)(stdtime/fttime);
         color = GREEN;
     }

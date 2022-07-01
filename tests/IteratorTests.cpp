@@ -1,5 +1,6 @@
 #include "../ft_containers.hpp"
 #include "include/IteratorTests.hpp"
+#include "TestClass.cpp"
 
 IteratorTests::IteratorTests(void) : TestClass() {}
 IteratorTests::~IteratorTests(void) {}
