@@ -18,24 +18,11 @@ private:
     double timeTests(void);
 
     // Algorithm tests
-    bool algorithms(void);
+    bool equal(void);
+    bool lexicographical_compare(void);
 
     // Uility tests
     //bool utility(void);
-
-    template <typename T>
-    bool equal_to(T a, T b) {
-        return (a == b);
-    }
-    template <typename T>
-    bool greater_than(T a, T b) {
-        return (a > b);
-    }
-    template <typename T>
-    bool less_than(T a, T b) {
-        return (a < b);
-    }
-
 
     OtherTests(const OtherTests& src);
     const OtherTests& operator=(const OtherTests & rhs);

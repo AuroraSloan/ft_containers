@@ -9,6 +9,7 @@
 # if 1
 #  define TEST
 #  include "include/vector.hpp"
+#  include "include/algorithm.hpp"
 # else
    namespace ft = std;
 # endif
