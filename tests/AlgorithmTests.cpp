@@ -1,28 +1,26 @@
-#include "include/OtherTests.hpp"
+#include "include/AlgorithmTests.hpp"
 #include "include/TestClass.hpp"
 #include "../ft_containers.hpp"
 
+// canonical functions
+AlgorithmTests::AlgorithmTests() : TestClass() {}
+AlgorithmTests::~AlgorithmTests() {}
 
-OtherTests::OtherTests() : TestClass() {}
-OtherTests::~OtherTests() {}
-
-void OtherTests::testOutput(void) {
-    print_subheader("Algorithm Tests");
+// tester functions for main
+void AlgorithmTests::testOutput(void) {
     print_test_result("equal - ", equal());
     print_test_result("lexicographical_compare - ", lexicographical_compare());
-
-    print_subheader("Utility Tests");
-    print_test_result("pair - ", pair());
 }
 
-void OtherTests::testPerformance(void) {
+void AlgorithmTests::testPerformance(void) {
     ftTime = timeTests();
     namespace ft = std;
     stdTime = timeTests();
     print_time_results(stdTime, ftTime);
 }
 
-double OtherTests::timeTests(void) {
+// private tester functions
+double AlgorithmTests::timeTests(void) {
     clock_t begin, end;
 
     begin = clock();
@@ -30,10 +28,6 @@ double OtherTests::timeTests(void) {
     //algorithms
     equal();
     lexicographical_compare();
-
-    //utility
-    //pair();
-    //make_pair();
 
     end = clock();
     return ((double) (end - begin) / CLOCKS_PER_SEC);
@@ -50,7 +44,7 @@ double OtherTests::timeTests(void) {
 bool equal_toPredicate(int a, int b) {
     return (a == b);
 }
-bool OtherTests::equal(void) {
+bool AlgorithmTests::equal(void) {
     ft::vector<int> vecA;
     ft::vector<int> vecB;
 
@@ -91,7 +85,7 @@ bool less_than_predicate(int a, int b) {
     return (a < b);
 }
 // true if the first range is lexicographically less than the second
-bool OtherTests::lexicographical_compare(void) {
+bool AlgorithmTests::lexicographical_compare(void) {
     ft::vector<int> vecA;
     ft::vector<int> vecB;
     ft::vector<int> vecShort;
@@ -128,21 +122,8 @@ bool OtherTests::lexicographical_compare(void) {
     return (true);
 }
 
-//============================================================================//
-//                                                                            //
-//                              UTILITY TESTS                                 //
-//                                                                            //
-//============================================================================//
-//====================================//
-//                PAIR                //
-//====================================//
-bool OtherTests::pair() {
-   return (true);
-}
-
-
-OtherTests::OtherTests(const OtherTests& src) : TestClass(src) {}
-const OtherTests& OtherTests::operator=(const OtherTests & rhs) {
+AlgorithmTests::AlgorithmTests(const AlgorithmTests& src) : TestClass(src) {}
+const AlgorithmTests& AlgorithmTests::operator=(const AlgorithmTests & rhs) {
     if (this != &rhs) {
         this->stdTime = rhs.stdTime;
         this->ftTime = rhs.ftTime;

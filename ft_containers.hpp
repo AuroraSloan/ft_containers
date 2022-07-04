@@ -10,6 +10,7 @@
 #  define TEST
 #  include "include/vector.hpp"
 #  include "include/algorithm.hpp"
+#  include "include/utility.hpp"
 # else
    namespace ft = std;
 # endif
