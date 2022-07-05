@@ -7,7 +7,7 @@
 # define INT /* INT / STRING */
 
 // Test output
-# define LONG /* SHORT / LONG */
+# define SHORT /* SHORT / LONG */
 
 // 1 for testing ft === 0 for testing std
 # if 1
