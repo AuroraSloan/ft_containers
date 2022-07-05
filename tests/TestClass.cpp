@@ -3,6 +3,13 @@
 TestClass::TestClass() : stdTime(0), ftTime(0) {}
 TestClass::~TestClass() {}
 
+void    TestClass::test() {
+    testOutput();
+#ifdef TEST
+    testPerformance();
+#endif
+}
+
 void    TestClass::print_test_result(std::string testName, bool success) {
     std::cout << testName;
     if (success)

@@ -1,7 +1,8 @@
-#include "ft_containers.hpp"
 #include "tests/VectorTests.cpp"
 #include "tests/IteratorTests.cpp"
-#include "tests/OtherTests.cpp"
+#include "tests/AlgorithmTests.cpp"
+#include "tests/UtilityTests.cpp"
+#include "ft_containers.hpp"
 #include <iostream>
 #include <cstring> //strcmp // find better way
 
@@ -26,43 +27,52 @@ void print_header(std::string header) {
 
 
 /*int main(void) {
+    ft::pair<std::string, double> A("abc", 33.5);
+    ft::pair<std::string, double> B("abc", 33.5);
+    ft::pair<std::string, double> C("abc", 1.1);
+    ft::pair<std::string, double> D("cba", 1.1);
+    ft::pair<std::string, double> E("cba", 33.5);
 
-//    ft::vector<int> vec;
-    int  array[100];
-    int* array_end = array + 100;
-
-    std::vector<int> comp(array, array_end);
-    ft::vector<int> vec(array, array_end);
-    return (0);
+    if (A == B && !(A==B) && A != D && !(A != B)
+    && A > C && A > D && A > E && E > A) {
+        std::cout << "Okay\n";
+    } else {
+        std::cout << "not okay\n";
+    }
 }*/
 
 int main(int argc, char **argv)
 {
+    // check args
     if (argc != 2 || !valid_arg(argv[1]))
         print_usage();
+
+    // iterator tests
     if (str_equal(argv[1], "iterator")) {
         print_header(" Iterator Tests ");
         IteratorTests iterator;
-        iterator.testOutput();
-#ifdef TEST
-        iterator.testPerformance();
-#endif
+        iterator.test();
     }
+
+    // vector tests
     if (str_equal(argv[1], "vector")) {
         print_header(" Vector Tests ");
         VectorTests vector;
-        vector.testOutput();
-#ifdef TEST
-        vector.testPerformance();
-#endif
+        vector.test();
     }
-    if (str_equal(argv[1], "other")) {
-        print_header("algorithms & Utility");
-        OtherTests other;
-        other.testOutput();
-#ifdef TEST
-        other.testPerformance();
-#endif
+
+    // algorithm tests
+    if (str_equal(argv[1], "algorithm")) {
+        print_header("Algorithm tests");
+        AlgorithmTests algorithm;
+        algorithm.test();
+    }
+
+    // utility tests
+    if (str_equal(argv[1], "utility")) {
+        print_header("Utility tests");
+        UtilityTests utility;
+        utility.test();
     }
     exit(EXIT_SUCCESS);
 }

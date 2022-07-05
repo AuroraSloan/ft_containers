@@ -19,19 +19,12 @@ public:
     TestClass();
     virtual ~TestClass();
 
-    virtual void testOutput() = 0;
-    virtual void testPerformance() = 0;
+    void test();
 
 protected:
-    /*template <typename Function>
-    double timer(Function f) {
-      clock_t begin, end;
 
-        begin = clock();
-        f();
-        end = clock();
-        return ((double) (end - begin) / CLOCKS_PER_SEC);
-    }*/
+    virtual void testOutput() = 0;
+    virtual void testPerformance() = 0;
 
     template <typename ContainerA, typename ContainerB>
     bool    containers_equal(ContainerA & A, ContainerB & B) {
