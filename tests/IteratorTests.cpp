@@ -2,16 +2,23 @@
 #include "include/IteratorTests.hpp"
 #include "TestClass.cpp"
 
+// Canonical methods
 IteratorTests::IteratorTests(void) : TestClass() {}
 IteratorTests::~IteratorTests(void) {}
 
-void IteratorTests::testOutput(void) {
-    ft::vector<int>     vec;
-    std::vector<int>    comp;
+// test helper
+void createSampleIntVector(ft::vector<int>& vec, std::vector<int>& comp) {
     for (size_t i = 0; i < 30; i++) {
         vec.push_back(i);
         comp.push_back(i);
     }
+}
+// Inherited pure methods
+void IteratorTests::printLongResults() {
+    ft::vector<int>     vec;
+    std::vector<int>    comp;
+    createSampleIntVector(vec, comp);
+    print_header(" Iterator Tests ");
 
     print_subheader("Construction Tests");
     print_test_result("construction - ", construction());
@@ -20,24 +27,27 @@ void IteratorTests::testOutput(void) {
     print_test_result("iterator - ", modification<ft::vector<int>::iterator, std::vector<int>::iterator >(vec.begin(), comp.begin()));
     print_test_result("reverse iterator - ", modification<ft::vector<int>::reverse_iterator, std::vector<int>::reverse_iterator >(vec.rbegin(), comp.rbegin()));
 }
+void IteratorTests::printShortResults() {
+    ft::vector<int>     vec;
+    std::vector<int>    comp;
+    createSampleIntVector(vec, comp);
 
-void IteratorTests::testPerformance(void) {
-    ftTime = timeTests();
-    namespace ft = std;
-    stdTime = timeTests();
-    print_time_results(stdTime, ftTime);
+    std::cout << "Iterator tests - ";
+    if (construction()
+    && modification<ft::vector<int>::iterator, std::vector<int>::iterator >(vec.begin(), comp.begin())
+    && modification<ft::vector<int>::reverse_iterator, std::vector<int>::reverse_iterator >(vec.rbegin(), comp.rbegin())) {
+        print_result(true);
+    } else {
+        print_result(false);
+    }
 }
 
-double    IteratorTests::timeTests(void) {
+double    IteratorTests::timerTest(void) {
     clock_t begin, end;
 
     ft::vector<int>     vec;
     std::vector<int>    comp;
-    for (size_t i = 0; i < 30; i++) {
-        vec.push_back(i);
-        comp.push_back(i);
-    }
-
+    createSampleIntVector(vec, comp);
     begin = clock();
 
     construction();
@@ -48,9 +58,6 @@ double    IteratorTests::timeTests(void) {
 
     return ((double) (end - begin) / CLOCKS_PER_SEC);
 }
-
-
-
 
 //============================================================================//
 //                                                                            //

@@ -3,9 +3,13 @@
 
 # include <vector>
 
-# define INT
-//# define STR
+// test variables/ arguments
+# define INT /* INT / STRING */
 
+// Test output
+# define SHORT /* SHORT / LONG */
+
+// 1 for testing ft === 0 for testing std
 # if 1
 #  define TEST
 #  include "include/vector.hpp"

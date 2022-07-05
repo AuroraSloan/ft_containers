@@ -2,24 +2,27 @@
 #include "include/TestClass.hpp"
 #include "../ft_containers.hpp"
 
+// Canonical methods
+UtilityTests::UtilityTests(void) : TestClass() {}
+UtilityTests::~UtilityTests(void) {}
 
-UtilityTests::UtilityTests() : TestClass() {}
-UtilityTests::~UtilityTests() {}
+// Inherited pure methods
+void UtilityTests::printLongResults(void) {
+    print_header("Utility tests");
 
-void UtilityTests::testOutput(void) {
     print_test_result("pair_construction - ", pair_construction());
     print_test_result("pair_relational_operators - ", pair_relational_operators());
     print_test_result("make_pair - ", make_pair());
 }
-
-void UtilityTests::testPerformance(void) {
-    ftTime = timeTests();
-    namespace ft = std;
-    stdTime = timeTests();
-    print_time_results(stdTime, ftTime);
+void UtilityTests::printShortResults(void) {
+    std::cout << "Utility tests - ";
+    if (pair_construction() && pair_relational_operators() && make_pair()) {
+        print_result(true);
+    } else {
+        print_result(false);
+    }
 }
-
-double UtilityTests::timeTests(void) {
+double UtilityTests::timerTest(void) {
     clock_t begin, end;
 
     begin = clock();

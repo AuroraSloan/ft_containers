@@ -7,24 +7,22 @@ class AlgorithmTests : public TestClass {
 
 public:
 
-    // canonical functions
+    // Canonical methods
     AlgorithmTests(void);
     ~AlgorithmTests(void);
 
-    // tester functions for main
-    void testOutput(void);
-    void testPerformance(void);
-
 private:
 
-    // private tester functions
-    double timeTests(void);
+    // Inherited pure methods
+    void printLongResults(void);
+    void printShortResults(void);
+    double timerTest(void);
 
     // Algorithm tests
     bool equal(void);
     bool lexicographical_compare(void);
 
-    // canonical functions
+    // canonical methods
     AlgorithmTests(const AlgorithmTests& src);
     const AlgorithmTests& operator=(const AlgorithmTests & rhs);
 };
