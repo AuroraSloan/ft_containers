@@ -27,14 +27,18 @@ void print_header(std::string header) {
 
 
 /*int main(void) {
+    ft::pair<std::string, double> A("abc", 33.5);
+    ft::pair<std::string, double> B("abc", 33.5);
+    ft::pair<std::string, double> C("abc", 1.1);
+    ft::pair<std::string, double> D("cba", 1.1);
+    ft::pair<std::string, double> E("cba", 33.5);
 
-//    ft::vector<int> vec;
-    int  array[100];
-    int* array_end = array + 100;
-
-    std::vector<int> comp(array, array_end);
-    ft::vector<int> vec(array, array_end);
-    return (0);
+    if (A == B && !(A==B) && A != D && !(A != B)
+    && A > C && A > D && A > E && E > A) {
+        std::cout << "Okay\n";
+    } else {
+        std::cout << "not okay\n";
+    }
 }*/
 
 int main(int argc, char **argv)

@@ -20,7 +20,9 @@ private:
     // Test functions
     bool pair_construction(void);
     bool pair_relational_operators(void);
+    bool make_pair(void);
 
+    // canonical functions
     UtilityTests(const UtilityTests& src);
     const UtilityTests& operator=(const UtilityTests & rhs);
 };
