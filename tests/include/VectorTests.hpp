@@ -8,17 +8,18 @@
 class VectorTests : public TestClass {
 
 public:
+    // Canonical methods
     VectorTests(void);
     ~VectorTests(void);
 
-    void testOutput(void);
-    void testPerformance(void);
-
 private:
 
-    double    timeTests(void);
+    // Inherited pure methods
+    void printLongResults(void);
+    void printShortResults(void);
+    double  timerTest(void);
 
-    // Construcion tests
+    // Construction tests
     bool    construction(void);
 
     // Iterator tests
@@ -46,9 +47,9 @@ private:
     // Relational operators tests
     bool    relational_operators(void);
 
+    // canonical methods
     VectorTests(const VectorTests& src);
     const VectorTests& operator=(const VectorTests& rhs);
-
 
 };
 

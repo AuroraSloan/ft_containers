@@ -2,25 +2,26 @@
 #include "include/TestClass.hpp"
 #include "../ft_containers.hpp"
 
-// canonical functions
+// Canonical methods
 AlgorithmTests::AlgorithmTests() : TestClass() {}
 AlgorithmTests::~AlgorithmTests() {}
 
-// tester functions for main
-void AlgorithmTests::testOutput(void) {
+// Inherited pure methods
+void AlgorithmTests::printLongResults() {
+    print_header("Algorithm tests");
+
     print_test_result("equal - ", equal());
     print_test_result("lexicographical_compare - ", lexicographical_compare());
 }
-
-void AlgorithmTests::testPerformance(void) {
-    ftTime = timeTests();
-    namespace ft = std;
-    stdTime = timeTests();
-    print_time_results(stdTime, ftTime);
+void AlgorithmTests::printShortResults() {
+   std::cout << "Algorithm tests - ";
+   if (equal() && lexicographical_compare()) {
+       print_result(true);
+   } else {
+       print_result(false);
+   }
 }
-
-// private tester functions
-double AlgorithmTests::timeTests(void) {
+double AlgorithmTests::timerTest(void) {
     clock_t begin, end;
 
     begin = clock();

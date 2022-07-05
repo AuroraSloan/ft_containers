@@ -21,10 +21,6 @@ void print_usage(void) {
     exit(EXIT_FAILURE);
 }
 
-void print_header(std::string header) {
-    std::cout << MAGENTA << HDR << header << HDR << RESET << '\n';
-}
-
 
 /*int main(void) {
     ft::pair<std::string, double> A("abc", 33.5);
@@ -49,28 +45,24 @@ int main(int argc, char **argv)
 
     // iterator tests
     if (str_equal(argv[1], "iterator")) {
-        print_header(" Iterator Tests ");
         IteratorTests iterator;
         iterator.test();
     }
 
     // vector tests
     if (str_equal(argv[1], "vector")) {
-        print_header(" Vector Tests ");
         VectorTests vector;
         vector.test();
     }
 
     // algorithm tests
     if (str_equal(argv[1], "algorithm")) {
-        print_header("Algorithm tests");
         AlgorithmTests algorithm;
         algorithm.test();
     }
 
     // utility tests
     if (str_equal(argv[1], "utility")) {
-        print_header("Utility tests");
         UtilityTests utility;
         utility.test();
     }

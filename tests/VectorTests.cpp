@@ -1,11 +1,14 @@
 #include "../ft_containers.hpp"
 #include "include/VectorTests.hpp"
 
+// Canonical methods
+VectorTests::VectorTests(void) : TestClass() {}
+VectorTests::~VectorTests(void) {}
 
-VectorTests::VectorTests() : TestClass() {}
-VectorTests::~VectorTests() {}
+// Inherited pure methods
+void VectorTests::printLongResults(void) {
+    print_header(" Vector Tests ");
 
-void VectorTests::testOutput() {
     print_subheader("Construction Tests");
     print_test_result("construction - ", construction());
 
@@ -35,16 +38,17 @@ void VectorTests::testOutput() {
     print_subheader("Relational operator tests");
     print_test_result("relational operators and swap - ", relational_operators());
 }
-
-void VectorTests::testPerformance() {
-    ftTime = timeTests();
-    namespace ft = std;
-    stdTime = timeTests();
-    print_time_results(stdTime, ftTime);
+void    VectorTests::printShortResults(void) {
+    std::cout << "Vector tests - ";
+    if (construction() && iterator_methods() && reverse_iterator_methods() && assign()
+    && push_back() && pop_back() && insert() && erase() && swap() && clear() && size()
+    && resize() && capacity() && reserve() && element_access() && relational_operators()) {
+        print_result(true);
+    } else {
+        print_result(false);
+    }
 }
-
-
-double  VectorTests::timeTests() {
+double  VectorTests::timerTest(void) {
     clock_t begin, end;
 
     begin = clock();

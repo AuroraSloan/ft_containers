@@ -15,16 +15,33 @@
 
 class TestClass {
 public:
+    // Canonical methods
+    TestClass(void);
+    virtual ~TestClass(void);
 
-    TestClass();
-    virtual ~TestClass();
+    void test(void);
 
-    void test();
+private:
+    void    testPerformance(void);
+    void    print_time_results(double stdtime, double fttime);
 
 protected:
 
-    virtual void testOutput() = 0;
-    virtual void testPerformance() = 0;
+    // Copy constructor
+    TestClass(const TestClass& src);
+
+    double stdTime;
+    double ftTime;
+
+    virtual void printLongResults(void) = 0;
+    virtual void printShortResults(void) = 0;
+    virtual double timerTest(void) = 0;
+
+    void    print_test_result(std::string testName, bool result);
+    void    print_result(bool success);
+    void    print_header(std::string header);
+    void    print_subheader(std::string subHeader);
+
 
     template <typename ContainerA, typename ContainerB>
     bool    containers_equal(ContainerA & A, ContainerB & B) {
@@ -96,17 +113,9 @@ protected:
         std::cout << '\n';
     }
 
-    void    print_test_result(std::string testName, bool success);
-    void    print_time_results(double stdtime, double fttime);
-    void    print_subheader(std::string subHeader);
-
-    double stdTime;
-    double ftTime;
-
-    TestClass(const TestClass& src);
-
 private:
 
+    // Equal operator
     const TestClass& operator=(const TestClass& rhs);
 
 };
