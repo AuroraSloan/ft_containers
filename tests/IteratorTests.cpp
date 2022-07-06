@@ -1,6 +1,7 @@
-#include "../ft_containers.hpp"
 #include "include/IteratorTests.hpp"
 #include "TestClass.cpp"
+#include "../ft_containers.hpp"
+
 #include <ctime>
 
 // Canonical methods

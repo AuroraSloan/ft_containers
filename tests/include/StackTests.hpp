@@ -18,7 +18,7 @@ private:
     double  timerTest(void);
 
     // Construction tests
-    //bool    nantokatest(void);
+    bool construction(void);
 
     // canonical methods
     StackTests(const StackTests& src);

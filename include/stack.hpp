@@ -5,19 +5,18 @@
 # include "vector.hpp"   // ft::vector
 
 namespace ft {
-    template<typename T>
+    template<typename T, class Container = ft::vector<T> >
     class stack {
-        public:
-            stack(void) : var(5) {}
-            int var;
+    public:
+        // MEMBER TYPES
+        typedef T                       value_type;
+        typedef typename ft::vector<T>  container_type;
+        typedef size_t                  size_type;
 
-            // MEMBER TYPES
-            typedef T                       value_type;
-            typedef typename ft::vector<T>  container_type;
-            typedef size_t                  size_type;
-
-            // CONSTRUCTORS / DESTRUCTOR
-
+        // CONSTRUCTORS / DESTRUCTOR
+        explicit stack (const container_type& ctnr = container_type()) : _ctnr(ctnr) {}
+    private:
+        container_type  _ctnr;
     };
 }
 

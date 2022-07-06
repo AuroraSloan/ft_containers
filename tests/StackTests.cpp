@@ -1,5 +1,8 @@
-#include "../ft_containers.hpp"
 #include "include/StackTests.hpp"
+#include "include/TestClass.hpp"
+#include "../ft_containers.hpp"
+#include <stack>
+
 #include <ctime>
 
 // Canonical methods
@@ -10,13 +13,13 @@ StackTests::~StackTests(void) {}
 void StackTests::printLongResults(void) {
     print_header(" Stack Tests ");
 
-    //print_subheader("Construction Tests");
-    //print_test_result("construction - ", construction());
+    print_subheader("Construction Tests");
+    print_test_result("construction - ", construction());
 
 }
 void    StackTests::printShortResults(void) {
     std::cout << "Stack tests - ";
-    if (1) {
+    if (construction()) {
         print_result(true);
     } else {
         print_result(false);
@@ -28,7 +31,7 @@ double  StackTests::timerTest(void) {
     begin = clock();
 
     // construction
-    //construction();
+    construction();
 
     end = clock();
     return ((double) (end - begin) / CLOCKS_PER_SEC);
@@ -41,9 +44,13 @@ double  StackTests::timerTest(void) {
 //                                                                            //
 //============================================================================//
 //====================================//
-//        VECTOR CONSTRUCTION         //
+//         STACK CONSTRUCTION         //
 //====================================//
+bool    StackTests::construction() {
+    ft::stack<int> stack;
 
+    return (true);
+}
 
 
 StackTests::StackTests(const StackTests& src) : TestClass(src) {}
