@@ -17,8 +17,10 @@ private:
     void printShortResults(void);
     double  timerTest(void);
 
-    // Construction tests
+    // Tests
     bool construction(void);
+    bool all_methods(void);
+    bool relational_operators(void);
 
     // Helper methods
     template <typename stackA, typename stackB>
@@ -38,6 +40,7 @@ private:
         }
         return (true);
     }
+
     // canonical methods
     StackTests(const StackTests& src);
     const StackTests& operator=(const StackTests& rhs);
