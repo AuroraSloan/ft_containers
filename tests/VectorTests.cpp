@@ -2,8 +2,13 @@
 #include "include/TestClass.hpp"
 #include "../ft_containers.hpp"
 #include <vector>
-
 #include <ctime>
+#ifdef TEST
+# include "../include/vector.hpp"
+# else
+namespace ft = std;
+#endif
+
 
 // Canonical methods
 VectorTests::VectorTests(void) : TestClass() {}

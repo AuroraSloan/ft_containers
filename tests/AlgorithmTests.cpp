@@ -1,8 +1,12 @@
 #include "include/AlgorithmTests.hpp"
 #include "include/TestClass.hpp"
 #include "../ft_containers.hpp"
-
 #include <ctime>
+#ifdef TEST
+# include "../include/algorithm.hpp"
+# else
+namespace ft = std;
+#endif
 
 // Canonical methods
 AlgorithmTests::AlgorithmTests() : TestClass() {}

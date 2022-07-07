@@ -2,9 +2,12 @@
 #include "include/TestClass.hpp"
 #include "../ft_containers.hpp"
 #include <map>
-
 #include <ctime>
-
+#ifdef TEST
+# include "../include/map.hpp"
+# else
+namespace ft = std;
+#endif
 // Canonical methods
 MapTests::MapTests(void) : TestClass() {}
 MapTests::~MapTests(void) {}

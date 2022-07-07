@@ -7,17 +7,8 @@
 // Test output
 # define SHORT /* SHORT / LONG */
 
-// 1 for testing ft === 0 for testing std
-# if 1
-#  define TEST
-#  include "include/algorithm.hpp"
-#  include "include/iterator.hpp"
-#  include "include/stack.hpp"
-#  include "include/utility.hpp"
-#  include "include/vector.hpp"
-#  include "include/map.hpp"
-# else
-   namespace ft = std;
-# endif
+// define Test for testing ft
+// comment out to test std
+//# define TEST
 
 #endif

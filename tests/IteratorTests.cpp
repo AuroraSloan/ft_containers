@@ -1,8 +1,12 @@
 #include "include/IteratorTests.hpp"
 #include "TestClass.cpp"
 #include "../ft_containers.hpp"
-
 #include <ctime>
+#ifdef TEST
+# include "../include/iterator.hpp"
+# else
+namespace ft = std;
+#endif
 
 // Canonical methods
 IteratorTests::IteratorTests(void) : TestClass() {}
