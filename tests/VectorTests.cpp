@@ -1,5 +1,9 @@
-#include "../ft_containers.hpp"
 #include "include/VectorTests.hpp"
+#include "include/TestClass.hpp"
+#include "../ft_containers.hpp"
+#include <vector>
+
+#include <ctime>
 
 // Canonical methods
 VectorTests::VectorTests(void) : TestClass() {}

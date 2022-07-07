@@ -2,6 +2,8 @@
 #include "include/TestClass.hpp"
 #include "../ft_containers.hpp"
 
+#include <ctime>
+
 // Canonical methods
 UtilityTests::UtilityTests(void) : TestClass() {}
 UtilityTests::~UtilityTests(void) {}

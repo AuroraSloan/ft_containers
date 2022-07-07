@@ -3,8 +3,6 @@
 
 # include "TestClass.hpp"
 
-# include <ctime>       //clock
-
 class IteratorTests : public TestClass {
 
 public:

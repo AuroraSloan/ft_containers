@@ -15,8 +15,6 @@ namespace ft {
     template<typename T, class Alloc = std::allocator <T> >
     class vector {
     public:
-        //vector(void) : var(5) {}
-        //int var;
 
         // MEMBER TYPES
         typedef T value_type;

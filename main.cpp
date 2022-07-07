@@ -2,6 +2,7 @@
 #include "tests/IteratorTests.cpp"
 #include "tests/AlgorithmTests.cpp"
 #include "tests/UtilityTests.cpp"
+#include "tests/StackTests.cpp"
 #include "ft_containers.hpp"
 #include <iostream>
 #include <cstring> //strcmp // find better way
@@ -11,12 +12,13 @@ bool    str_equal(char *A, std::string B) {
 }
 
 bool    valid_arg(std::string arg) {
-    return (arg == "vector" || arg == "stack" || arg == "map" || arg == "iterator" || arg == "all");
+    return (arg == "vector" || arg == "stack" || arg == "map" || arg == "iterator"
+    || arg == "algorithm" || arg == "utility" || arg == "all");
 }
 
 void print_usage(void) {
     std::cout << "usage: ./ft_containers <test name>\n"
-    << "available tests:\nvector\nstack\nmap\n";
+    << "available tests:\nall\nvector\nstack\nmap\nalgorithm\nutility\n";
 
     exit(EXIT_FAILURE);
 }
@@ -53,6 +55,12 @@ int main(int argc, char **argv)
     if (str_equal(argv[1], "vector")) {
         VectorTests vector;
         vector.test();
+    }
+
+    // stack tests
+    if (str_equal(argv[1], "stack")) {
+        StackTests stack;
+        stack.test();
     }
 
     // algorithm tests
