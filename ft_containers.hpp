@@ -8,7 +8,7 @@
 # define SHORT /* SHORT / LONG */
 
 // 1 for testing ft === 0 for testing std
-# if 1
+# if 0
 #  define TEST
 #  include "include/algorithm.hpp"
 #  include "include/iterator.hpp"

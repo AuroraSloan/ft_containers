@@ -26,9 +26,9 @@ namespace ft {
     };
     template <typename T>
     struct iterator_traits<const T*> {
-        typedef ptrdiff_t const                                     difference_type;
-        typedef T const                                             value_type;
-        typedef T* const                                            pointer;
+        typedef const ptrdiff_t                                     difference_type;
+        typedef const T                                             value_type;
+        typedef const T*                                            pointer;
         typedef T&                                                  reference;
         typedef typename std::random_access_iterator_tag const      iterator_category;
     };

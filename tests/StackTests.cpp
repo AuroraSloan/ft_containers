@@ -47,8 +47,27 @@ double  StackTests::timerTest(void) {
 //         STACK CONSTRUCTION         //
 //====================================//
 bool    StackTests::construction() {
-    ft::stack<int> stack;
+    ft::stack<int> constructedA;
+    ft::stack<int, ft::vector<int> > constructedB;
+    if (!constructedA.empty() || !constructedB.empty()) {
+        return (false);
+    }
 
+    constructedA.push(111);
+    ft::stack<int> copy_constructed(constructedA);
+    if (!(stacks_equal(constructedA, copy_constructed))) {
+        return (false);
+    }
+
+    ft::vector<int> vector(32, 999);
+    ft::stack<int, ft::vector<int> > constructed_from_vector(vector);
+    ft::stack<int> check;
+    for (int i = 1; i <= 32; i++) {
+       check.push(999);
+    }
+    if (!(stacks_equal(constructed_from_vector, check))) {
+        return (false);
+    }
     return (true);
 }
 
