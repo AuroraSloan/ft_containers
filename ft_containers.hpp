@@ -15,6 +15,7 @@
 #  include "include/stack.hpp"
 #  include "include/utility.hpp"
 #  include "include/vector.hpp"
+#  include "include/map.hpp"
 # else
    namespace ft = std;
 # endif

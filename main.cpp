@@ -3,6 +3,7 @@
 #include "tests/AlgorithmTests.cpp"
 #include "tests/UtilityTests.cpp"
 #include "tests/StackTests.cpp"
+#include "tests/MapTests.cpp"
 #include "ft_containers.hpp"
 #include <iostream>
 #include <cstring> //strcmp // find better way
@@ -61,6 +62,12 @@ int main(int argc, char **argv)
     if (str_equal(argv[1], "stack")) {
         StackTests stack;
         stack.test();
+    }
+
+    // map tests
+    if (str_equal(argv[1], "map")) {
+        MapTests map;
+        map.test();
     }
 
     // algorithm tests
