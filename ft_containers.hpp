@@ -9,6 +9,6 @@
 
 // define Test for testing ft
 // comment out to test std
-//# define TEST
+# define TEST
 
 #endif
