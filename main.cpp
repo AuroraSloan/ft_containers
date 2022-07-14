@@ -7,6 +7,7 @@
 #include "ft_containers.hpp"
 #include <iostream>
 #include <cstring> //strcmp // find better way
+#include "include/map.hpp"
 
 bool    str_equal(char *A, std::string B) {
     return (strcmp(A, B.c_str()) == 0 || strcmp(A, "all") == 0);
@@ -25,22 +26,24 @@ void print_usage(void) {
 }
 
 
-/*int main(void) {
-    ft::pair<std::string, double> A("abc", 33.5);
-    ft::pair<std::string, double> B("abc", 33.5);
-    ft::pair<std::string, double> C("abc", 1.1);
-    ft::pair<std::string, double> D("cba", 1.1);
-    ft::pair<std::string, double> E("cba", 33.5);
+int main(void) {
+    ft::_rb_tree<int> tree;
+    /*ft::_rb_node<int> one(1);
+    ft::_rb_node<int> thirtythree(33);
+    ft::_rb_node<int> seventeen(17);
 
-    if (A == B && !(A==B) && A != D && !(A != B)
-    && A > C && A > D && A > E && E > A) {
-        std::cout << "Okay\n";
-    } else {
-        std::cout << "not okay\n";
-    }
-}*/
+    tree.insert(one);
+    tree.insert(thirtythree);
+    tree.insert(seventeen);*/
+    tree.insert(1);
+    tree.insert(33);
+    tree.insert(17);
 
-int main(int argc, char **argv)
+    tree.inOrderWalk(tree.getRoot());
+
+}
+
+/*int main(int argc, char **argv)
 {
     // check args
     if (argc != 2 || !valid_arg(argv[1]))
@@ -82,4 +85,4 @@ int main(int argc, char **argv)
         utility.test();
     }
     exit(EXIT_SUCCESS);
-}
+}*/

@@ -4,6 +4,7 @@
 # include <memory>   // std::allocator
 # include <iterator> // std::iterator
 # include <cstddef>  // ptrdiff_t, size_t
+# include "_rb_tree.hpp"
 # include "utility.hpp" // ft::pair
 
 namespace ft {
