@@ -9,16 +9,16 @@
 #include <cstring> //strcmp // find better way
 #include "include/map.hpp"
 
-bool    str_equal(char *A, std::string B) {
+bool    str_equal(const char *A, const std::string& B) {
     return (strcmp(A, B.c_str()) == 0 || strcmp(A, "all") == 0);
 }
 
-bool    valid_arg(std::string arg) {
+bool    valid_arg(std::string& arg) {
     return (arg == "vector" || arg == "stack" || arg == "map" || arg == "iterator"
     || arg == "algorithm" || arg == "utility" || arg == "all");
 }
 
-void print_usage(void) {
+void print_usage() {
     std::cout << "usage: ./ft_containers <test name>\n"
     << "available tests:\nall\nvector\nstack\nmap\nalgorithm\nutility\n";
 
@@ -26,7 +26,7 @@ void print_usage(void) {
 }
 
 
-int main(void) {
+int main() {
     ft::_rb_tree<int> tree;
     /*ft::_rb_node<int> one(1);
     ft::_rb_node<int> thirtythree(33);
@@ -35,10 +35,10 @@ int main(void) {
     tree.insert(one);
     tree.insert(thirtythree);
     tree.insert(seventeen);*/
-    tree.insert(1);
-    tree.insert(33);
-    tree.insert(17);
-    tree.insert(2);
+    tree.tree_insert(1);
+    tree.tree_insert(33);
+    tree.tree_insert(17);
+    tree.tree_insert(2);
 
     tree.inOrderWalk(tree.getRoot());
     tree.inOrderWalk(tree.getRoot());

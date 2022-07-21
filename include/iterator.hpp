@@ -44,10 +44,10 @@ namespace ft {
         typedef typename ft::iterator_traits<T*>::reference             reference;
         typedef typename ft::iterator_traits<T*>::iterator_category     iterator_category;
 
-        random_access_iterator(void) : _data(NULL) {}
+        random_access_iterator() : _data(NULL) {}
         random_access_iterator(value_type *x) : _data(x) {}
         random_access_iterator(random_access_iterator const & src) : _data(src._data) {}
-        ~random_access_iterator(void) {}
+        ~random_access_iterator() {}
 
         reference   operator*() const { return (*_data); }
         pointer     operator->() const { return (_data); }
@@ -58,7 +58,7 @@ namespace ft {
             return (*this);
         }
 
-        random_access_iterator & operator++(void) {
+        random_access_iterator & operator++() {
             ++_data;
             return (*this);
         }
@@ -69,7 +69,7 @@ namespace ft {
             return tmp;
         }
 
-        random_access_iterator & operator--(void) {
+        random_access_iterator & operator--() {
             --_data;
             return (*this);
         }
@@ -129,7 +129,7 @@ namespace ft {
         iterator_type _it;
 
         // CONSTRUCTORS
-        reverse_iterator(void) : _it(NULL) {}
+        reverse_iterator() : _it(NULL) {}
         explicit reverse_iterator(iterator_type it) : _it(it) {}
 
         template <typename iter>
@@ -143,7 +143,7 @@ namespace ft {
         pointer     operator->() const { return (&(*_it)); }
 
         reverse_iterator operator+(difference_type n) const { return (reverse_iterator(_it - n)); }
-        reverse_iterator & operator++(void) {
+        reverse_iterator & operator++() {
             --_it;
             return (*this);
         }
@@ -153,7 +153,7 @@ namespace ft {
             return tmp;
         }
         reverse_iterator operator-(difference_type n) const { return (reverse_iterator(_it + n)); }
-        reverse_iterator & operator--(void) {
+        reverse_iterator & operator--() {
             ++_it;
             return (*this);
         }
