@@ -1,6 +1,26 @@
+#include <iterator>
+#include <iostream>
+#include "iterator.hpp"
+
 namespace ft {
 
     enum color_bool { black, red };
+
+    template <typename node_type>
+    node_type& tree_min(node_type& node) {
+        while (node->left) {
+            node = node->left;
+        }
+        return (node);
+    }
+
+    template <typename node_type>
+    node_type& tree_max(node_type& node) {
+        while (node->right) {
+            node = node->right;
+        }
+        return (node);
+    }
 
     template <typename T>
     struct _rb_node {
@@ -13,7 +33,7 @@ namespace ft {
         _base_node  parent;
         bool        color;
 
-        _rb_node() : key(), left(NULL), right(NULL), parent(NULL), color(black) {}
+        _rb_node() : key(NULL), left(NULL), right(NULL), parent(NULL), color(black) {}
         explicit _rb_node(const T& value) : key(value), left(NULL), right(NULL), parent(NULL), color(red) {}
         _rb_node(const _rb_node& src) : key(src.key), left(src.left), right(src.right), parent(src.parent), color(src.color) {}
         ~_rb_node() {}
@@ -30,16 +50,91 @@ namespace ft {
         }
     };
 
+    // ITERATOR
+    template <typename T>
+    class _tree_iterator : public std::iterator<std::bidirectional_iterator_tag, T> {
+
+    public:
+        typedef typename ft::iterator_traits<T*>::difference_type       difference_type;
+        typedef typename ft::iterator_traits<T*>::value_type            value_type;
+        typedef typename ft::iterator_traits<T*>::pointer               pointer;
+        typedef typename ft::iterator_traits<T*>::reference             reference;
+        typedef typename ft::iterator_traits<T*>::iterator_category     iterator_category;
+
+        _tree_iterator() : _data(NULL) {}
+        _tree_iterator(value_type *x) : _data(x) {}
+        _tree_iterator(_tree_iterator const & src) : _data(src._data) {}
+        ~_tree_iterator() {}
+
+        reference   operator*() const { return (*_data); }
+        pointer     operator->() const { return (_data); }
+
+        _tree_iterator& operator=(_tree_iterator const &rhs) {
+            if (this != &rhs)
+                _data = rhs->_data;
+            return (*this);
+        }
+
+        _tree_iterator& operator++() {
+            if (_data->right) {
+                _data = ft::tree_min(_data->right);
+            } else {
+                while (_data->parent && _data == _data->parent->right) {
+                    _data = _data->parent;
+                }
+                _data = _data->parent;
+            }
+            return (*this);
+        }
+
+        _tree_iterator operator++(int) {
+            _tree_iterator tmp(*this);
+            ++(*this);
+            return tmp;
+        }
+
+        _tree_iterator & operator--() {
+            if (_data->left) {
+                _data = (ft::tree_max(_data->left));
+            } else {
+                while (_data->parent && _data == _data->parent->left) {
+                    _data = _data->parent;
+                }
+                _data = _data->parent;
+            }
+            return (*this);
+        }
+
+        _tree_iterator operator--(int) {
+            _tree_iterator tmp(*this);
+            --(*this);
+            return tmp;
+        }
+
+        pointer base() const { return (_data); }
+
+    private:
+        pointer _data;
+
+    };
+    template <typename T>
+    bool operator==(ft::_tree_iterator<T> const &lhs, ft::_tree_iterator<T> const &rhs) { return (lhs.base() == rhs.base()); }
+    template <typename T>
+    bool operator!=(ft::_tree_iterator<T> const &lhs, ft::_tree_iterator<T> const &rhs) { return (lhs.base() != rhs.base()); }
+
+    // RED BLACK TREE
     template <typename T, class Alloc = std::allocator<_rb_node<T> > >
     class _rb_tree {
     public:
 
-        typedef Alloc                               allocator_type;
-        typedef typename allocator_type::reference  reference;
-        typedef typename allocator_type::pointer    pointer;
         typedef _rb_node<T>                         node;
         typedef node*                               node_pointer;
         typedef node&                               node_reference;
+        typedef Alloc                               allocator_type;
+        typedef _tree_iterator<node>                iterator;
+        typedef const _tree_iterator<node>          const_iterator;
+        typedef typename allocator_type::reference  reference;
+        typedef typename allocator_type::pointer    pointer;
 
     private:
         node_pointer    _nill;
@@ -85,6 +180,8 @@ namespace ft {
                 inOrderWalk(x->right);
             }
         }
+
+        iterator begin() { return (iterator(_root)); }
 
         node_pointer getRoot() { return (_root); }
 

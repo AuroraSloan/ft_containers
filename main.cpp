@@ -38,8 +38,18 @@ int main(void) {
     tree.insert(1);
     tree.insert(33);
     tree.insert(17);
+    tree.insert(2);
 
     tree.inOrderWalk(tree.getRoot());
+    tree.inOrderWalk(tree.getRoot());
+
+    ft::_rb_tree<int>::iterator i(tree.begin());
+    std::cout << i->key << '\n';
+    i++;
+    i++;
+    std::cout << i->key << '\n';
+
+    //i = tree.begin();
 
 }
 
