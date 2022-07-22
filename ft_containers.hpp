@@ -5,7 +5,7 @@
 # define INT /* INT / STRING */
 
 // Test output
-# define SHORT /* SHORT / LONG */
+# define LONG /* SHORT / LONG */
 
 // define Test for testing ft
 // comment out to test std

@@ -1,6 +1,9 @@
-#include <iterator>
-#include <iostream>
-#include "iterator.hpp"
+#ifndef _RB_TREE_HPP
+# define _RB_TREE_HPP
+
+# include <iterator>
+# include <iostream>
+# include "iterator.hpp"
 
 namespace ft {
 
@@ -49,6 +52,10 @@ namespace ft {
             return (*this);
         }
     };
+    template <typename T>
+    bool operator==(ft::_rb_node<T> const &lhs, ft::_rb_node<T> const &rhs) { return (lhs.key == rhs.key); }
+    template <typename T>
+    bool operator!=(ft::_rb_node<T> const &lhs, ft::_rb_node<T> const &rhs) { return (lhs.key != rhs.key); }
 
     // ITERATOR
     template <typename T>
@@ -120,33 +127,46 @@ namespace ft {
         pointer _nil;
 
     };
-    template <typename T>
+    /*template <typename T>
     bool operator==(ft::_tree_iterator<T> const &lhs, ft::_tree_iterator<T> const &rhs) { return (lhs.base() == rhs.base()); }
     template <typename T>
-    bool operator!=(ft::_tree_iterator<T> const &lhs, ft::_tree_iterator<T> const &rhs) { return (lhs.base() != rhs.base()); }
+    bool operator!=(ft::_tree_iterator<T> const &lhs, ft::_tree_iterator<T> const &rhs) { return (lhs.base() != rhs.base()); }*/
 
     // RED BLACK TREE
     template <typename T, class Alloc = std::allocator<_rb_node<T> > >
     class _rb_tree {
     public:
 
+        typedef T                                   value_type;
         typedef _rb_node<T>                         node;
-        typedef node*                               node_pointer;
-        typedef node&                               node_reference;
         typedef Alloc                               allocator_type;
         typedef _tree_iterator<node>                iterator;
         typedef const _tree_iterator<node>          const_iterator;
-        typedef typename allocator_type::reference  reference;
-        typedef typename allocator_type::pointer    pointer;
+        typedef typename allocator_type::reference  node_reference;
+        typedef typename allocator_type::pointer    node_pointer;
 
     private:
         node_pointer    _root;
         node_pointer    _nil;
         Alloc           _alloc;
+        size_t          _size;
 
     public:
-        _rb_tree() : _root(), _nil(), _alloc(allocator_type()) {}
-        _rb_tree(const _rb_tree& src) : _root(src._root), _nil(), _alloc(allocator_type()) {}
+        // CONSTRUCTORS / DESTRUCTORS
+        explicit _rb_tree(allocator_type const &alloc = allocator_type()) : _root(), _nil(), _alloc(alloc), _size(0) {}
+
+        _rb_tree(const _rb_tree& src) : _root(src._root), _nil(), _alloc(allocator_type()), _size(src._size) {}
+
+        _rb_tree& operator=(const _rb_tree& rhs) {
+            if (this == &rhs) {
+                node_pointer old_root = _root;
+                _root = node_pointer();
+                _size = 0;
+                _add_nodes_recursive(old_root);
+                _free_nodes_recursive(old_root);
+            }
+            return (*this);
+        }
         ~_rb_tree() {}
 
         void tree_insert(node_pointer node) {
@@ -168,11 +188,12 @@ namespace ft {
             } else {
                 y->right = node;
             }
+            _size++;
         }
 
         void tree_insert(T key) {
-            pointer new_node = _alloc.allocate(1);
-            *new_node = _rb_node<T>(key);
+            node_pointer new_node = _alloc.allocate(1);
+            _alloc.construct(new_node, key);
             tree_insert(new_node);
         }
 
@@ -218,15 +239,46 @@ namespace ft {
         }
 
         iterator begin() { return (iterator(_root)); }
+        iterator end() { return (iterator(_nil)); }
+
+        size_t size() { return (_size); }
+        size_t empty() { return (!_size); }
+
+        void clear () {
+            _free_nodes_recursive(_root);
+        }
 
         node_pointer getRoot() { return (_root); }
 
     private:
-        _rb_tree& operator=(const _rb_tree& rhs) {
-            if (this == &rhs) {
-                return (*this);
+        void _free_nodes_recursive(node_pointer node) {
+            if (node->right != _nil) {
+                _free_nodes_recursive(node->right);
             }
-            return (_rb_tree(rhs));
+            if (node->left != _nil) {
+                _free_nodes_recursive(node->left);
+            }
+            if (node != _nil) {
+                _alloc.destroy(node);
+                _alloc.deallocate(node, 1);
+            }
         }
+
+        void _add_nodes_recursive(node_pointer src) {
+            if (src->right != _nil) {
+                _add_nodes_recursive(src->right);
+            }
+            if (src->left != _nil) {
+                _add_nodes_recursive(src->left);
+            }
+            if (src != _nil) {
+                node_pointer new_node = _alloc.allocate(1);
+                _alloc.construct(new_node, src->key);
+                tree_insert(new_node);
+            }
+        }
+
     };
 }
+
+#endif

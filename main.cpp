@@ -3,18 +3,19 @@
 #include "tests/AlgorithmTests.cpp"
 #include "tests/UtilityTests.cpp"
 #include "tests/StackTests.cpp"
+#include "tests/TreeTests.cpp"
 #include "tests/MapTests.cpp"
 #include "ft_containers.hpp"
 #include <iostream>
 #include <cstring> //strcmp // find better way
-#include "include/map.hpp"
+//#include "include/map.hpp"
 
 bool    str_equal(const char *A, const std::string& B) {
     return (strcmp(A, B.c_str()) == 0 || strcmp(A, "all") == 0);
 }
 
-bool    valid_arg(std::string& arg) {
-    return (arg == "vector" || arg == "stack" || arg == "map" || arg == "iterator"
+bool    valid_arg(const std::string& arg) {
+    return (arg == "vector" || arg == "stack" || arg == "tree" || arg == "map" || arg == "iterator"
     || arg == "algorithm" || arg == "utility" || arg == "all");
 }
 
@@ -26,15 +27,15 @@ void print_usage() {
 }
 
 
-int main() {
+/*int main() {
     ft::_rb_tree<int> tree;
-    /*ft::_rb_node<int> one(1);
-    ft::_rb_node<int> thirtythree(33);
-    ft::_rb_node<int> seventeen(17);
+    //ft::_rb_node<int> one(1);
+    //ft::_rb_node<int> thirtythree(33);
+    //ft::_rb_node<int> seventeen(17);
 
-    tree.insert(one);
-    tree.insert(thirtythree);
-    tree.insert(seventeen);*/
+    //tree.insert(one);
+    //tree.insert(thirtythree);
+    //tree.insert(seventeen);
     tree.tree_insert(1);
     tree.tree_insert(33);
     tree.tree_insert(17);
@@ -51,9 +52,9 @@ int main() {
 
     //i = tree.begin();
 
-}
+}*/
 
-/*int main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     // check args
     if (argc != 2 || !valid_arg(argv[1]))
@@ -77,11 +78,16 @@ int main() {
         stack.test();
     }
 
+    // tree tests
+    if (str_equal(argv[1], "tree")) {
+        TreeTests tree;
+        tree.test();
+    }
     // map tests
-    if (str_equal(argv[1], "map")) {
+    /*if (str_equal(argv[1], "map")) {
         MapTests map;
         map.test();
-    }
+    }*/
 
     // algorithm tests
     if (str_equal(argv[1], "algorithm")) {
@@ -95,4 +101,4 @@ int main() {
         utility.test();
     }
     exit(EXIT_SUCCESS);
-}*/
+}
