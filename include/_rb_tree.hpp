@@ -27,17 +27,17 @@ namespace ft {
 
     template <typename T>
     struct _rb_node {
-        typedef _rb_node*   _base_node;
+        typedef _rb_node*   node_ptr;
         typedef T           value_type;
 
         value_type  key;
-        _base_node  left;
-        _base_node  right;
-        _base_node  parent;
+        node_ptr    left;
+        node_ptr    right;
+        node_ptr    parent;
         bool        color;
 
         _rb_node() : key(), left(), right(), parent(), color(black) {}
-        explicit _rb_node(const T& value) : key(value), left(), right(), parent(), color(red) {}
+        explicit _rb_node(const value_type& value) : key(value), left(), right(), parent(), color(red) {}
         _rb_node(const _rb_node& src) : key(src.key), left(src.left), right(src.right), parent(src.parent), color(src.color) {}
         ~_rb_node() {}
 
@@ -52,10 +52,10 @@ namespace ft {
             return (*this);
         }
     };
-    template <typename T>
+    /*template <typename T>
     bool operator==(ft::_rb_node<T> const &lhs, ft::_rb_node<T> const &rhs) { return (lhs.key == rhs.key); }
     template <typename T>
-    bool operator!=(ft::_rb_node<T> const &lhs, ft::_rb_node<T> const &rhs) { return (lhs.key != rhs.key); }
+    bool operator!=(ft::_rb_node<T> const &lhs, ft::_rb_node<T> const &rhs) { return (lhs.key != rhs.key); }*/
 
     // ITERATOR
     template <typename T>
@@ -66,7 +66,7 @@ namespace ft {
         typedef typename ft::iterator_traits<T*>::value_type            value_type;
         typedef typename ft::iterator_traits<T*>::pointer               pointer;
         typedef typename ft::iterator_traits<T*>::reference             reference;
-        typedef typename ft::iterator_traits<T*>::iterator_category     iterator_category;
+        typedef typename std::bidirectional_iterator_tag     iterator_category;
 
         _tree_iterator() : _data(), _nil() {}
         _tree_iterator(value_type *x) : _data(x), _nil() {}
@@ -122,15 +122,19 @@ namespace ft {
 
         pointer base() const { return (_data); }
 
+        /*template <typename U>
+        bool operator==(const _tree_iterator<U> &rhs) { return (_data == rhs.base()); }
+        template <typename U>
+        bool operator!=(const _tree_iterator<U> &rhs) { return !(*this == rhs); }*/
     private:
         pointer _data;
         pointer _nil;
 
     };
-    /*template <typename T>
-    bool operator==(ft::_tree_iterator<T> const &lhs, ft::_tree_iterator<T> const &rhs) { return (lhs.base() == rhs.base()); }
     template <typename T>
-    bool operator!=(ft::_tree_iterator<T> const &lhs, ft::_tree_iterator<T> const &rhs) { return (lhs.base() != rhs.base()); }*/
+    bool operator==(ft::_tree_iterator<T> const &lhs, ft::_tree_iterator<T> const &rhs) { return (lhs.base()->key == rhs.base()->key); }
+    template <typename T>
+    bool operator!=(ft::_tree_iterator<T> const &lhs, ft::_tree_iterator<T> const &rhs) { return (lhs.base()->key != rhs.base()->key); }
 
     // RED BLACK TREE
     template <typename T, class Alloc = std::allocator<_rb_node<T> > >

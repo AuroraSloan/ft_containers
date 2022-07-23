@@ -43,8 +43,6 @@ private:
 
         Iterator iteratorA = A.begin();
         Iterator iteratorB = B.begin();
-        Iterator endA = A.end();
-        Iterator endB = B.end();
 
         for (size_t i = 0; i < ASize; i++, iteratorA++, iteratorB++) {
             if (*iteratorA != *iteratorB)

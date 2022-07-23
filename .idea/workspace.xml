@@ -19,9 +19,11 @@
   <component name="ChangeListManager">
     <list default="true" id="d9b6b9c6-fbc3-45f0-870d-9119f4ce94ad" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ft_containers.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/ft_containers.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/_rb_tree.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/_rb_tree.hpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/include/TreeTests.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/include/TreeTests.hpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
