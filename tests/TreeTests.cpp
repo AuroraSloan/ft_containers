@@ -59,32 +59,9 @@ double  TreeTests::timerTest() {
     begin = clock();
 
     // construction
-    construction();
+    //construction();
 
-    // iterator
-    /*iterator_methods();
-    reverse_iterator_methods();
 
-    //modifier
-    assign();
-    push_back();
-    pop_back();
-    insert();
-    erase();
-    swap();
-    clear();
-
-    // capacity
-    size();
-    resize();
-    capacity();
-    reserve();
-
-    // element access
-    element_access();
-
-    // relational operators
-    relational_operators();*/
 
     end = clock();
     return ((double) (end - begin) / CLOCKS_PER_SEC);
@@ -107,9 +84,16 @@ bool    TreeTests::construction()
     TreeClass dflt;
     // Copy Construction
     TreeClass toCpy;
-    toCpy.tree_insert(1900);
+    toCpy.tree_insert(100);
+    toCpy.tree_insert(0);
     toCpy.tree_insert(1);
+    toCpy.tree_insert(900);
+    toCpy.tree_insert(55);
     TreeClass cpy_const(toCpy);
+    /*std::cerr << "cpyconst\n";
+    cpy_const.inOrderWalk(cpy_const.getRoot());
+    std::cerr << "size: " << cpy_const.size();
+    std::cerr << '\n';*/
     // Equal overload
     TreeClass dfltEQ, cpy_constEQ;
 

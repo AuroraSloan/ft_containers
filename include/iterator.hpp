@@ -44,7 +44,7 @@ namespace ft {
         typedef typename ft::iterator_traits<T*>::reference             reference;
         typedef typename ft::iterator_traits<T*>::iterator_category     iterator_category;
 
-        random_access_iterator() : _data(NULL) {}
+        random_access_iterator() : _data() {}
         random_access_iterator(value_type *x) : _data(x) {}
         random_access_iterator(random_access_iterator const & src) : _data(src._data) {}
         ~random_access_iterator() {}
@@ -129,7 +129,7 @@ namespace ft {
         iterator_type _it;
 
         // CONSTRUCTORS
-        reverse_iterator() : _it(NULL) {}
+        reverse_iterator() : _it() {}
         explicit reverse_iterator(iterator_type it) : _it(it) {}
 
         template <typename iter>
