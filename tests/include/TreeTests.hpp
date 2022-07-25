@@ -7,24 +7,24 @@ class TreeTests : public TestClass {
 
 public:
     // Canonical methods
-    TreeTests(void);
-    ~TreeTests(void);
+    TreeTests();
+    ~TreeTests();
 
 private:
 
     // Inherited pure methods
-    void printLongResults(void);
-    void printShortResults(void);
-    double  timerTest(void);
+    void printLongResults();
+    void printShortResults();
+    double  timerTest();
 
     // Construction tests
-    bool    construction(void);
+    bool    construction();
 
     // Iterator tests
-    /*bool    iterator_methods(void);
+    bool    iterator();
 
     // Modifier tests
-    bool    tree_insert(void);
+    /*bool    tree_insert(void);
     bool    tree_transplant(void);
     bool    tree_delete(void);*/
 

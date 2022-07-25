@@ -158,18 +158,14 @@ namespace ft {
         // CONSTRUCTORS / DESTRUCTORS
         explicit _rb_tree(allocator_type const &alloc = allocator_type()) : _root(), _nil(), _alloc(alloc), _size(0) {}
 
-        _rb_tree(const _rb_tree& src) : _root(src._root), _nil(), _alloc(allocator_type()), _size(src._size) {}
+        _rb_tree(const _rb_tree& src) : _root(src._root), _nil(src._nil), _alloc(allocator_type()), _size(src._size) {}
 
         _rb_tree& operator=(const _rb_tree& rhs) {
             if (this != &rhs) {
-                _size = rhs._size;
+                _size = 0;
                 _alloc = rhs._alloc;
                 _nil = rhs._nil;
-                //std::cout << "rhs root address: " << &rhs._root << '\n';
-                //std::cout << "root address: " << &_root << '\n';
-                _root = node_pointer(rhs._root);
-                //std::cout << "nwe root address: " << &_root << '\n';
-                //_add_nodes_recursive(rhs.getRoot());
+                _add_nodes_recursive(rhs._root);
             }
             return (*this);
         }
@@ -240,6 +236,7 @@ namespace ft {
             if (x != _nil) {
                 inOrderWalk(x->left);
                 std::cout << "key: " << x->key << '\n';
+                std::cout << "address: " << x << '\n';
                 inOrderWalk(x->right);
             }
         }
@@ -258,26 +255,26 @@ namespace ft {
 
     private:
         void _free_nodes_recursive(node_pointer node) {
-            if (node->right != _nil) {
+            if (node && node->right != _nil) {
                 _free_nodes_recursive(node->right);
             }
-            if (node->left != _nil) {
+            if (node && node->left != _nil) {
                 _free_nodes_recursive(node->left);
             }
-            if (node != _nil) {
+            if (node && node != _nil) {
                 _alloc.destroy(node);
                 _alloc.deallocate(node, 1);
             }
         }
 
         void _add_nodes_recursive(node_pointer src) {
-            if (src->right != _nil) {
+            if (src && src->right != _nil) {
                 _add_nodes_recursive(src->right);
             }
-            if (src->left != _nil) {
+            if (src && src->left != _nil) {
                 _add_nodes_recursive(src->left);
             }
-            if (src != _nil) {
+            if (src && src != _nil) {
                 node_pointer new_node = _alloc.allocate(1);
                 _alloc.construct(new_node, src->key);
                 tree_insert(new_node);
