@@ -99,7 +99,6 @@ bool    TreeTests::construction()
         || !trees_equal(cpy_constEQ, toCpy)) {
         return (false);
     }
-    std::cerr << "testing finishe\n";
     return (true);
 }
 
@@ -130,8 +129,8 @@ bool    TreeTests::iterator() {
     tree_iterator itA = tree.begin();
     set_iterator compitA = comparer.begin();
     tree_iterator itA_e = tree.end();
-    //set_iterator compitA_e = comparer.end()--;
-    if (*itA != *compitA || *--itA_e != large) {
+    itA_e--;
+    if (*itA != *compitA || *itA_e != large) {
         std::cerr << "itA: " << *itA << "compitA: " << *compitA << '\n';
         std::cerr << "itA_e: " << *itA_e << "large: " << large << '\n';
         return (false);

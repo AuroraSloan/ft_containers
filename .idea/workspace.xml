@@ -17,12 +17,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d9b6b9c6-fbc3-45f0-870d-9119f4ce94ad" name="Changes" comment="">
+    <list default="true" id="2294eba3-7746-48a0-ba41-78237f937efb" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ft_containers" beforeDir="false" afterPath="$PROJECT_DIR$/ft_containers" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/include/_rb_tree.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/_rb_tree.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/iterator.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/iterator.hpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.o" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/TreeTests.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/TreeTests.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/include/TreeTests.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/tests/include/TreeTests.hpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,15 +75,15 @@
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
     <option name="majorVersion" value="2021" />
-    <option name="minorVersion" value="3" />
+    <option name="minorVersion" value="3.2" />
   </component>
-  <component name="ProjectId" id="2CHnZWttzA4on8yWp1VgBlVrSfB" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectId" id="2CR8hdeONc9WT7Z8x6LPQSeguVe" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
@@ -89,13 +91,13 @@
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.detected.package.tslint" value="true" />
-    <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RunManager" selected="Makefile Application.all">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="all" type="CLionNativeAppRunConfigurationType" PROGRAM_PARAMS="all" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$ContentRoot$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ft_containers" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="ft_containers">
       <method v="2">
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
@@ -126,13 +128,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="d9b6b9c6-fbc3-45f0-870d-9119f4ce94ad" name="Changes" comment="" />
-      <created>1658468433630</created>
+      <changelist id="2294eba3-7746-48a0-ba41-78237f937efb" name="Changes" comment="" />
+      <created>1658754156640</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1658468433630</updated>
-      <workItem from="1658468438773" duration="13541000" />
-      <workItem from="1658491762914" duration="780000" />
+      <updated>1658754156640</updated>
+      <workItem from="1658754159839" duration="43000" />
     </task>
     <servers />
   </component>
