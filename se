@@ -1,0 +1,10 @@
+rm -f main.o
+rm -f ft_containers
+clang++ -std=c++98 -pedantic -Wall -Wextra -Werror   -c -o main.o main.cpp
+clang++ -std=c++98 -pedantic -Wall -Wextra -Werror -o ft_containers main.o
+[35m========== Tree Tests ==========[0m
+[36m--Construction Tests--[0m
+construction - [32mSUCCESS
+[0m[36m--Iterator Tests--[0m
+iterator - [31mFAILURE
+[0m[33mSTL is -2147483648x faster: [0m [std: 0ms] [ft: 0.001ms]

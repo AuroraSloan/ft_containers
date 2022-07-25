@@ -109,29 +109,37 @@ bool    TreeTests::construction()
 //                                                                            //
 //============================================================================//
 bool    TreeTests::iterator() {
-    typedef ft::_rb_tree<int>::iterator    tree_iterator;
-    typedef std::set<int>::iterator      vec_iterator;
+    typedef ft::_rb_tree<int>::iterator     tree_iterator;
+    typedef std::set<int>::iterator         set_iterator;
 
     ft::_rb_tree<int>   tree;
     std::set<int>       comparer;
     int                 random_number;
 
+    int large = 0;
     for (int i = 1; i < 25; i++) {
         random_number = rand();
-        std::cout << random_number << ' ';
         tree.tree_insert(random_number);
         comparer.insert(random_number);
+        if (random_number > large) {
+            large = random_number;
+        }
     }
-    std::cout << '\n';
 
     tree_iterator itA = tree.begin();
-    vec_iterator compitA = comparer.begin();
+    set_iterator compitA = comparer.begin();
     tree_iterator itA_e = tree.end();
-    //vec_iterator compitA_e = comparer.end();
-    std::cerr << "here: " << --*itA_e << '\n';
-    if (*itA != *compitA || --*itA_e != *comparer.find(random_number)) {
-
+    //set_iterator compitA_e = comparer.end()--;
+    if (*itA != *compitA || *--itA_e != large) {
+        std::cerr << "itA: " << *itA << "compitA: " << *compitA << '\n';
+        std::cerr << "itA_e: " << *itA_e << "large: " << large << '\n';
         return (false);
+    }
+    for (int i = 1; i < 25; i++, itA++, compitA++) {
+       if (*compitA != *itA) {
+           std::cerr << "tree: " << *itA << "\ncomp: " << *compitA << '\n';
+           return (false);
+       }
     }
     /*if (*cit_b != *vit_b || *--cit_e != *--vit_e)
         return (false);

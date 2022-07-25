@@ -10,7 +10,7 @@ namespace ft {
     enum color_bool { black, red };
 
     template <typename node_type>
-    node_type& tree_min(node_type& node, const node_type& nil) {
+    node_type* tree_min(node_type* node, const node_type* nil) {
         while (node->left != nil) {
             node = node->left;
         }
@@ -18,7 +18,7 @@ namespace ft {
     }
 
     template <typename node_type>
-    node_type& tree_max(node_type& node, const node_type& nil) {
+    node_type* tree_max(node_type* node, const node_type* nil) {
         while (node->right != nil) {
             node = node->right;
         }
@@ -150,15 +150,17 @@ namespace ft {
 
     private:
         node_pointer    _root;
+        node_pointer    _begin;
+        node_pointer    _end;
         node_pointer    _nil;
         Alloc           _alloc;
         size_t          _size;
 
     public:
         // CONSTRUCTORS / DESTRUCTORS
-        explicit _rb_tree(allocator_type const &alloc = allocator_type()) : _root(), _nil(), _alloc(alloc), _size(0) {}
+        explicit _rb_tree(allocator_type const &alloc = allocator_type()) : _root(), _begin(), _end(), _nil(), _alloc(alloc), _size(0) {}
 
-        _rb_tree(const _rb_tree& src) : _root(src._root), _nil(src._nil), _alloc(allocator_type()), _size(src._size) {}
+        _rb_tree(const _rb_tree& src) : _root(src._root), _begin(src._begin), _end(src._end), _nil(src._nil), _alloc(allocator_type()), _size(src._size) {}
 
         _rb_tree& operator=(const _rb_tree& rhs) {
             if (this != &rhs) {
@@ -169,7 +171,10 @@ namespace ft {
             }
             return (*this);
         }
-        ~_rb_tree() {}
+        ~_rb_tree() {
+            std::cerr << "destructor called\n";
+            /*clear();*/
+        }
 
         void tree_insert(node_pointer node) {
             node_pointer y = _nil;
@@ -189,6 +194,15 @@ namespace ft {
                 y->left = node;
             } else {
                 y->right = node;
+            }
+            if (_begin == _nil || node->key < _begin->key) {
+                _begin = node;
+            }
+            if (_end == _nil || node->key > _end->parent->key) {
+                if (_end == _nil) {
+                    _end = _alloc.allocate(1);
+                }
+                _end->parent = node;
             }
             _size++;
         }
@@ -241,8 +255,9 @@ namespace ft {
             }
         }
 
-        iterator begin() { return (iterator(_root)); }
-        iterator end() { return (iterator(_nil)); }
+        iterator begin() { return (iterator(_begin)); }
+
+        iterator end() { return (iterator(_end)); }
 
         size_t size() { return (_size); }
         size_t empty() { return (!_size); }
