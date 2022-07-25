@@ -158,28 +158,40 @@ namespace ft {
 
     public:
         // CONSTRUCTORS / DESTRUCTORS
-        explicit _rb_tree(allocator_type const &alloc = allocator_type()) : _root(), _begin(), _end(), _nil(), _alloc(alloc), _size(0) {}
+        explicit _rb_tree(allocator_type const &alloc = allocator_type()) : _root(), _begin(), _end(), _nil(), _alloc(alloc), _size(0) {
+            std::cerr << "default constructor called\n";
+        }
 
-        _rb_tree(const _rb_tree& src) : _root(src._root), _begin(src._begin), _end(src._end), _nil(src._nil), _alloc(allocator_type()), _size(src._size) {}
+        _rb_tree(const _rb_tree& src) : _nil(src._nil), _alloc(allocator_type()) {
+            std::cerr << "copy constructor called\n";
+            _size = 0;
+            std::cerr << "not allowed?\n";
+            std::cerr << "root address: " << _root << " src root address: " << src._root << '\n';
+            _insert_nodes(src._root);
+            std::cerr << "ug\n";
+        }
 
         _rb_tree& operator=(const _rb_tree& rhs) {
+            std::cerr << "equal operator overload called\n";
             if (this != &rhs) {
                 _size = 0;
                 _alloc = rhs._alloc;
                 _nil = rhs._nil;
-                _add_nodes_recursive(rhs._root);
+                _begin = rhs._begin;
+                _insert_nodes(rhs._root);
             }
             return (*this);
         }
         ~_rb_tree() {
             std::cerr << "destructor called\n";
-            /*clear();*/
+            clear();
         }
 
         void tree_insert(node_pointer node) {
             node_pointer y = _nil;
             node_pointer x = _root;
             while (x != _nil) {
+                std::cerr << "7\n";
                 y = x;
                 if (node->key < x->key) {
                     x = x->left;
@@ -263,33 +275,26 @@ namespace ft {
         size_t empty() { return (!_size); }
 
         void clear () {
-            _free_nodes_recursive(_root);
+            _free_nodes(_root);
         }
 
         node_pointer getRoot() const { return (_root); }
 
     private:
-        void _free_nodes_recursive(node_pointer node) {
-            if (node && node->right != _nil) {
-                _free_nodes_recursive(node->right);
-            }
-            if (node && node->left != _nil) {
-                _free_nodes_recursive(node->left);
-            }
-            if (node && node != _nil) {
-                _alloc.destroy(node);
-                _alloc.deallocate(node, 1);
+        void _free_nodes(node_pointer src) {
+            if (src && src != _nil && src != _end) {
+                _free_nodes(src->left);
+                _free_nodes(src->right);
+                std::cerr << "destructing: " << src->key << '\n';
+                _alloc.destroy(src);
+                _alloc.deallocate(src, 1);
             }
         }
 
-        void _add_nodes_recursive(node_pointer src) {
-            if (src && src->right != _nil) {
-                _add_nodes_recursive(src->right);
-            }
-            if (src && src->left != _nil) {
-                _add_nodes_recursive(src->left);
-            }
+        void _insert_nodes(node_pointer src) {
             if (src && src != _nil) {
+                _insert_nodes(src->left);
+                _insert_nodes(src->right);
                 node_pointer new_node = _alloc.allocate(1);
                 _alloc.construct(new_node, src->key);
                 tree_insert(new_node);

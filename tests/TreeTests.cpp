@@ -99,6 +99,7 @@ bool    TreeTests::construction()
         || !trees_equal(cpy_constEQ, toCpy)) {
         return (false);
     }
+    std::cerr << "testing finishe\n";
     return (true);
 }
 
