@@ -161,14 +161,14 @@ namespace ft {
         explicit _rb_tree(allocator_type const &alloc = allocator_type()) : _root(), _begin(), _nil(), _alloc(alloc), _size(0) {
             //std::cerr << "default constructor called\n";
             _end = _alloc.allocate(1);
-            _alloc.construct(_end, T());
+            _alloc.construct(_end, node());
         }
 
         _rb_tree(const _rb_tree& src) : _root(), _begin(), _nil(src._nil), _alloc(allocator_type()) {
             //std::cerr << "copy constructor called\n";
             _size = 0;
             _end = _alloc.allocate(1);
-            _alloc.construct(_end, T());
+            _alloc.construct(_end, node());
             _insert_nodes(src._root, src._end);
         }
 
@@ -179,7 +179,7 @@ namespace ft {
                 _alloc = rhs._alloc;
                 _nil = rhs._nil;
                 _end = _alloc.allocate(1);
-                _alloc.construct(_end, T());
+                _alloc.construct(_end, node());
                 _insert_nodes(rhs._root, rhs._end);
             }
             return (*this);
@@ -221,7 +221,7 @@ namespace ft {
 
         void tree_insert(T key) {
             node_pointer new_node = _alloc.allocate(1);
-            _alloc.construct(new_node, key);
+            _alloc.construct(new_node, node(key));
             tree_insert(new_node);
         }
 
@@ -295,7 +295,7 @@ namespace ft {
                 _insert_nodes(src->left, end);
                 _insert_nodes(src->right, end);
                 node_pointer new_node = _alloc.allocate(1);
-                _alloc.construct(new_node, src->key);
+                _alloc.construct(new_node, node(src->key));
                 tree_insert(new_node);
             }
         }
