@@ -161,21 +161,15 @@ namespace ft {
         explicit _rb_tree(allocator_type const &alloc = allocator_type()) : _root(), _begin(), _nil(), _alloc(alloc), _size(0) {
             //std::cerr << "default constructor called\n";
             _end = _alloc.allocate(1);
-            _alloc.construct(_end, 0);
-            /*if (_end->parent) {
-                std::cerr << "true\n";
-            } else {
-                std::cerr << "false\n";
-            }*/
+            _alloc.construct(_end, T());
         }
 
         _rb_tree(const _rb_tree& src) : _root(), _begin(), _nil(src._nil), _alloc(allocator_type()) {
             //std::cerr << "copy constructor called\n";
             _size = 0;
             _end = _alloc.allocate(1);
-            _alloc.construct(_end, 0);
-            //_end = _alloc.allocate(1);
-            _insert_nodes(src._root);
+            _alloc.construct(_end, T());
+            _insert_nodes(src._root, src._end);
         }
 
         _rb_tree& operator=(const _rb_tree& rhs) {
@@ -184,25 +178,22 @@ namespace ft {
                 _size = 0;
                 _alloc = rhs._alloc;
                 _nil = rhs._nil;
-                _begin = rhs._begin;
-                //_end = rhs._end;
                 _end = _alloc.allocate(1);
-                _alloc.construct(_end, 0);
-                _insert_nodes(rhs._root);
+                _alloc.construct(_end, T());
+                _insert_nodes(rhs._root, rhs._end);
             }
             return (*this);
         }
         ~_rb_tree() {
             //std::cerr << "destructor called\n";
             clear();
-            _alloc.destroy(_end);
-            _alloc.deallocate(_end, 1);
         }
 
         void tree_insert(node_pointer node) {
             node_pointer y = _nil;
             node_pointer x = _root;
-            while (x != _nil) {
+            //std::cerr << "inserting: " << node->key << '\n';
+            while (x != _nil && x != _end) {
                 y = x;
                 if (node->key < x->key) {
                     x = x->left;
@@ -223,6 +214,7 @@ namespace ft {
             }
             if (!_end->parent || node->key > _end->parent->key) {
                 _end->parent = node;
+                node->right = _end;
             }
             _size++;
         }
@@ -290,22 +282,20 @@ namespace ft {
 
     private:
         void _free_nodes(node_pointer src) {
-            if (src && src != _nil) {
+            if (src != _nil) {
                 _free_nodes(src->left);
                 _free_nodes(src->right);
-                //std::cerr << "destructing: " << src->key << '\n';
                 _alloc.destroy(src);
                 _alloc.deallocate(src, 1);
             }
         }
 
-        void _insert_nodes(node_pointer src) {
-            node_pointer tmp = src;
-            if (tmp && tmp != _nil) {
-                _insert_nodes(tmp->left);
-                _insert_nodes(tmp->right);
+        void _insert_nodes(node_pointer src, node_pointer end) {
+            if (src != _nil && src != end) {
+                _insert_nodes(src->left, end);
+                _insert_nodes(src->right, end);
                 node_pointer new_node = _alloc.allocate(1);
-                _alloc.construct(new_node, tmp->key);
+                _alloc.construct(new_node, src->key);
                 tree_insert(new_node);
             }
         }

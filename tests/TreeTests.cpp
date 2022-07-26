@@ -82,7 +82,7 @@ bool    TreeTests::construction()
     // Copy Construction
     TreeClass toCpy;
     toCpy.tree_insert(100);
-    toCpy.tree_insert(0);
+    toCpy.tree_insert(17);
     toCpy.tree_insert(1);
     toCpy.tree_insert(900);
     toCpy.tree_insert(55);
