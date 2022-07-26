@@ -61,7 +61,7 @@ int main(int argc, char **argv)
         print_usage();
 
     // iterator tests
-    if (str_equal(argv[1], "iterator")) {
+    /*if (str_equal(argv[1], "iterator")) {
         IteratorTests iterator;
         iterator.test();
     }
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     if (str_equal(argv[1], "stack")) {
         StackTests stack;
         stack.test();
-    }
+    }*/
 
     // tree tests
     if (str_equal(argv[1], "tree")) {
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
     }*/
 
     // algorithm tests
-    if (str_equal(argv[1], "algorithm")) {
+    /*if (str_equal(argv[1], "algorithm")) {
         AlgorithmTests algorithm;
         algorithm.test();
     }
@@ -99,6 +99,6 @@ int main(int argc, char **argv)
     if (str_equal(argv[1], "utility")) {
         UtilityTests utility;
         utility.test();
-    }
+    }*/
     exit(EXIT_SUCCESS);
 }
