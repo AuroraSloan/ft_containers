@@ -57,6 +57,7 @@ void print_usage() {
 int main(int argc, char **argv)
 {
     // check args
+
     if (argc != 2 || !valid_arg(argv[1]))
         print_usage();
 

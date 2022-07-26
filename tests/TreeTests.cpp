@@ -110,48 +110,51 @@ bool    TreeTests::construction()
 //                                                                            //
 //============================================================================//
 bool    TreeTests::iterator() {
-    typedef ft::_rb_tree<int>::iterator     tree_iterator;
-    typedef std::set<int>::iterator         set_iterator;
+    typedef ft::_rb_tree<int>::iterator     tree_it;
+    typedef std::set<int>::iterator         set_it;
 
     ft::_rb_tree<int>   tree;
-    std::set<int>       comparer;
+    std::set<int>       set;
     int                 random_number;
+    srand (time(NULL));
 
-    int large = 0;
-    for (int i = 1; i < 25; i++) {
+    for (int i = 0; i < 25; i++) {
         random_number = rand();
         tree.tree_insert(random_number);
-        comparer.insert(random_number);
-        if (random_number > large) {
-            large = random_number;
-        }
+        set.insert(random_number);
     }
 
-    tree_iterator itA = tree.begin();
-    set_iterator compitA = comparer.begin();
-    tree_iterator itA_e = tree.end();
-    itA_e--;
-    if (*itA != *compitA || *itA_e != large) {
-        std::cerr << "itA: " << *itA << "compitA: " << *compitA << '\n';
-        std::cerr << "itA_e: " << *itA_e << "large: " << large << '\n';
+    tree_it itA = tree.begin();
+    set_it compitA = set.begin();
+
+    // quick check begin and end
+    if (*itA != *compitA || *--tree.end() != *set.rbegin()) {
         return (false);
     }
-    for (int i = 1; i < 25; i++, itA++, compitA++) {
+
+    // ++ begin - end
+    // std::cerr << "++\n";
+    for (; itA != tree.end(); itA++, compitA++) {
+       //std::cerr << *itA << " \n";
        if (*compitA != *itA) {
-           std::cerr << "tree: " << *itA << "\ncomp: " << *compitA << '\n';
            return (false);
        }
     }
-    /*if (*cit_b != *vit_b || *--cit_e != *--vit_e)
-        return (false);
-    for (size_t i = 0; i < 4; i++) {
-        vit_b++;
-        cit_b++;
-        vit_e--;
-        cit_e--;
+
+    // -- end to begin
+    // std::cerr << "--\n";
+    itA--;
+    compitA--;
+    for (; itA != tree.begin(); itA--, compitA--) {
+        //std::cerr << *itA << " \n";
+        if (*compitA != *itA) {
+            return (false);
+        }
     }
-    if (*cit_b != *vit_b || *cit_e != *vit_e)
-        return (false);*/
+    //std::cerr << *itA << " \n";
+    if (*compitA != *itA) {
+        return (false);
+    }
     return (true);
 }
 

@@ -128,10 +128,12 @@ namespace ft {
     };
     template <typename T>
     bool operator==(ft::_tree_iterator<T, _rb_node<T> > const &lhs, ft::_tree_iterator<T, _rb_node<T> > const &rhs) {
+        //return (lhs.base()->key == rhs.base()->key);
         return (lhs.base() == rhs.base());
     }
     template <typename T>
     bool operator!=(ft::_tree_iterator<T, _rb_node<T> > const &lhs, ft::_tree_iterator<T, _rb_node<T> > const &rhs) {
+        //return (lhs.base()->key != rhs.base()->key);
         return (lhs.base() != rhs.base());
     }
 

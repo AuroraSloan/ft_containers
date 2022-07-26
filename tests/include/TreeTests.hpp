@@ -32,7 +32,7 @@ private:
     template <typename Tree>
     bool    trees_equal(Tree & A, Tree & B) {
 
-        //typedef typename Tree::iterator   Iterator;
+        typedef typename Tree::iterator   Iterator;
 
         //check size
         size_t ASize, BSize;
@@ -43,21 +43,15 @@ private:
             return (false);
         }
 
-        /*Iterator iteratorA = A.begin();
+        Iterator iteratorA = A.begin();
         Iterator iteratorB = B.begin();
 
         for (size_t i = 0; i < ASize; i++, iteratorA++, iteratorB++) {
-            std::cerr << "1\n";
-            std::cerr << "iteratorA: " << *iteratorA << '\n';
-            if (*iteratorA != *iteratorB)
+            if (*iteratorA != *iteratorB || iteratorA == A.end() || iteratorB == B.end()) {
+                std::cerr << "iterator A not equal to iterator B\n";
                 return (false);
+            }
         }
-        while (iteratorA != A.end() || iteratorB != B.end()) {
-            if ((*(iteratorA) != *(iteratorB)) || iteratorA == A.end() || iteratorB == B.end())
-                return (false);
-            iteratorA++;
-            iteratorB++;
-        }*/
         return (true);
     }
     // canonical methods
