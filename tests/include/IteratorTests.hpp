@@ -8,18 +8,18 @@ class IteratorTests : public TestClass {
 public:
 
     // Canonical methods
-    IteratorTests(void);
-    ~IteratorTests(void);
+    IteratorTests();
+    ~IteratorTests();
 
 private:
 
     // Inherited pure methods
-    void printLongResults(void);
-    void printShortResults(void);
-    double    timerTest(void);
+    void printLongResults();
+    void printShortResults();
+    double    timerTest();
 
     // Iterator tests
-    bool    construction(void);
+    bool    construction();
 
     template <typename IteratorA, typename IteratorB>
     bool    modification(IteratorA vecit, IteratorB compit);

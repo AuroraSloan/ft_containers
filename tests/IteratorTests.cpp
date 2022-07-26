@@ -144,10 +144,10 @@ bool    IteratorTests::modification(IteratorA vecit, IteratorB compit) {
         return (false);
 
     // INEQUALITY COMPARISON
-    if (!(vecit < vecitB == compit < compitB)
-        || !(vecit > vecitB == compit > compitB)
-        || !(vecit <= vecitB == compit <= compitB)
-        || !(vecit >= vecitB == compit >= compitB))
+    if (!((vecit < vecitB) == (compit < compitB))
+        || !((vecit > vecitB) == (compit > compitB))
+        || !((vecit <= vecitB) == (compit <= compitB))
+        || !((vecit >= vecitB) == (compit >= compitB)))
         return (false);
 
     // COMPOUND ASSIGNMENT OPERATIONS

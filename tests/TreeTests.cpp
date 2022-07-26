@@ -6,6 +6,7 @@
 #ifdef TEST
 # include "../include/_rb_tree.hpp"
 # include <set>
+# include <cstdlib>
 // Canonical methods
 TreeTests::TreeTests() : TestClass() {}
 TreeTests::~TreeTests() {}
