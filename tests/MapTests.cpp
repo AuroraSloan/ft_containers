@@ -3,29 +3,31 @@
 #include "../ft_containers.hpp"
 #include <map>
 #include <ctime>
+#include <cstdlib>
+#include <utility>
 #ifdef TEST
 # include "../include/map.hpp"
 # else
 namespace ft = std;
 #endif
 // Canonical methods
-MapTests::MapTests(void) : TestClass() {}
-MapTests::~MapTests(void) {}
+MapTests::MapTests() : TestClass() {}
+MapTests::~MapTests() {}
 
 // Inherited pure methods
-void MapTests::printLongResults(void) {
+void MapTests::printLongResults() {
     print_header(" Map Tests ");
 
-    /*print_subheader("Construction Tests");
+    print_subheader("Construction Tests");
     print_test_result("construction - ", construction());
 
     print_subheader("Iterator Tests");
-    print_test_result("iterator methods - ", iterator_methods());
-    print_test_result("reverse iterator methods - ", reverse_iterator_methods());
+    print_test_result("iterator - ", iterator());
+    print_test_result("reverse iterator - ", reverse_iterator());
 
     print_subheader("Modifiers Tests");
-    print_test_result("assign - ", assign());
-    print_test_result("push_back - ", push_back());
+    print_test_result("insert - ", insert());
+    /*print_test_result("push_back - ", push_back());
     print_test_result("pop_back - ", pop_back());
     print_test_result("insert - ", insert());
     print_test_result("erase - ", erase());
@@ -45,29 +47,29 @@ void MapTests::printLongResults(void) {
     print_subheader("Relational operator tests");
     print_test_result("relational operators and swap - ", relational_operators());*/
 }
-void    MapTests::printShortResults(void) {
+void    MapTests::printShortResults() {
     std::cout << "Map tests - ";
-    if (1) {
+    if (construction() && iterator() && reverse_iterator() && insert()) {
         print_result(true);
     } else {
         print_result(false);
     }
 }
-double  MapTests::timerTest(void) {
+double  MapTests::timerTest() {
     clock_t begin, end;
 
     begin = clock();
 
     // construction
-    /*construction();
+    construction();
 
     // iterator
-    iterator_methods();
-    reverse_iterator_methods();
+    iterator();
+    reverse_iterator();
 
     //modifier
-    assign();
-    push_back();
+    insert();
+    /*push_back();
     pop_back();
     insert();
     erase();
@@ -97,77 +99,34 @@ double  MapTests::timerTest(void) {
 //                                                                            //
 //============================================================================//
 //====================================//
-//        VECTOR CONSTRUCTION         //
+//          MAP CONSTRUCTION          //
 //====================================//
-/*bool    MapTests::construction(void)
+bool    MapTests::construction()
 {
-#ifdef INT
-    typedef ft::vector<int> VectorClass;
-    typedef ft::vector<int>::iterator iterator;
+    typedef ft::map<int, char> Map;
 
     // Default construction
-    VectorClass dflt;
-    // Default construction overload
-    VectorClass empty(0);
-    VectorClass emptyXdata(0, 100);
-    VectorClass sizeOnly(100);
-    VectorClass sizeXdata(100, 99999);
-    VectorClass large(1000000, 99999);
-#endif
-#ifdef STR
-    typedef ft::vector<std::string> VectorClass;
-    typedef ft::vector<std::string>::iterator iterator;
-
-    // Default construction
-    VectorClass dflt;
-    // Default construction overload
-    VectorClass empty(0);
-    VectorClass emptyXdata(0, "hey");
-    VectorClass sizeOnly(100);
-    VectorClass sizeXdata(100, "YELLOW");
-    VectorClass large(1000000, "YELLOW");
-#endif
+    Map dflt;
     // Copy Construction
-    VectorClass emptyCP(empty);
-    VectorClass emptyXdataCP(emptyXdata);
-    VectorClass sizeOnlyCP(sizeOnly);
-    VectorClass sizeXdataCP(sizeXdata);
-    VectorClass largeCP(large);
+    Map toCpy;
+    toCpy.insert(ft::make_pair(100, 'a'));
+    toCpy.insert(ft::make_pair(17, 'c'));
+    toCpy.insert(ft::make_pair(1, 'z'));
+    toCpy.insert(ft::make_pair(900, '5'));
+    toCpy.insert(ft::make_pair(55, 'i'));
+    Map cpy_const(toCpy);
 
-    // Equal overload
-    VectorClass emptyEQ, emptyXdataEQ, sizeOnlyEQ, sizeXdataEQ, largeEQ;
+    // Equal operator overload
+    Map dfltEQ, cpy_constEQ;
 
-    emptyEQ = emptyCP;
-    emptyXdataEQ = emptyXdataCP;
-    sizeOnlyEQ = sizeOnlyCP;
-    sizeXdataEQ = sizeXdataCP;
-    largeEQ = largeCP;
-    dflt = sizeXdataCP;
-    if (!containers_equal(empty, emptyCP, emptyEQ)
-        || !containers_equal(emptyXdata, emptyXdataCP, emptyXdataEQ)
-        || !containers_equal(sizeOnly, sizeOnlyCP, sizeOnlyEQ)
-        || !containers_equal(sizeXdata, sizeXdataCP, sizeXdataEQ)
-        || !containers_equal(large, largeCP, largeEQ)
-        || !containers_equal(dflt, sizeXdata, sizeXdataEQ))
+    dfltEQ = dflt;
+    cpy_constEQ = cpy_const;
+    if (!maps_equal(cpy_const, toCpy)
+        || !maps_equal(dfltEQ, dflt)
+        || !maps_equal(cpy_constEQ, cpy_const)
+        || !maps_equal(cpy_constEQ, toCpy)) {
         return (false);
-
-#ifdef INT
-    std::vector<int>    compsxd(100, 99999);
-    std::vector<int>::iterator compbg = compsxd.begin();
-    std::vector<int>::iterator compend = compsxd.end();
-    std::vector<int> comp(compbg, compend);
-#endif
-#ifdef STR
-    std::vector<std::string>    compsxd(100, "YELLOW");
-    std::vector<std::string>::iterator compbg = compsxd.begin();
-    std::vector<std::string>::iterator compend = compsxd.end();
-    std::vector<std::string> comp(compbg, compend);
-#endif
-    iterator bg = sizeXdata.begin();
-    iterator end = sizeXdata.end();
-    VectorClass templateTest(bg, end);
-    if (!containers_equal(comp, templateTest))
-        return (false);
+    }
     return (true);
 }
 
@@ -177,55 +136,85 @@ double  MapTests::timerTest(void) {
 //                              ITERATOR TESTS                                //
 //                                                                            //
 //============================================================================//
-bool    VectorTests::iterator_methods(void) {
-    ft::vector<int>     vec;
-    std::vector<int>    comp;
+bool    MapTests::iterator() {
+    ft::map<int, char>              map;
+    std::map<int, char>             comp;
+    ft::map<int, char>::iterator    map_it;
+    std::map<int, char>::iterator   comp_it;
+    int                             random_number;
+    char                            character = 'A';
+    srand (time(NULL));
 
-    for (int i = 1; i < 25; i++) {
-        vec.push_back(i);
-        comp.push_back(i);
+    for (int i = 0; i < 25; i++, character++) {
+        random_number = rand();
+        map.insert(ft::make_pair(random_number, character));
+        comp.insert(std::make_pair(random_number, character));
     }
 
-    std::vector<int>::iterator  cit_b = comp.begin();
-    std::vector<int>::iterator  cit_e = comp.end();
-    ft::vector<int>::iterator   vit_b = vec.begin();
-    ft::vector<int>::iterator   vit_e = vec.end();
-    if (*cit_b != *vit_b || *--cit_e != *--vit_e)
-        return (false);
-    for (size_t i = 0; i < 4; i++) {
-        vit_b++;
-        cit_b++;
-        vit_e--;
-        cit_e--;
+    map_it = map.begin();
+    comp_it = comp.begin();
+
+    // ++ begin - end
+    for (; map_it != map.end(); map_it++, comp_it++) {
+        //std::cerr << *itA << " \n";
+        if ((*map_it).first != (*comp_it).first || (*map_it).second != (*comp_it).second || comp_it == comp.end()) {
+            return (false);
+        }
     }
-    if (*cit_b != *vit_b || *cit_e != *vit_e)
+
+    // -- end to begin
+    map_it--;
+    comp_it--;
+    for (; map_it != map.begin(); map_it--, comp_it--) {
+        //std::cerr << *itA << " \n";
+        if ((*map_it).first != (*comp_it).first || (*map_it).second != (*comp_it).second || comp_it == comp.begin()) {
+            return (false);
+        }
+    }
+    if ((*map_it).first != (*comp_it).first || (*map_it).second != (*comp_it).second) {
         return (false);
+    }
     return (true);
 }
 
-bool    VectorTests::reverse_iterator_methods(void) {
-    ft::vector<int>     vec;
-    std::vector<int>    comp;
+bool    MapTests::reverse_iterator() {
+    ft::map<int, char>                      map;
+    std::map<int, char>                     comp;
+    ft::map<int, char>::reverse_iterator    map_rit;
+    std::map<int, char>::reverse_iterator   comp_rit;
+    int                                     random_number;
+    char                                    character = 'A';
+    srand (time(NULL));
 
-    for (int i = 1; i < 25; i++) {
-        vec.push_back(i);
-        comp.push_back(i);
+    for (int i = 0; i < 25; i++, character++) {
+        random_number = rand();
+        map.insert(ft::make_pair(random_number, character));
+        comp.insert(std::make_pair(random_number, character));
     }
 
-    std::vector<int>::reverse_iterator  crit_b = comp.rbegin();
-    std::vector<int>::reverse_iterator  crit_e = comp.rend();
-    ft::vector<int>::reverse_iterator   vrit_b = vec.rbegin();
-    ft::vector<int>::reverse_iterator   vrit_e = vec.rend();
-    if (*crit_b != *vrit_b || *--crit_e != *--vrit_e)
-        return (false);
-    for (size_t i = 0; i < 4; i++) {
-        vrit_b++;
-        crit_b++;
-        vrit_e--;
-        crit_e--;
+    map_rit = map.rbegin();
+    comp_rit = comp.rbegin();
+
+    // ++ rbegin - rend
+    for (; map_rit != map.rend(); map_rit++, comp_rit++) {
+        //std::cerr << *itA << " \n";
+        if ((*map_rit).first != (*comp_rit).first || (*map_rit).second != (*comp_rit).second || comp_rit == comp.rend()) {
+            return (false);
+        }
     }
-    if (*crit_b != *vrit_b || *crit_e != *vrit_e)
+
+    // -- rend to rbegin
+    map_rit--;
+    comp_rit--;
+    for (; map_rit != map.rbegin(); map_rit--, comp_rit--) {
+        //std::cerr << *itA << " \n";
+        if ((*map_rit).first != (*comp_rit).first || (*map_rit).second != (*comp_rit).second || comp_rit == comp.rbegin()) {
+            return (false);
+        }
+    }
+    if ((*map_rit).first != (*comp_rit).first || (*map_rit).second != (*comp_rit).second) {
         return (false);
+    }
     return (true);
 }
 
@@ -240,54 +229,21 @@ bool    VectorTests::reverse_iterator_methods(void) {
 //====================================//
 //               ASSIGN               //
 //====================================//
-bool    VectorTests::assign() {
+bool    MapTests::insert() {
+    ft::map<int, char> map;
 
-    ft::vector<int>     myvec(10, 100);
-    std::vector<int>    comp(10, 100);
-
-    // void  assign(size_type n, value_type const & val)
-    myvec.assign(10, 35);
-    comp.assign(10, 35);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    myvec.assign(1, 3700);
-    comp.assign(1, 3700);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    myvec.assign(100, 17);
-    comp.assign(100, 17);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    //template <class InputIterator>
-    //void assign(InputIterator first, InputIterator last)
-    ft::vector<int>     newvec(30, 7);
-    std::vector<int>    newcomp(30, 7);
-
-    ft::vector<int>::iterator vecs = newvec.begin();
-    ft::vector<int>::iterator vece = newvec.end();
-    std::vector<int>::iterator comps = newcomp.begin();
-    std::vector<int>::iterator compe = newcomp.end();
-    myvec.assign(vecs, vece);
-    comp.assign(comps, compe);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    ft::vector<int>     largervec(400, 987654);
-    std::vector<int>    largercomp(400, 987654);
-    vecs = largervec.begin();
-    vece = largervec.end();
-    comps = largercomp.begin();
-    compe = largercomp.end();
-    myvec.assign(vecs, vece);
-    comp.assign(comps, compe);
-    if (!containers_equal(myvec, comp))
-        return (false);
+    map.tree_insert(ft::make_pair(4, 'a'));
+    map.tree_insert(ft::make_pair(4, 'a'));
+    map.tree_insert(ft::make_pair(5, 'b'));
+    map.tree_insert(ft::make_pair(4, 'c'));
+    //map.inOrderWalk(map.getRoot());
     return (true);
 }
 
 //====================================//
 //            PUSH_BACK               //
 //====================================//
-bool    VectorTests::push_back() {
+/*bool    VectorTests::push_back() {
     ft::vector<int>     myvec;
     ft::vector<int>     myvec2(10, 555);
     std::vector<int>    comp;

@@ -188,12 +188,13 @@ namespace ft {
     bool operator!=(_tree_reverse_iterator<Iterator> const & lhs, _tree_reverse_iterator<Iterator> const & rhs) { return (lhs.base() != rhs.base()); }
 
     // RED BLACK TREE
-    template <typename T, class Alloc = std::allocator<_rb_node<T> > >
+    template <typename T, class Comp, class Alloc = std::allocator<_rb_node<T> > >
     class _rb_map_tree {
     public:
 
         typedef T                                       value_type;
         typedef _rb_node<T>                             node;
+        typedef Comp                                    value_compare;
         typedef Alloc                                   allocator_type;
         typedef size_t                                  size_type;
         typedef _tree_iterator<T, node>                 iterator;
@@ -208,18 +209,19 @@ namespace ft {
         node_pointer    _begin;
         node_pointer    _end;
         node_pointer    _nil;
+        value_compare   _comp;
         Alloc           _alloc;
         size_type       _size;
 
     public:
         // CONSTRUCTORS / DESTRUCTORS
-        explicit _rb_map_tree(allocator_type const &alloc = allocator_type()) : _root(), _begin(), _nil(), _alloc(alloc), _size(0) {
+        explicit _rb_map_tree(const Comp& comp, const allocator_type& alloc = allocator_type()) : _root(), _begin(), _nil(), _comp(comp), _alloc(alloc), _size(0) {
             //std::cerr << "default constructor called\n";
             _end = _alloc.allocate(1);
             _alloc.construct(_end, node());
         }
 
-        _rb_map_tree(const _rb_map_tree& src) : _root(), _begin(), _nil(src._nil), _alloc(allocator_type()) {
+        _rb_map_tree(const _rb_map_tree& src) : _root(), _begin(), _nil(src._nil), _comp(src.comp), _alloc(allocator_type()) {
             //std::cerr << "copy constructor called\n";
             _size = 0;
             _end = _alloc.allocate(1);
@@ -232,6 +234,7 @@ namespace ft {
             if (this != &rhs) {
                 clear();
                 _size = 0;
+                _comp = rhs._comp;
                 _alloc = rhs._alloc;
                 _nil = rhs._nil;
                 _end = _alloc.allocate(1);
@@ -244,10 +247,16 @@ namespace ft {
             //std::cerr << "destructor called\n";
             clear();
         }
-        /*ft::pair<iterator,bool> insert (const value_type& val){
+        bool search(node_pointer src, value_type& val) {
+            if (src != _nil && src != _end) {
+                search(src->left, val);
+                search(src->right, val);
+            }
+        }
+        ft::pair<iterator,bool> insert (const value_type& val){
             return (ft::make_pair(1, 2));
         }
-        iterator insert (iterator position, const value_type& val) {
+        /*iterator insert (iterator position, const value_type& val) {
             return (iterator());
         }
         template <class InputIterator>
