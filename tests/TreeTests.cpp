@@ -5,6 +5,7 @@
 #include <ctime>
 #ifdef TEST
 # include "../include/_rb_tree.hpp"
+# include "../include/utility.hpp"
 # include <set>
 # include <cstdlib>
 // Canonical methods
@@ -77,17 +78,17 @@ double  TreeTests::timerTest() {
 //====================================//
 bool    TreeTests::construction()
 {
-    typedef ft::_rb_tree<int> TreeClass;
+    typedef ft::_rb_map_tree<ft::pair<int, char> > TreeClass;
 
     // Default construction
     TreeClass dflt;
     // Copy Construction
     TreeClass toCpy;
-    toCpy.tree_insert(100);
-    toCpy.tree_insert(17);
-    toCpy.tree_insert(1);
-    toCpy.tree_insert(900);
-    toCpy.tree_insert(55);
+    toCpy.tree_insert(ft::make_pair(100, 'a'));
+    toCpy.tree_insert(ft::make_pair(17, 'c'));
+    toCpy.tree_insert(ft::make_pair(1, 'z'));
+    toCpy.tree_insert(ft::make_pair(900, '5'));
+    toCpy.tree_insert(ft::make_pair(55, 'i'));
     TreeClass cpy_const(toCpy);
 
     // Equal operator overload
@@ -111,33 +112,35 @@ bool    TreeTests::construction()
 //                                                                            //
 //============================================================================//
 bool    TreeTests::iterator() {
-    typedef ft::_rb_tree<int>::iterator     tree_it;
-    typedef std::set<int>::iterator         set_it;
-
-    ft::_rb_tree<int>   tree;
-    std::set<int>       set;
-    int                 random_number;
+    typedef ft::_rb_map_tree<ft::pair<int, char> >::iterator tree_it;
+    typedef std::set<ft::pair<int, char> >::iterator         set_it;
     srand (time(NULL));
 
-    for (int i = 0; i < 25; i++) {
+    ft::_rb_map_tree<ft::pair<int, char> >  tree;
+    std::set<ft::pair<int, char> >          set;
+    int                                     random_number;
+    char                                    character;
+
+    character = 'A';
+    for (int i = 0; i < 25; i++, character++) {
         random_number = rand();
-        tree.tree_insert(random_number);
-        set.insert(random_number);
+        tree.tree_insert(ft::make_pair(random_number, character));
+        set.insert(ft::make_pair(random_number, character));
     }
 
     tree_it itA = tree.begin();
     set_it compitA = set.begin();
 
     // quick check begin and end
-    if (*itA != *compitA || *--tree.end() != *set.rbegin()) {
+    if (*--tree.end() != *set.rbegin()) {
         return (false);
     }
 
     // ++ begin - end
     // std::cerr << "++\n";
     for (; itA != tree.end(); itA++, compitA++) {
-       std::cerr << *itA << " \n";
-       if (*compitA != *itA) {
+       //std::cerr << *itA << " \n";
+       if ((*itA).first != (*compitA).first || (*itA).second != (*compitA).second) {
            return (false);
        }
     }
@@ -148,45 +151,48 @@ bool    TreeTests::iterator() {
     compitA--;
     for (; itA != tree.begin(); itA--, compitA--) {
         //std::cerr << *itA << " \n";
-        if (*compitA != *itA) {
+        if ((*itA).first != (*compitA).first || (*itA).second != (*compitA).second) {
             return (false);
         }
     }
     //std::cerr << *itA << " \n";
-    if (*compitA != *itA) {
+    if ((*itA).first != (*compitA).first || (*itA).second != (*compitA).second) {
         return (false);
     }
     return (true);
 }
 
 bool    TreeTests::reverse_iterator(void) {
-    typedef ft::_rb_tree<int>::reverse_iterator     tree_it;
-    typedef std::set<int>::reverse_iterator         set_it;
-
-    ft::_rb_tree<int>   tree;
-    std::set<int>       set;
-    int                 random_number;
+    typedef ft::_rb_map_tree<ft::pair<int, char> >::reverse_iterator tree_it;
+    typedef std::set<ft::pair<int, char> >::reverse_iterator         set_it;
     srand (time(NULL));
 
-    for (int i = 0; i < 25; i++) {
+    ft::_rb_map_tree<ft::pair<int, char> >  tree;
+    std::set<ft::pair<int, char> >          set;
+    int                                     random_number;
+    char                                    character;
+
+    character = 'A';
+    for (int i = 0; i < 25; i++, character++) {
         random_number = rand();
-        tree.tree_insert(random_number);
-        set.insert(random_number);
+        tree.tree_insert(ft::make_pair(random_number, character));
+        set.insert(ft::make_pair(random_number, character));
     }
 
     tree_it ritA = tree.rbegin();
     set_it compritA = set.rbegin();
 
     // quick check begin and end
-    if (*ritA != *compritA || *--tree.rend() != *set.begin()) {
+
+    if (*--tree.rend() != *set.begin()) {
         return (false);
     }
 
     // ++ begin - end
     // std::cerr << "++\n";
     for (; ritA != tree.rend(); ritA++, compritA++) {
-        std::cerr << *ritA << " \n";
-        if (*compritA != *ritA) {
+        //std::cerr << *ritA << " \n";
+        if ((*ritA).first != (*compritA).first || (*ritA).second != (*compritA).second) {
             return (false);
         }
     }
@@ -196,12 +202,12 @@ bool    TreeTests::reverse_iterator(void) {
     ritA--;
     compritA--;
     for (; ritA != tree.rbegin(); ritA--, compritA--) {
-        //std::cerr << *itA << " \n";
-        if (*compritA != *ritA) {
+        //std::cerr << *ritA << " \n";
+        if ((*ritA).first != (*compritA).first || (*ritA).second != (*compritA).second) {
             return (false);
         }
     }
-    //std::cerr << *itA << " \n";
+    //std::cerr << *ritA << " \n";
     if (*compritA != *ritA) {
         return (false);
     }
@@ -221,10 +227,13 @@ bool    TreeTests::reverse_iterator(void) {
 //====================================//
 bool    TreeTests::insert() {
 
-/*    ft::_rb_tree<ft::pair<int, char> > tree;
+    ft::_rb_map_tree<ft::pair<int, char> > tree;
 
-    tree.tree_insert(ft::pair<int, char>(4, 'H'));
-    tree.inOrderWalk(tree.getRoot());*/
+    tree.tree_insert(ft::make_pair(4, 'a'));
+    tree.tree_insert(ft::make_pair(4, 'a'));
+    tree.tree_insert(ft::make_pair(5, 'b'));
+    tree.tree_insert(ft::make_pair(4, 'c'));
+    tree.inOrderWalk(tree.getRoot());
     return (true);
 }
 

@@ -48,7 +48,8 @@ private:
         Iterator iteratorB = B.begin();
 
         for (size_t i = 0; i < ASize; i++, iteratorA++, iteratorB++) {
-            if (*iteratorA != *iteratorB || iteratorA == A.end() || iteratorB == B.end()) {
+            if ((*iteratorA).first != (*iteratorB).first || (*iteratorA).second != (*iteratorB).second
+            || iteratorA == A.end() || iteratorB == B.end()) {
                 std::cerr << "iterator A not equal to iterator B\n";
                 return (false);
             }
