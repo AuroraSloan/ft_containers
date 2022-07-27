@@ -128,27 +128,80 @@ namespace ft {
     };
     template <typename T>
     bool operator==(ft::_tree_iterator<T, _rb_node<T> > const &lhs, ft::_tree_iterator<T, _rb_node<T> > const &rhs) {
-        //return (lhs.base()->key == rhs.base()->key);
         return (lhs.base() == rhs.base());
     }
     template <typename T>
     bool operator!=(ft::_tree_iterator<T, _rb_node<T> > const &lhs, ft::_tree_iterator<T, _rb_node<T> > const &rhs) {
-        //return (lhs.base()->key != rhs.base()->key);
         return (lhs.base() != rhs.base());
     }
+
+    // TREE REVERSE ITERATOR
+    template <typename Iterator>
+    class _tree_reverse_iterator {
+    public:
+        typedef Iterator                                                    iterator_type;
+        typedef typename ft::iterator_traits<Iterator>::difference_type     difference_type;
+        typedef typename ft::iterator_traits<Iterator>::value_type          value_type;
+        typedef typename ft::iterator_traits<Iterator>::pointer             pointer;
+        typedef typename ft::iterator_traits<Iterator>::reference           reference;
+        typedef typename ft::iterator_traits<Iterator>::iterator_category   iterator_category;
+        iterator_type _rit;
+
+        // CONSTRUCTORS
+        _tree_reverse_iterator() : _rit() {}
+        explicit _tree_reverse_iterator(iterator_type it) : _rit(it) {}
+
+        template <typename iter>
+        _tree_reverse_iterator(_tree_reverse_iterator<iter> const & rev_it) : _rit(rev_it.base()) {}
+
+        iterator_type base() const { return (_rit); }
+        reference   operator*() const {
+            iterator_type tmp = _rit.base();
+            return (*--tmp);
+        }
+        pointer     operator->() const { return (&(*_rit)); }
+
+        _tree_reverse_iterator & operator++() {
+            --_rit;
+            return (*this);
+        }
+        _tree_reverse_iterator operator++(int) {
+            _tree_reverse_iterator tmp(*this);
+            _rit--;
+            return tmp;
+        }
+
+        _tree_reverse_iterator & operator--() {
+            ++_rit;
+            return (*this);
+        }
+        _tree_reverse_iterator operator--(int) {
+            _tree_reverse_iterator tmp(*this);
+            _rit++;
+            return tmp;
+        }
+
+    };
+    template <typename Iterator>
+    bool operator==(_tree_reverse_iterator<Iterator> const & lhs, _tree_reverse_iterator<Iterator> const & rhs) { return (lhs.base() == rhs.base()); }
+    template <typename Iterator>
+    bool operator!=(_tree_reverse_iterator<Iterator> const & lhs, _tree_reverse_iterator<Iterator> const & rhs) { return (lhs.base() != rhs.base()); }
 
     // RED BLACK TREE
     template <typename T, class Alloc = std::allocator<_rb_node<T> > >
     class _rb_tree {
     public:
 
-        typedef T                                   value_type;
-        typedef _rb_node<T>                         node;
-        typedef Alloc                               allocator_type;
-        typedef _tree_iterator<T, node>                iterator;
-        typedef const _tree_iterator<T, node>          const_iterator;
-        typedef typename allocator_type::reference  node_reference;
-        typedef typename allocator_type::pointer    node_pointer;
+        typedef T                                       value_type;
+        typedef _rb_node<T>                             node;
+        typedef Alloc                                   allocator_type;
+        typedef size_t                                  size_type;
+        typedef _tree_iterator<T, node>                 iterator;
+        typedef const _tree_iterator<T, node>           const_iterator;
+        typedef _tree_reverse_iterator<iterator>        reverse_iterator;
+        typedef const _tree_reverse_iterator<iterator>  const_reverse_iterator;
+        typedef typename allocator_type::reference      node_reference;
+        typedef typename allocator_type::pointer        node_pointer;
 
     private:
         node_pointer    _root;
@@ -156,7 +209,7 @@ namespace ft {
         node_pointer    _end;
         node_pointer    _nil;
         Alloc           _alloc;
-        size_t          _size;
+        size_type       _size;
 
     public:
         // CONSTRUCTORS / DESTRUCTORS
@@ -177,6 +230,7 @@ namespace ft {
         _rb_tree& operator=(const _rb_tree& rhs) {
             //std::cerr << "equal operator overload called\n";
             if (this != &rhs) {
+                clear();
                 _size = 0;
                 _alloc = rhs._alloc;
                 _nil = rhs._nil;
@@ -224,6 +278,7 @@ namespace ft {
         void tree_insert(T key) {
             node_pointer new_node = _alloc.allocate(1);
             _alloc.construct(new_node, node(key));
+            //std::cerr << "constructing: " << new_node->key << '\n';
             tree_insert(new_node);
         }
 
@@ -264,29 +319,42 @@ namespace ft {
             node_pointer tmp = x;
             if (tmp != _nil) {
                 inOrderWalk(tmp->left);
-                std::cout << "key: " << tmp->key << '\n';
+                std::cout << "key: " << tmp->key.first << '\n';
+                std::cout << "key: " << tmp->key.second << '\n';
                 inOrderWalk(tmp->right);
             }
         }
 
         iterator begin() { return (iterator(_begin)); }
+        const_iterator begin() const { return (const_iterator(_begin)); }
 
         iterator end() { return (iterator(_end)); }
+        const_iterator end() const { return (const_iterator(_end)); }
 
-        size_t size() { return (_size); }
-        size_t empty() { return (!_size); }
+        reverse_iterator rbegin() { return (reverse_iterator(_end)); }
+        const_reverse_iterator rbegin() const { return (const_reverse_iterator(_end)); }
+
+        reverse_iterator rend() { return (reverse_iterator(_begin)); }
+        const_reverse_iterator rend() const { return (const_reverse_iterator(_begin)); }
+
+        size_type size() { return (_size); }
+        size_type empty() { return (!_size); }
+        size_type max_size() { return (_alloc.max_size()); }
 
         void clear () {
-            _free_nodes(_root);
+            _free_nodes(_root, _end);
+            _alloc.destroy(_end);
+            _alloc.deallocate(_end, 1);
         }
 
         node_pointer getRoot() const { return (_root); }
 
     private:
-        void _free_nodes(node_pointer src) {
-            if (src != _nil) {
-                _free_nodes(src->left);
-                _free_nodes(src->right);
+        void _free_nodes(node_pointer src, node_pointer end) {
+            if (src != _nil && src != end) {
+                //std::cerr << "destructing: " << src->key << '\n';
+                _free_nodes(src->left, end);
+                _free_nodes(src->right, end);
                 _alloc.destroy(src);
                 _alloc.deallocate(src, 1);
             }
@@ -298,6 +366,7 @@ namespace ft {
                 _insert_nodes(src->right, end);
                 node_pointer new_node = _alloc.allocate(1);
                 _alloc.construct(new_node, node(src->key));
+                //std::cerr << "constructing: " << new_node->key << '\n';
                 tree_insert(new_node);
             }
         }

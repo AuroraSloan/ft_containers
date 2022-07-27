@@ -26,32 +26,37 @@ void print_usage() {
     exit(EXIT_FAILURE);
 }
 
+/*class test {
+public:
+    int a;
+    test() : a() {
+        std::cerr << "dflt const\n";
+    }
+    test(int val) : a(val) {
+        std::cerr << "dflt const\n";
+    }
+    test(const test& src) : a(src.a) {
+        std::cerr << "cpy const\n";
+    }
+    test& operator=(const test& rhs) {
+        a = rhs.a;
+        std::cerr << "eq overload const\n";
+        return (*this);
+    }
+    ~test() {
+        std::cerr << "dest: " << a << '\n';
+    }
+};
 
-/*int main() {
-    ft::_rb_tree<int> tree;
-    //ft::_rb_node<int> one(1);
-    //ft::_rb_node<int> thirtythree(33);
-    //ft::_rb_node<int> seventeen(17);
+int main() {
 
-    //tree.insert(one);
-    //tree.insert(thirtythree);
-    //tree.insert(seventeen);
-    tree.tree_insert(1);
-    tree.tree_insert(33);
-    tree.tree_insert(17);
-    tree.tree_insert(2);
+   test dflt;
+   test dfltVal(5);
+   test cpy(dfltVal);
+   test eq;
+   eq = cpy;
 
-    tree.inOrderWalk(tree.getRoot());
-    tree.inOrderWalk(tree.getRoot());
-
-    ft::_rb_tree<int>::iterator i(tree.begin());
-    std::cout << i->key << '\n';
-    i++;
-    i++;
-    std::cout << i->key << '\n';
-
-    //i = tree.begin();
-
+   return (0);
 }*/
 
 int main(int argc, char **argv)
@@ -62,7 +67,7 @@ int main(int argc, char **argv)
         print_usage();
 
     // iterator tests
-    /*if (str_equal(argv[1], "iterator")) {
+    if (str_equal(argv[1], "iterator")) {
         IteratorTests iterator;
         iterator.test();
     }
@@ -77,21 +82,16 @@ int main(int argc, char **argv)
     if (str_equal(argv[1], "stack")) {
         StackTests stack;
         stack.test();
-    }*/
+    }
 
     // tree tests
     if (str_equal(argv[1], "tree")) {
         TreeTests tree;
         tree.test();
     }
-    // map tests
-    /*if (str_equal(argv[1], "map")) {
-        MapTests map;
-        map.test();
-    }*/
 
     // algorithm tests
-    /*if (str_equal(argv[1], "algorithm")) {
+    if (str_equal(argv[1], "algorithm")) {
         AlgorithmTests algorithm;
         algorithm.test();
     }
@@ -100,6 +100,13 @@ int main(int argc, char **argv)
     if (str_equal(argv[1], "utility")) {
         UtilityTests utility;
         utility.test();
-    }*/
+    }
+
     exit(EXIT_SUCCESS);
 }
+
+// map tests
+/*if (str_equal(argv[1], "map")) {
+MapTests map;
+map.test();
+}*/

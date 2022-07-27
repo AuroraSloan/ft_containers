@@ -22,10 +22,11 @@ private:
 
     // Iterator tests
     bool    iterator();
+    bool    reverse_iterator();
 
     // Modifier tests
-    /*bool    tree_insert(void);
-    bool    tree_transplant(void);
+    bool    insert();
+    /*bool    tree_transplant(void);
     bool    tree_delete(void);*/
 
     // Helper Methods

@@ -20,10 +20,11 @@ void TreeTests::printLongResults() {
 
     print_subheader("Iterator Tests");
     print_test_result("iterator - ", iterator());
+    print_test_result("reverse iterator - ", reverse_iterator());
 
-    /*print_subheader("Modifiers Tests");
-    print_test_result("assign - ", assign());
-    print_test_result("push_back - ", push_back());
+    print_subheader("Modifiers Tests");
+    print_test_result("insert - ", insert());
+    /*print_test_result("push_back - ", push_back());
     print_test_result("pop_back - ", pop_back());
     print_test_result("insert - ", insert());
     print_test_result("erase - ", erase());
@@ -135,7 +136,7 @@ bool    TreeTests::iterator() {
     // ++ begin - end
     // std::cerr << "++\n";
     for (; itA != tree.end(); itA++, compitA++) {
-       //std::cerr << *itA << " \n";
+       std::cerr << *itA << " \n";
        if (*compitA != *itA) {
            return (false);
        }
@@ -158,29 +159,52 @@ bool    TreeTests::iterator() {
     return (true);
 }
 
-/*bool    VectorTests::reverse_iterator_methods(void) {
-    ft::vector<int>     vec;
-    std::vector<int>    comp;
+bool    TreeTests::reverse_iterator(void) {
+    typedef ft::_rb_tree<int>::reverse_iterator     tree_it;
+    typedef std::set<int>::reverse_iterator         set_it;
 
-    for (int i = 1; i < 25; i++) {
-        vec.push_back(i);
-        comp.push_back(i);
+    ft::_rb_tree<int>   tree;
+    std::set<int>       set;
+    int                 random_number;
+    srand (time(NULL));
+
+    for (int i = 0; i < 25; i++) {
+        random_number = rand();
+        tree.tree_insert(random_number);
+        set.insert(random_number);
     }
 
-    std::vector<int>::reverse_iterator  crit_b = comp.rbegin();
-    std::vector<int>::reverse_iterator  crit_e = comp.rend();
-    ft::vector<int>::reverse_iterator   vrit_b = vec.rbegin();
-    ft::vector<int>::reverse_iterator   vrit_e = vec.rend();
-    if (*crit_b != *vrit_b || *--crit_e != *--vrit_e)
+    tree_it ritA = tree.rbegin();
+    set_it compritA = set.rbegin();
+
+    // quick check begin and end
+    if (*ritA != *compritA || *--tree.rend() != *set.begin()) {
         return (false);
-    for (size_t i = 0; i < 4; i++) {
-        vrit_b++;
-        crit_b++;
-        vrit_e--;
-        crit_e--;
     }
-    if (*crit_b != *vrit_b || *crit_e != *vrit_e)
+
+    // ++ begin - end
+    // std::cerr << "++\n";
+    for (; ritA != tree.rend(); ritA++, compritA++) {
+        std::cerr << *ritA << " \n";
+        if (*compritA != *ritA) {
+            return (false);
+        }
+    }
+
+    // -- end to begin
+    // std::cerr << "--\n";
+    ritA--;
+    compritA--;
+    for (; ritA != tree.rbegin(); ritA--, compritA--) {
+        //std::cerr << *itA << " \n";
+        if (*compritA != *ritA) {
+            return (false);
+        }
+    }
+    //std::cerr << *itA << " \n";
+    if (*compritA != *ritA) {
         return (false);
+    }
     return (true);
 }
 
@@ -195,54 +219,19 @@ bool    TreeTests::iterator() {
 //====================================//
 //               ASSIGN               //
 //====================================//
-bool    VectorTests::assign() {
+bool    TreeTests::insert() {
 
-    ft::vector<int>     myvec(10, 100);
-    std::vector<int>    comp(10, 100);
+/*    ft::_rb_tree<ft::pair<int, char> > tree;
 
-    // void  assign(size_type n, value_type const & val)
-    myvec.assign(10, 35);
-    comp.assign(10, 35);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    myvec.assign(1, 3700);
-    comp.assign(1, 3700);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    myvec.assign(100, 17);
-    comp.assign(100, 17);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    //template <class InputIterator>
-    //void assign(InputIterator first, InputIterator last)
-    ft::vector<int>     newvec(30, 7);
-    std::vector<int>    newcomp(30, 7);
-
-    ft::vector<int>::iterator vecs = newvec.begin();
-    ft::vector<int>::iterator vece = newvec.end();
-    std::vector<int>::iterator comps = newcomp.begin();
-    std::vector<int>::iterator compe = newcomp.end();
-    myvec.assign(vecs, vece);
-    comp.assign(comps, compe);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    ft::vector<int>     largervec(400, 987654);
-    std::vector<int>    largercomp(400, 987654);
-    vecs = largervec.begin();
-    vece = largervec.end();
-    comps = largercomp.begin();
-    compe = largercomp.end();
-    myvec.assign(vecs, vece);
-    comp.assign(comps, compe);
-    if (!containers_equal(myvec, comp))
-        return (false);
+    tree.tree_insert(ft::pair<int, char>(4, 'H'));
+    tree.inOrderWalk(tree.getRoot());*/
     return (true);
 }
 
 //====================================//
 //            PUSH_BACK               //
 //====================================//
-bool    VectorTests::push_back() {
+/*bool    VectorTests::push_back() {
     ft::vector<int>     myvec;
     ft::vector<int>     myvec2(10, 555);
     std::vector<int>    comp;
