@@ -54,31 +54,37 @@ namespace ft {
 
         // CONSTRUCTORS / DESTRUCTOR
         explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
-        : _key_comp(comp), _value_comp(value_compare(_key_comp)), _tree(_value_comp), _alloc(alloc) {}
+        : _key_comp(comp), _value_comp(value_compare(_key_comp)), _tree(_value_comp), _alloc(alloc) {
+            //std::cerr << "map default constructor called" << std::endl;
+        }
 
-        /*template <class InputIterator>
+        template <class InputIterator>
         map (InputIterator first,
              typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last,
              const key_compare& comp = key_compare(),
-             const allocator_type& alloc = allocator_type()) : _key_comp(comp), _alloc(alloc) {
-            size_type n = static_cast<size_type>(std::distance(first, last));
+             const allocator_type& alloc = allocator_type()) : _key_comp(comp), _value_comp(value_compare(_key_comp)), _tree(_value_comp), _alloc(alloc) {
+            //size_type n = static_cast<size_type>(std::distance(first, last));
+            while (first != last) {
+                _tree.insert(*first++);
+            }
+            //std::cerr << "map iterator constructor" << std::endl;
         }
-        map (const map& x) : _key_comp(key_compare()), _alloc(allocator_type()) {
+        map (const map& x) : _key_comp(x.key_comp()), _value_comp(x.value_comp()), _tree(x._tree), _alloc(allocator_type()) {
+            //std::cerr << "map copy constructor called" << std::endl;
         }
         map& operator=(const map& rhs) {
             if (this != &rhs) {
-                _dealoc();
-                //_alloc = rhs._alloc;
+                _tree = rhs._tree;
                 _key_comp = rhs.key_comp();
-                _size = 0;
-                _allocate(rhs.size());
-                _construct(_end, rhs.size(), rhs._begin);
+                _value_comp = rhs.value_comp();
+                //std::cerr << "map equal operator called" << std::endl;
             }
             return (*this);
         }
-        */
 
-        ~map() {}
+        ~map() {
+            //std::cerr << "map destructor called" << std::endl;
+        }
 
 
 
@@ -131,6 +137,7 @@ namespace ft {
 
         // OBSERVERS
         key_compare key_comp() const { return (_key_comp); }
+        value_compare value_comp() const { return (_tree.value_comp()); }
 
         // OPERATIONS
         /*iterator find (const key_type& k) {}

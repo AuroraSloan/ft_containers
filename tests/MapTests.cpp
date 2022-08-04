@@ -116,6 +116,10 @@ bool    MapTests::construction()
     toCpy.insert(ft::make_pair(55, 'i'));
     Map cpy_const(toCpy);
 
+    // Iterator constructor
+    Map itConst(toCpy.begin(), toCpy.end());
+
+
     // Equal operator overload
     Map dfltEQ, cpy_constEQ;
 
@@ -124,7 +128,8 @@ bool    MapTests::construction()
     if (!maps_equal(cpy_const, toCpy)
         || !maps_equal(dfltEQ, dflt)
         || !maps_equal(cpy_constEQ, cpy_const)
-        || !maps_equal(cpy_constEQ, toCpy)) {
+        || !maps_equal(cpy_constEQ, toCpy)
+        || !maps_equal(toCpy, itConst)) {
         return (false);
     }
     return (true);

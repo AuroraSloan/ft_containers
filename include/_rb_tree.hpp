@@ -216,13 +216,13 @@ namespace ft {
     public:
         // CONSTRUCTORS / DESTRUCTORS
         explicit _rb_map_tree(const Comp& comp, const allocator_type& alloc = allocator_type()) : _root(), _begin(), _nil(), _comp(comp), _alloc(alloc), _size(0) {
-            //std::cerr << "default constructor called\n";
+            //std::cerr << "tree default constructor called\n";
             _end = _alloc.allocate(1);
             _alloc.construct(_end, node());
         }
 
         _rb_map_tree(const _rb_map_tree& src) : _root(), _begin(), _nil(src._nil), _comp(src._comp), _alloc(allocator_type()) {
-            //std::cerr << "copy constructor called\n";
+            //std::cerr << "tree copy constructor called\n";
             _size = 0;
             _end = _alloc.allocate(1);
             _alloc.construct(_end, node());
@@ -230,12 +230,11 @@ namespace ft {
         }
 
         _rb_map_tree& operator=(const _rb_map_tree& rhs) {
-            //std::cerr << "equal operator overload called\n";
+            //std::cerr << "tree equal operator overload called\n";
             if (this != &rhs) {
                 clear();
                 _size = 0;
                 _comp = rhs._comp;
-                _alloc = rhs._alloc;
                 _nil = rhs._nil;
                 _end = _alloc.allocate(1);
                 _alloc.construct(_end, node());
@@ -244,7 +243,7 @@ namespace ft {
             return (*this);
         }
         ~_rb_map_tree() {
-            //std::cerr << "destructor called\n";
+            //std::cerr << "tree destructor called\n";
             clear();
         }
         bool search(node_pointer src, value_type& val) {
@@ -361,6 +360,7 @@ namespace ft {
         }
 
         node_pointer getRoot() const { return (_root); }
+        value_compare value_comp() const { return (_comp); }
 
     private:
         void _free_nodes(node_pointer src, node_pointer end) {
