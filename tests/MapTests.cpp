@@ -25,8 +25,8 @@ void MapTests::printLongResults() {
     print_test_result("iterator - ", iterator());
     print_test_result("reverse iterator - ", reverse_iterator());
 
-    print_subheader("Modifiers Tests");
-    print_test_result("insert - ", insert());
+    /*print_subheader("Modifiers Tests");
+    print_test_result("insert - ", insert());*/
     /*print_test_result("push_back - ", push_back());
     print_test_result("pop_back - ", pop_back());
     print_test_result("insert - ", insert());
@@ -49,7 +49,7 @@ void MapTests::printLongResults() {
 }
 void    MapTests::printShortResults() {
     std::cout << "Map tests - ";
-    if (construction() && iterator() && reverse_iterator() && insert()) {
+    if (construction() && iterator() && reverse_iterator()) {
         print_result(true);
     } else {
         print_result(false);
@@ -68,7 +68,7 @@ double  MapTests::timerTest() {
     reverse_iterator();
 
     //modifier
-    insert();
+    //insert();
     /*push_back();
     pop_back();
     insert();
@@ -229,7 +229,7 @@ bool    MapTests::reverse_iterator() {
 //====================================//
 //               ASSIGN               //
 //====================================//
-bool    MapTests::insert() {
+/*bool    MapTests::insert() {
     ft::map<int, char> map;
 
     map.tree_insert(ft::make_pair(4, 'a'));
@@ -238,7 +238,7 @@ bool    MapTests::insert() {
     map.tree_insert(ft::make_pair(4, 'c'));
     //map.inOrderWalk(map.getRoot());
     return (true);
-}
+}*/
 
 //====================================//
 //            PUSH_BACK               //

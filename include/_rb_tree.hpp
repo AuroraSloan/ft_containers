@@ -221,7 +221,7 @@ namespace ft {
             _alloc.construct(_end, node());
         }
 
-        _rb_map_tree(const _rb_map_tree& src) : _root(), _begin(), _nil(src._nil), _comp(src.comp), _alloc(allocator_type()) {
+        _rb_map_tree(const _rb_map_tree& src) : _root(), _begin(), _nil(src._nil), _comp(src._comp), _alloc(allocator_type()) {
             //std::cerr << "copy constructor called\n";
             _size = 0;
             _end = _alloc.allocate(1);
@@ -253,50 +253,48 @@ namespace ft {
                 search(src->right, val);
             }
         }
-        ft::pair<iterator,bool> insert (const value_type& val){
-            return (ft::make_pair(1, 2));
-        }
+
         /*iterator insert (iterator position, const value_type& val) {
             return (iterator());
         }
         template <class InputIterator>
         void insert (InputIterator first, InputIterator last) {
         }*/
-        void tree_insert(node_pointer node) {
+        ft::pair<iterator, bool> insert(const value_type& val) {
             node_pointer y = _nil;
             node_pointer x = _root;
             //std::cerr << "inserting: " << node->value << '\n';
             while (x != _nil && x != _end) {
                 y = x;
-                if (node->value < x->value) {
+                /*if (node->value < x->value) {*/
+                if (_comp(val, x->value)) {
                     x = x->left;
                 } else {
                     x = x->right;
                 }
             }
-            node->parent = y;
+            if (x != _nil && x == y->right && !(_comp(y->value, val))) {
+                return (ft::make_pair(iterator(y), false));
+            }
+            node_pointer new_node = _alloc.allocate(1);
+            _alloc.construct(new_node, node(val));
+            new_node->parent = y;
             if (y == _nil) {
-                _root = node;
-            } else if (node->value < y->value) {
-                y->left = node;
+                _root = new_node;
+            } else if (new_node->value < y->value) {
+                y->left = new_node;
             } else {
-                y->right = node;
+                y->right = new_node;
             }
-            if (_begin == _nil || node->value < _begin->value) {
-                _begin = node;
+            if (_begin == _nil || new_node->value < _begin->value) {
+                _begin = new_node;
             }
-            if (!_end->parent || node->value > _end->parent->value) {
-                _end->parent = node;
-                node->right = _end;
+            if (!_end->parent || new_node->value > _end->parent->value) {
+                _end->parent = new_node;
+                new_node->right = _end;
             }
             _size++;
-        }
-
-        void tree_insert(T value) {
-            node_pointer new_node = _alloc.allocate(1);
-            _alloc.construct(new_node, node(value));
-            //std::cerr << "constructing: " << new_node->value << '\n';
-            tree_insert(new_node);
+            return (ft::make_pair(iterator(new_node), true));
         }
 
         void tree_transplant(node_pointer u, node_pointer v) {
@@ -352,8 +350,8 @@ namespace ft {
         reverse_iterator rend() { return (reverse_iterator(_begin)); }
         const_reverse_iterator rend() const { return (const_reverse_iterator(_begin)); }
 
-        size_type size() { return (_size); }
-        size_type empty() { return (!_size); }
+        size_type size() const { return (_size); }
+        size_type empty() const { return (!_size); }
         size_type max_size() { return (_alloc.max_size()); }
 
         void clear () {
@@ -379,10 +377,11 @@ namespace ft {
             if (src != _nil && src != end) {
                 _insert_nodes(src->left, end);
                 _insert_nodes(src->right, end);
-                node_pointer new_node = _alloc.allocate(1);
+                insert(src->value);
+                /*node_pointer new_node = _alloc.allocate(1);
                 _alloc.construct(new_node, node(src->value));
                 //std::cerr << "constructing: " << new_node->value << '\n';
-                tree_insert(new_node);
+                tree_insert(new_node);*/
             }
         }
 

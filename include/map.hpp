@@ -25,12 +25,6 @@ namespace ft {
         typedef typename allocator_type::const_reference                            const_reference;
         typedef typename allocator_type::pointer                                    pointer;
         typedef typename allocator_type::const_pointer                              const_pointer;
-        // should be convertable to const
-        typedef typename ft::_rb_map_tree<value_type, ft::_rb_node<value_type> >    rb_tree;
-        typedef typename rb_tree::iterator                                          iterator;
-        typedef const iterator                                                      const_iterator;
-        typedef typename rb_tree::reverse_iterator                                  reverse_iterator;
-        typedef const reverse_iterator                                              const_reverse_iterator;
         typedef ptrdiff_t                                                           difference_type;
         typedef size_t                                                              size_type;
 
@@ -44,6 +38,11 @@ namespace ft {
                 return (comp(x.first, y.first));
             }
         };
+        typedef typename ft::_rb_map_tree<value_type, value_compare>    rb_tree;
+        typedef typename rb_tree::iterator                                          iterator;
+        typedef const iterator                                                      const_iterator;
+        typedef typename rb_tree::reverse_iterator                                  reverse_iterator;
+        typedef const reverse_iterator                                              const_reverse_iterator;
 
     private:
         key_compare     _key_comp;
@@ -111,8 +110,10 @@ namespace ft {
         /*mapped_type& operator[](const key_type& k) {}*/
 
         // MODIFIERS
-        /*pair<iterator,bool> insert (const value_type& val) {}
-        iterator insert (iterator position, const value_type& val) {}
+        ft::pair<iterator,bool> insert (const value_type& val) {
+            return (_tree.insert(val));
+        }
+        /*iterator insert (iterator position, const value_type& val) {}
         template <class InputIterator>
         void insert (InputIterator first, InputIterator last) {}
         void erase (iterator position) {}

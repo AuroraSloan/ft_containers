@@ -3,7 +3,7 @@
 #include "tests/AlgorithmTests.cpp"
 #include "tests/UtilityTests.cpp"
 #include "tests/StackTests.cpp"
-#include "tests/TreeTests.cpp"
+
 #include "tests/MapTests.cpp"
 #include "ft_containers.hpp"
 #include <iostream>
@@ -85,9 +85,14 @@ int main(int argc, char **argv)
     }*/
 
     // tree tests
-    if (str_equal(argv[1], "tree")) {
+    /*if (str_equal(argv[1], "tree")) {
         TreeTests tree;
         tree.test();
+    }*/
+    // map tests
+    if (str_equal(argv[1], "map")) {
+        MapTests map;
+        map.test();
     }
 
     // algorithm tests
@@ -104,9 +109,3 @@ int main(int argc, char **argv)
 
     exit(EXIT_SUCCESS);
 }
-
-// map tests
-/*if (str_equal(argv[1], "map")) {
-MapTests map;
-map.test();
-}*/
