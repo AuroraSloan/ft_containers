@@ -152,7 +152,12 @@ namespace ft {
 
         // ALLOCATOR
         allocator_type get_allocator() const { return (_alloc); }
+        void inOrderWalk() {
+            _tree.inOrderWalk(_tree.getRoot());
+        }
     private:
+
+
 
     };
 }

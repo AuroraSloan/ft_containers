@@ -25,8 +25,8 @@ void MapTests::printLongResults() {
     print_test_result("iterator - ", iterator());
     print_test_result("reverse iterator - ", reverse_iterator());
 
-    /*print_subheader("Modifiers Tests");
-    print_test_result("insert - ", insert());*/
+    print_subheader("Modifiers Tests");
+    print_test_result("insert - ", insert());
     /*print_test_result("push_back - ", push_back());
     print_test_result("pop_back - ", pop_back());
     print_test_result("insert - ", insert());
@@ -49,7 +49,7 @@ void MapTests::printLongResults() {
 }
 void    MapTests::printShortResults() {
     std::cout << "Map tests - ";
-    if (construction() && iterator() && reverse_iterator()) {
+    if (construction() && iterator() && reverse_iterator() && insert()) {
         print_result(true);
     } else {
         print_result(false);
@@ -68,7 +68,7 @@ double  MapTests::timerTest() {
     reverse_iterator();
 
     //modifier
-    //insert();
+    insert();
     /*push_back();
     pop_back();
     insert();
@@ -104,32 +104,48 @@ double  MapTests::timerTest() {
 bool    MapTests::construction()
 {
     typedef ft::map<int, char> Map;
+    typedef std::map<int, char> comp;
 
     // Default construction
     Map dflt;
+    comp Cdflt;
     // Copy Construction
     Map toCpy;
+    comp CtoCpy;
+
     toCpy.insert(ft::make_pair(100, 'a'));
+    CtoCpy.insert(std::make_pair(100, 'a'));
     toCpy.insert(ft::make_pair(17, 'c'));
+    CtoCpy.insert(std::make_pair(17, 'c'));
     toCpy.insert(ft::make_pair(1, 'z'));
+    CtoCpy.insert(std::make_pair(1, 'z'));
     toCpy.insert(ft::make_pair(900, '5'));
+    CtoCpy.insert(std::make_pair(900, '5'));
     toCpy.insert(ft::make_pair(55, 'i'));
+    CtoCpy.insert(std::make_pair(55, 'i'));
+
     Map cpy_const(toCpy);
+    comp Ccpy_const(CtoCpy);
 
     // Iterator constructor
     Map itConst(toCpy.begin(), toCpy.end());
-
+    comp CitConst(CtoCpy.begin(), CtoCpy.end());
 
     // Equal operator overload
     Map dfltEQ, cpy_constEQ;
+    comp CdfltEQ, Ccpy_constEQ;
 
     dfltEQ = dflt;
+    CdfltEQ = Cdflt;
+
     cpy_constEQ = cpy_const;
-    if (!maps_equal(cpy_const, toCpy)
-        || !maps_equal(dfltEQ, dflt)
-        || !maps_equal(cpy_constEQ, cpy_const)
+    Ccpy_constEQ = Ccpy_const;
+
+    if (!maps_equal(cpy_const, toCpy, Ccpy_const)
+        || !maps_equal(dfltEQ, dflt, CdfltEQ)
+        || !maps_equal(cpy_constEQ, cpy_const, Ccpy_constEQ)
         || !maps_equal(cpy_constEQ, toCpy)
-        || !maps_equal(toCpy, itConst)) {
+        || !maps_equal(toCpy, itConst, CitConst)) {
         return (false);
     }
     return (true);
@@ -150,18 +166,25 @@ bool    MapTests::iterator() {
     char                            character = 'A';
     srand (time(NULL));
 
-    for (int i = 0; i < 25; i++, character++) {
+    for (int i = 0; i < 1000; i++, character++) {
         random_number = rand();
+        //std::cerr << random_number << ":" << character << "|";
         map.insert(ft::make_pair(random_number, character));
         comp.insert(std::make_pair(random_number, character));
     }
+    //std::cerr << std::endl;
+    //map.inOrderWalk();
+
 
     map_it = map.begin();
     comp_it = comp.begin();
+    //std::cerr << "begin" << std::endl << (*map_it).first << ":" << (*map_it).second << std::endl << (*comp_it).first << ":" << (*comp_it).second << std::endl;
 
     // ++ begin - end
     for (; map_it != map.end(); map_it++, comp_it++) {
-        //std::cerr << *itA << " \n";
+        //std::cerr << &map_it << " \n";
+        //std::cerr << "begin" << std::endl << (*map_it).first << ":" << (*map_it).second << std::endl << (*comp_it).first << ":" << (*comp_it).second << std::endl;
+        //std::cerr << "map: " << (*map_it).first << ':' << (*map_it).second << "\tcomp: " << (*comp_it).first << ':' << (*comp_it).second << std::endl;
         if ((*map_it).first != (*comp_it).first || (*map_it).second != (*comp_it).second || comp_it == comp.end()) {
             return (false);
         }
@@ -173,10 +196,12 @@ bool    MapTests::iterator() {
     for (; map_it != map.begin(); map_it--, comp_it--) {
         //std::cerr << *itA << " \n";
         if ((*map_it).first != (*comp_it).first || (*map_it).second != (*comp_it).second || comp_it == comp.begin()) {
+            std::cerr << "y" << std::endl;
             return (false);
         }
     }
     if ((*map_it).first != (*comp_it).first || (*map_it).second != (*comp_it).second) {
+        std::cerr << "x" << std::endl;
         return (false);
     }
     return (true);
@@ -191,7 +216,7 @@ bool    MapTests::reverse_iterator() {
     char                                    character = 'A';
     srand (time(NULL));
 
-    for (int i = 0; i < 25; i++, character++) {
+    for (int i = 0; i < 1000; i++, character++) {
         random_number = rand();
         map.insert(ft::make_pair(random_number, character));
         comp.insert(std::make_pair(random_number, character));
@@ -204,6 +229,7 @@ bool    MapTests::reverse_iterator() {
     for (; map_rit != map.rend(); map_rit++, comp_rit++) {
         //std::cerr << *itA << " \n";
         if ((*map_rit).first != (*comp_rit).first || (*map_rit).second != (*comp_rit).second || comp_rit == comp.rend()) {
+            //std::cerr << "a" << std::endl;
             return (false);
         }
     }
@@ -214,10 +240,12 @@ bool    MapTests::reverse_iterator() {
     for (; map_rit != map.rbegin(); map_rit--, comp_rit--) {
         //std::cerr << *itA << " \n";
         if ((*map_rit).first != (*comp_rit).first || (*map_rit).second != (*comp_rit).second || comp_rit == comp.rbegin()) {
+            //std::cerr << "b" << std::endl;
             return (false);
         }
     }
     if ((*map_rit).first != (*comp_rit).first || (*map_rit).second != (*comp_rit).second) {
+        //std::cerr << "c" << std::endl;
         return (false);
     }
     return (true);
@@ -232,18 +260,33 @@ bool    MapTests::reverse_iterator() {
 //============================================================================//
 
 //====================================//
-//               ASSIGN               //
+//               INSERT               //
 //====================================//
-/*bool    MapTests::insert() {
-    ft::map<int, char> map;
+bool    MapTests::insert() {
 
-    map.tree_insert(ft::make_pair(4, 'a'));
-    map.tree_insert(ft::make_pair(4, 'a'));
-    map.tree_insert(ft::make_pair(5, 'b'));
-    map.tree_insert(ft::make_pair(4, 'c'));
-    //map.inOrderWalk(map.getRoot());
+    // insert pair value
+    ft::map<int, char> map;
+    std::map<int, char> comp;
+
+    map.insert(ft::make_pair(4, 'a'));
+    comp.insert(std::make_pair(4, 'a'));
+    map.insert(ft::make_pair(4, 'a'));
+    comp.insert(std::make_pair(4, 'a'));
+    map.insert(ft::make_pair(3700, 99));
+    comp.insert(std::make_pair(3700, 99));
+    map.insert(ft::make_pair(5, 'b'));
+    comp.insert(std::make_pair(5, 'b'));
+    map.insert(ft::make_pair(4, 'c'));
+    comp.insert(std::make_pair(4, 'c'));
+
+    if (!maps_equal(map, comp)) {
+        return (false);
+    }
+
+    // insert position and pair value
+
     return (true);
-}*/
+}
 
 //====================================//
 //            PUSH_BACK               //
