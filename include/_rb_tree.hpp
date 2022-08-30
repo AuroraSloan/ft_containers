@@ -356,7 +356,9 @@ namespace ft {
 
         size_type size() const { return (_size); }
         size_type empty() const { return (!_size); }
-        size_type max_size() { return (_alloc.max_size()); }
+        size_type max_size() {
+            return (_alloc.max_size());
+        }
 
         void clear () {
             _free_nodes(_root, _end);

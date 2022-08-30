@@ -109,7 +109,7 @@ namespace ft {
 
         size_type size() const { return (_tree.size()); }
 
-        //size_type max_size() { return (_alloc.max_size()); }
+        size_type max_size() { return (_tree.max_size()); }
 
         // ELEMENT ACCESS
         /*mapped_type& operator[](const key_type& k) {}*/

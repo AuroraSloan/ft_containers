@@ -25,31 +25,16 @@ void MapTests::printLongResults() {
     print_test_result("iterator - ", iterator());
     print_test_result("reverse iterator - ", reverse_iterator());
 
+    print_subheader("Capacity Tests");
+    print_test_result("capacity - ", capacity());
+
     print_subheader("Modifiers Tests");
     print_test_result("insert - ", insert());
-    /*print_test_result("push_back - ", push_back());
-    print_test_result("pop_back - ", pop_back());
-    print_test_result("insert - ", insert());
-    print_test_result("erase - ", erase());
-    print_test_result("swap - ", swap());
-    print_test_result("clear - ", clear());
 
-
-    print_subheader("Capacity Tests");
-    print_test_result("size - ", size());
-    print_test_result("resize - ", resize());
-    print_test_result("capacity - ", capacity());
-    print_test_result("reserve - ", reserve());
-
-    print_subheader("Element Access Tests");
-    print_test_result("operator[], at, front, back - ", element_access());
-
-    print_subheader("Relational operator tests");
-    print_test_result("relational operators and swap - ", relational_operators());*/
 }
 void    MapTests::printShortResults() {
     std::cout << "Map tests - ";
-    if (construction() && iterator() && reverse_iterator() && insert()) {
+    if (construction() && iterator() && reverse_iterator() && capacity() && insert()) {
         print_result(true);
     } else {
         print_result(false);
@@ -67,26 +52,11 @@ double  MapTests::timerTest() {
     iterator();
     reverse_iterator();
 
+    //capacity
+    capacity();
+
     //modifier
     insert();
-    /*push_back();
-    pop_back();
-    insert();
-    erase();
-    swap();
-    clear();
-
-    // capacity
-    size();
-    resize();
-    capacity();
-    reserve();
-
-    // element access
-    element_access();
-
-    // relational operators
-    relational_operators();*/
 
     end = clock();
     return ((double) (end - begin) / CLOCKS_PER_SEC);
@@ -254,6 +224,39 @@ bool    MapTests::reverse_iterator() {
     return (true);
 }
 
+//============================================================================//
+//                                                                            //
+//                              CAPACITY TESTS                                //
+//                                                                            //
+//============================================================================//
+bool    MapTests::capacity() {
+    // ADD MORE TESTS ONCE DELETE AND CLEAR ETC ARE DONE
+    ft::map<int, int> map;
+    std::map<int, int> std;
+
+    if (map.max_size() != std.max_size()) {
+        std::cerr << YELLOW << "m: " << map.max_size() << "s: " << std.max_size() << RESET << std::endl;
+    }
+
+    if (!map.empty()) {
+        return (false);
+    }
+
+    map.insert(ft::make_pair(65412, 'z'));
+    if (map.empty()) {
+        return (false);
+    }
+
+    for (int i = 0; i < 1000; i++) {
+        map.insert(ft::make_pair(i, 'a'));
+    }
+    if (map.size() != 1001 || map.empty()) {
+        return (false);
+    }
+
+
+    return (true);
+}
 
 
 //============================================================================//

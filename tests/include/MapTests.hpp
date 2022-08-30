@@ -24,13 +24,11 @@ private:
     bool    iterator();
     bool    reverse_iterator();
 
+    //capacity
+    bool    capacity();
+
     // Modifier tests
     bool    insert(void);
-    /*bool    erase(void);
-    bool    swap(void);
-    bool    clear(void);
-
-    // Capacity Tests
 
 
     // Helper Methods*/
