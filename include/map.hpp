@@ -63,11 +63,10 @@ namespace ft {
              typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last,
              const key_compare& comp = key_compare(),
              const allocator_type& alloc = allocator_type()) : _key_comp(comp), _value_comp(value_compare(_key_comp)), _tree(_value_comp), _alloc(alloc) {
-            //size_type n = static_cast<size_type>(std::distance(first, last));
+            //std::cerr << "map iterator constructor" << std::endl;
             while (first != last) {
                 _tree.insert(*first++);
             }
-            //std::cerr << "map iterator constructor" << std::endl;
         }
         map (const map& x) : _key_comp(x.key_comp()), _value_comp(x.value_comp()), _tree(x._tree), _alloc(allocator_type()) {
             //std::cerr << "map copy constructor called" << std::endl;

@@ -105,6 +105,7 @@ bool    MapTests::construction()
 {
     typedef ft::map<int, char> Map;
     typedef std::map<int, char> comp;
+    srand (time(NULL));
 
     // Default construction
     Map dflt;
@@ -148,6 +149,22 @@ bool    MapTests::construction()
         || !maps_equal(toCpy, itConst, CitConst)) {
         return (false);
     }
+
+    // Range Constructor
+    Map range;
+    int random_number;
+    char character = 'A';
+
+    for (int i = 0; i < 60; i++, character++) {
+        random_number = rand();
+        //std::cerr << random_number << ":" << character << "|";
+        range.insert(ft::make_pair(random_number, character));
+    }
+    Map range_constructed(range.begin(), range.end());
+    if (!maps_equal(range, range_constructed)) {
+        return (false);
+    }
+
     return (true);
 }
 
@@ -166,25 +183,19 @@ bool    MapTests::iterator() {
     char                            character = 'A';
     srand (time(NULL));
 
-    for (int i = 0; i < 1000; i++, character++) {
+    for (int i = 0; i < 60; i++, character++) {
         random_number = rand();
         //std::cerr << random_number << ":" << character << "|";
         map.insert(ft::make_pair(random_number, character));
         comp.insert(std::make_pair(random_number, character));
     }
     //std::cerr << std::endl;
-    //map.inOrderWalk();
-
 
     map_it = map.begin();
     comp_it = comp.begin();
-    //std::cerr << "begin" << std::endl << (*map_it).first << ":" << (*map_it).second << std::endl << (*comp_it).first << ":" << (*comp_it).second << std::endl;
 
     // ++ begin - end
     for (; map_it != map.end(); map_it++, comp_it++) {
-        //std::cerr << &map_it << " \n";
-        //std::cerr << "begin" << std::endl << (*map_it).first << ":" << (*map_it).second << std::endl << (*comp_it).first << ":" << (*comp_it).second << std::endl;
-        //std::cerr << "map: " << (*map_it).first << ':' << (*map_it).second << "\tcomp: " << (*comp_it).first << ':' << (*comp_it).second << std::endl;
         if ((*map_it).first != (*comp_it).first || (*map_it).second != (*comp_it).second || comp_it == comp.end()) {
             return (false);
         }
@@ -194,14 +205,11 @@ bool    MapTests::iterator() {
     map_it--;
     comp_it--;
     for (; map_it != map.begin(); map_it--, comp_it--) {
-        //std::cerr << *itA << " \n";
         if ((*map_it).first != (*comp_it).first || (*map_it).second != (*comp_it).second || comp_it == comp.begin()) {
-            std::cerr << "y" << std::endl;
             return (false);
         }
     }
     if ((*map_it).first != (*comp_it).first || (*map_it).second != (*comp_it).second) {
-        std::cerr << "x" << std::endl;
         return (false);
     }
     return (true);
@@ -216,7 +224,7 @@ bool    MapTests::reverse_iterator() {
     char                                    character = 'A';
     srand (time(NULL));
 
-    for (int i = 0; i < 1000; i++, character++) {
+    for (int i = 0; i < 60; i++, character++) {
         random_number = rand();
         map.insert(ft::make_pair(random_number, character));
         comp.insert(std::make_pair(random_number, character));
@@ -227,9 +235,7 @@ bool    MapTests::reverse_iterator() {
 
     // ++ rbegin - rend
     for (; map_rit != map.rend(); map_rit++, comp_rit++) {
-        //std::cerr << *itA << " \n";
         if ((*map_rit).first != (*comp_rit).first || (*map_rit).second != (*comp_rit).second || comp_rit == comp.rend()) {
-            //std::cerr << "a" << std::endl;
             return (false);
         }
     }
@@ -238,14 +244,11 @@ bool    MapTests::reverse_iterator() {
     map_rit--;
     comp_rit--;
     for (; map_rit != map.rbegin(); map_rit--, comp_rit--) {
-        //std::cerr << *itA << " \n";
         if ((*map_rit).first != (*comp_rit).first || (*map_rit).second != (*comp_rit).second || comp_rit == comp.rbegin()) {
-            //std::cerr << "b" << std::endl;
             return (false);
         }
     }
     if ((*map_rit).first != (*comp_rit).first || (*map_rit).second != (*comp_rit).second) {
-        //std::cerr << "c" << std::endl;
         return (false);
     }
     return (true);
