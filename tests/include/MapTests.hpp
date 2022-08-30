@@ -24,10 +24,12 @@ private:
     bool    iterator();
     bool    reverse_iterator();
 
-    //capacity
+    // Capacity
     bool    capacity();
 
-    // Modifier tests
+    // Element Access
+
+    // Modifier Tests
     bool    insert(void);
 
 
