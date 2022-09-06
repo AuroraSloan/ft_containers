@@ -112,7 +112,8 @@ namespace ft {
         size_type max_size() { return (_tree.max_size()); }
 
         // ELEMENT ACCESS
-        /*mapped_type& operator[](const key_type& k) {}*/
+        /*mapped_type& operator[](const key_type& k) {
+        }*/
 
         // MODIFIERS
         ft::pair<iterator,bool> insert (const value_type& val) {

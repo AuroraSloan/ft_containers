@@ -28,13 +28,16 @@ void MapTests::printLongResults() {
     print_subheader("Capacity Tests");
     print_test_result("capacity - ", capacity());
 
+    print_subheader("Element Access Tests");
+    print_test_result("Bracket Operator - ", bracketOperator());
+
     print_subheader("Modifiers Tests");
     print_test_result("insert - ", insert());
 
 }
 void    MapTests::printShortResults() {
     std::cout << "Map tests - ";
-    if (construction() && iterator() && reverse_iterator() && capacity() && insert()) {
+    if (construction() && iterator() && reverse_iterator() && capacity() && bracketOperator() && insert()) {
         print_result(true);
     } else {
         print_result(false);
@@ -54,6 +57,10 @@ double  MapTests::timerTest() {
 
     //capacity
     capacity();
+
+    // element access
+    bracketOperator();
+    //at();
 
     //modifier
     insert();
@@ -257,6 +264,19 @@ bool    MapTests::capacity() {
 
     return (true);
 }
+//============================================================================//
+//                                                                            //
+//                          ELEMENT ACCESS TESTS                              //
+//                                                                            //
+//============================================================================//
+//====================================//
+//          BRACKET OPERATOR          //
+//====================================//
+bool    MapTests::bracketOperator() {
+    // need emplace
+    return (true);
+}
+
 
 
 //============================================================================//

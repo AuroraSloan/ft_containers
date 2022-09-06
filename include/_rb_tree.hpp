@@ -247,11 +247,16 @@ namespace ft {
             //std::cerr << "tree destructor called\n";
             clear();
         }
-        bool search(node_pointer src, value_type& val) {
+
+        node_reference  search(node_pointer src, value_type& val) {
             if (src != _nil && src != _end) {
+                if (_values_equal(src->value, val)) {
+                    return (*src);
+                }
                 search(src->left, val);
                 search(src->right, val);
             }
+            return (_nil);
         }
 
         /*iterator insert (iterator position, const value_type& val) {

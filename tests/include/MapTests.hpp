@@ -28,6 +28,8 @@ private:
     bool    capacity();
 
     // Element Access
+    bool    bracketOperator();
+    //bool  at();
 
     // Modifier Tests
     bool    insert(void);
