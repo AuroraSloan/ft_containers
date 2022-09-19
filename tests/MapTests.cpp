@@ -33,11 +33,12 @@ void MapTests::printLongResults() {
 
     print_subheader("Modifiers Tests");
     print_test_result("insert - ", insert());
+    print_test_result("erase - ", erase());
 
 }
 void    MapTests::printShortResults() {
     std::cout << "Map tests - ";
-    if (construction() && iterator() && reverse_iterator() && capacity() && bracketOperator() && insert()) {
+    if (construction() && iterator() && reverse_iterator() && capacity() && bracketOperator() && insert() && erase()) {
         print_result(true);
     } else {
         print_result(false);
@@ -64,6 +65,7 @@ double  MapTests::timerTest() {
 
     //modifier
     insert();
+    erase();
 
     end = clock();
     return ((double) (end - begin) / CLOCKS_PER_SEC);
@@ -81,62 +83,46 @@ double  MapTests::timerTest() {
 bool    MapTests::construction()
 {
     typedef ft::map<int, char> Map;
-    typedef std::map<int, char> comp;
-    srand (time(NULL));
+    typedef std::map<int, char> Comp;
 
     // Default construction
     Map dflt;
-    comp Cdflt;
+    Comp comp_dflt;
     // Copy Construction
     Map toCpy;
-    comp CtoCpy;
+    Comp comp_toCpy;
 
-    toCpy.insert(ft::make_pair(100, 'a'));
-    CtoCpy.insert(std::make_pair(100, 'a'));
-    toCpy.insert(ft::make_pair(17, 'c'));
-    CtoCpy.insert(std::make_pair(17, 'c'));
-    toCpy.insert(ft::make_pair(1, 'z'));
-    CtoCpy.insert(std::make_pair(1, 'z'));
-    toCpy.insert(ft::make_pair(900, '5'));
-    CtoCpy.insert(std::make_pair(900, '5'));
-    toCpy.insert(ft::make_pair(55, 'i'));
-    CtoCpy.insert(std::make_pair(55, 'i'));
+    _generate_random_maps(toCpy, comp_toCpy, 30);
 
     Map cpy_const(toCpy);
-    comp Ccpy_const(CtoCpy);
+    Comp comp_cpy_const(comp_toCpy);
 
     // Iterator constructor
     Map itConst(toCpy.begin(), toCpy.end());
-    comp CitConst(CtoCpy.begin(), CtoCpy.end());
+    Comp comp_itConst(comp_toCpy.begin(), comp_toCpy.end());
 
     // Equal operator overload
     Map dfltEQ, cpy_constEQ;
-    comp CdfltEQ, Ccpy_constEQ;
+    Comp comp_dfltEQ, comp_cpy_constEQ;
 
     dfltEQ = dflt;
-    CdfltEQ = Cdflt;
+    comp_dfltEQ = comp_dflt;
 
     cpy_constEQ = cpy_const;
-    Ccpy_constEQ = Ccpy_const;
+    comp_cpy_constEQ = comp_cpy_const;
 
-    if (!maps_equal(cpy_const, toCpy, Ccpy_const)
-        || !maps_equal(dfltEQ, dflt, CdfltEQ)
-        || !maps_equal(cpy_constEQ, cpy_const, Ccpy_constEQ)
+    if (!maps_equal(cpy_const, toCpy, comp_cpy_const)
+        || !maps_equal(dfltEQ, dflt, comp_dfltEQ)
+        || !maps_equal(cpy_constEQ, cpy_const, comp_cpy_constEQ)
         || !maps_equal(cpy_constEQ, toCpy)
-        || !maps_equal(toCpy, itConst, CitConst)) {
+        || !maps_equal(toCpy, itConst, comp_itConst)) {
         return (false);
     }
 
     // Range Constructor
     Map range;
-    int random_number;
-    char character = 'A';
+    _generate_random_maps(range, 30);
 
-    for (int i = 0; i < 60; i++, character++) {
-        random_number = rand();
-        //std::cerr << random_number << ":" << character << "|";
-        range.insert(ft::make_pair(random_number, character));
-    }
     Map range_constructed(range.begin(), range.end());
     if (!maps_equal(range, range_constructed)) {
         return (false);
@@ -156,17 +142,9 @@ bool    MapTests::iterator() {
     std::map<int, char>             comp;
     ft::map<int, char>::iterator    map_it;
     std::map<int, char>::iterator   comp_it;
-    int                             random_number;
-    char                            character = 'A';
-    srand (time(NULL));
 
-    for (int i = 0; i < 60; i++, character++) {
-        random_number = rand();
-        //std::cerr << random_number << ":" << character << "|";
-        map.insert(ft::make_pair(random_number, character));
-        comp.insert(std::make_pair(random_number, character));
-    }
-    //std::cerr << std::endl;
+
+    _generate_random_maps(map, comp, 60);
 
     map_it = map.begin();
     comp_it = comp.begin();
@@ -197,16 +175,8 @@ bool    MapTests::reverse_iterator() {
     std::map<int, char>                     comp;
     ft::map<int, char>::reverse_iterator    map_rit;
     std::map<int, char>::reverse_iterator   comp_rit;
-    int                                     random_number;
-    char                                    character = 'A';
-    srand (time(NULL));
 
-    for (int i = 0; i < 60; i++, character++) {
-        random_number = rand();
-        map.insert(ft::make_pair(random_number, character));
-        comp.insert(std::make_pair(random_number, character));
-    }
-
+    _generate_random_maps(map, comp, 60);
     map_rit = map.rbegin();
     comp_rit = comp.rbegin();
 
@@ -290,30 +260,74 @@ bool    MapTests::bracketOperator() {
 //====================================//
 bool    MapTests::insert() {
 
-    // insert pair value
+    // INSERT PAIR VALUE
     ft::map<int, char> map;
     std::map<int, char> comp;
 
+    _generate_random_maps(map, comp, 50);
     map.insert(ft::make_pair(4, 'a'));
     comp.insert(std::make_pair(4, 'a'));
-    map.insert(ft::make_pair(4, 'a'));
-    comp.insert(std::make_pair(4, 'a'));
-    map.insert(ft::make_pair(3700, 99));
-    comp.insert(std::make_pair(3700, 99));
-    map.insert(ft::make_pair(5, 'b'));
-    comp.insert(std::make_pair(5, 'b'));
-    map.insert(ft::make_pair(4, 'c'));
-    comp.insert(std::make_pair(4, 'c'));
+    map.insert(ft::make_pair(4, 'z'));
+    comp.insert(std::make_pair(4, 'z'));
 
     if (!maps_equal(map, comp)) {
         return (false);
     }
 
-    // insert position and pair value
+    // INSERT POSITION AND PAIR VALUE
+    ft::map<int, char> map2;
+    std::map<int, char> comp2;
+
+    // Good Hint
+    for (int i = 0; i < 25; i++) {
+        if (i == 7) {
+            continue ;
+        }
+        map2.insert(ft::make_pair(i, 'l'));
+        comp2.insert(std::make_pair(i, 'l'));
+    }
+        // middle of
+    ft::map<int, char>::iterator mapIt2 = map2.begin();
+    std::map<int, char>::iterator compIt2 = comp2.begin();
+    for (int i = 1; i < 7; i++) {
+        mapIt2++;
+        compIt2++;
+    }
+    map2.insert(mapIt2, ft::make_pair(7, 'b'));
+    comp2.insert(compIt2, std::make_pair(7, 'b'));
+        // end of
+    ft::map<int, char>::iterator mapLast = map2.end();
+    std::map<int, char>::iterator compLast = comp2.end();
+    map2.insert(--mapLast, ft::make_pair(28, 'z'));
+    comp2.insert(--compLast, std::make_pair(28, 'z'));
+    if (!maps_equal(map2, comp2)) {
+        return (false);
+    }
+
+    // Bad Hint
+    map2.insert(map2.begin(), ft::make_pair(7777, 'R'));
+    comp2.insert(comp2.begin(), std::make_pair(7777, 'R'));
+
+    if (!maps_equal(map2, comp2)) {
+        return (false);
+    }
+
+    // INSERT BY ITERATORS
+    _generate_random_maps(map2, comp2, 50);
+    map2.insert(map.begin(), map.end());
+    comp2.insert(comp.begin(), comp.end());
+    if (!maps_equal(map2, comp2)) {
+        return (false);
+    }
 
     return (true);
 }
-
+//====================================//
+//               ERASE                //
+//====================================//
+bool    MapTests::erase() {
+    return (true);
+}
 //====================================//
 //            PUSH_BACK               //
 //====================================//
@@ -367,84 +381,6 @@ bool    VectorTests::pop_back() {
     return (true);
 }
 
-//====================================//
-//              INSERT                //
-//====================================//
-bool    VectorTests::insert() {
-
-    ft::vector<int>     myvec(30, 5);
-    std::vector<int>    comp(30, 5);
-
-    // ==== Insert one val ==== //
-    ft::vector<int>::iterator   vecCheck;
-    std::vector<int>::iterator  compCheck;
-    // reallocate
-    vecCheck = myvec.insert((myvec.begin() + 5), 7);
-    compCheck = comp.insert((comp.begin() + 5), 7);
-    if (!containers_equal(myvec, comp) || *vecCheck != *compCheck)
-        return (false);
-    // No reallocate
-    vecCheck = myvec.insert((myvec.begin() + 5), 30);
-    compCheck = comp.insert((comp.begin() + 5), 30);
-    if (!containers_equal(myvec, comp) || *vecCheck != *compCheck)
-        return (false);
-
-    // ==== Insert Mult val ==== //
-    // reallocate
-    myvec.insert(myvec.begin() + 20, 50, 44);
-    comp.insert(comp.begin() + 20, 50, 44);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    // No reallocate
-    myvec.insert((myvec.begin() + 30), 3, 900);
-    comp.insert((comp.begin() + 30), 3, 900);
-    if (!containers_equal(myvec, comp))
-        return (false);
-
-    // ==== Insert iterators ==== //
-    // reallocate
-    ft::vector<int>     tmpvec(100);
-    std::vector<int>    tmpcomp(100);
-
-    ft::vector<int>::iterator   firstvec = tmpvec.begin();
-    std::vector<int>::iterator  firstcomp = tmpcomp.begin();
-    ft::vector<int>::iterator   lastvec = tmpvec.end() - 1;
-    std::vector<int>::iterator  lastcomp = tmpcomp.end() - 1;
-    myvec.insert(myvec.begin() + 10, firstvec, lastvec);
-    comp.insert(comp.begin() + 10, firstcomp, lastcomp);
-    if (!containers_equal(myvec, comp))
-        return (false);
-
-    // No reallocation
-    firstvec = tmpvec.begin() + 8;
-    lastvec = tmpvec.begin() + 45;
-    firstcomp = tmpcomp.begin() + 8;
-    lastcomp = tmpcomp.begin() + 45;
-    myvec.insert(myvec.begin() + 44, firstvec, lastvec);
-    comp.insert(comp.begin() + 44, firstcomp, lastcomp);
-    if (!containers_equal(myvec, comp))
-        return (false);
-
-    // ==== Edge casees ==== //
-    myvec.insert(myvec.end(), 7);
-    comp.insert(comp.end(), 7);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    myvec.insert(myvec.end(), 4, 555);
-    comp.insert(comp.end(), 4, 555);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    myvec.insert(myvec.end(), myvec.begin(), myvec.end() - 1);
-    comp.insert(comp.end(), comp.begin(), comp.end() - 1);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    myvec.insert(myvec.begin(), myvec.begin(), myvec.end());
-    comp.insert(comp.begin(), comp.begin(), comp.end());
-    if (!containers_equal(myvec, comp))
-        return (false);
-
-    return (true);
-}
 
 //====================================//
 //               ERASE                //

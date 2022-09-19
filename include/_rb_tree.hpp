@@ -1,9 +1,11 @@
+#pragma once
 #ifndef _RB_TREE_HPP
 # define _RB_TREE_HPP
 
 # include <iterator>
 # include <iostream>
 # include "iterator.hpp"
+# include "utility.hpp"
 
 namespace ft {
 
@@ -248,65 +250,31 @@ namespace ft {
             clear();
         }
 
-        node_reference  search(node_pointer src, value_type& val) {
-            if (src != _nil && src != _end) {
-                if (_values_equal(src->value, val)) {
-                    return (*src);
-                }
-                search(src->left, val);
-                search(src->right, val);
+        ft::pair<iterator, bool> insert(const value_type& val) {
+            node_pointer parent = _find_parent(_root, val);
+
+            if (_is_valid_node(parent) && _values_equal(parent->value, val)) {
+                return (ft::make_pair(iterator(parent), false));
             }
-            return (_nil);
+            return (ft::make_pair(_setup_new_node(parent, val), true));
         }
 
-        /*iterator insert (iterator position, const value_type& val) {
-            return (iterator());
+        iterator insert (iterator position, const value_type& val) {
+            node_pointer parent = _find_parent(_resolve_hint(position, val), val);
+
+            if (_is_valid_node(parent) && _values_equal(parent->value, val)) {
+                return (iterator(parent));
+            }
+            return (_setup_new_node(parent, val));
         }
+
         template <class InputIterator>
         void insert (InputIterator first, InputIterator last) {
-        }*/
-
-        ft::pair<iterator, bool> insert(const value_type& val) {
-            node_pointer y = _nil;
-            node_pointer x = _root;
-            //std::cerr << "inserting: " << node->value << '\n';
-            while (_is_valid_node(x)) {
-                y = x;
-                if (_values_equal(x->value, val)) {
-                    return (ft::make_pair(iterator(y), false));
-                }
-                if (_comp(val, x->value)) {
-                    x = x->left;
-                } else {
-                    x = x->right;
-                }
+            while (first != last) {
+                insert(*first);
+                first++;
             }
-            node_pointer new_node = _alloc.allocate(1);
-            _alloc.construct(new_node, node(val));
-            //std::cerr << "node value: " << val.first << ", " << val.second << std::endl;
-            //std::cerr << "address: " << new_node << std::endl;
-            new_node->parent = y;
-            if (_not_valid_node(y)) {
-                _root = new_node;
-            } else if (_comp(new_node->value, y->value)) {
-                // how does this acutally work??
-                y->left = new_node;
-            } else {
-                y->right = new_node;
-            }
-            if (_not_valid_node(_begin) || new_node->value < _begin->value) {
-                _begin = new_node;
-            }
-            if (!_end->parent || new_node->value > _end->parent->value) {
-                _end->parent = new_node;
-                new_node->right = _end;
-            }
-            new_node->color = red;
-            _size++;
-            _rb_insert_fixup(new_node);
-            return (ft::make_pair(iterator(new_node), true));
         }
-
         void rb_delete(node_pointer node) {
             node_pointer    y = node;
             node_pointer    x = _nil;
@@ -337,7 +305,16 @@ namespace ft {
                 _rb_delete_fixup(x);
             }
         }
-
+        /*node_reference  search(node_pointer src, value_type& val) {
+            if (src != _nil && src != _end) {
+                if (_values_equal(src->value, val)) {
+                    return (*src);
+                }
+                search(src->left, val);
+                search(src->right, val);
+            }
+            return (_nil);
+        }
         void inOrderWalk(node_pointer x) {
             if (x != _nil && x != _end) {
                 inOrderWalk(x->left);
@@ -345,7 +322,7 @@ namespace ft {
                 inOrderWalk(x->right);
                 //std::cerr << "key: " << x->value.first << " - value: " << x->value.second << '\n';
             }
-        }
+        }*/
 
         iterator begin() { return (iterator(_begin)); }
         const_iterator begin() const { return (const_iterator(_begin)); }
@@ -466,7 +443,57 @@ namespace ft {
             _root->color = black;
         }
 
+        //=================================================================//
+        //                         INSERT HELPERS                          //
+        //=================================================================//
+        node_pointer    _find_parent(node_pointer start, const value_type &val) {
+            node_pointer parent = _nil;
+            while (_is_valid_node(start)) {
+                parent = start;
+                if (_values_equal(start->value, val)) {
+                    break ;
+                } else if (_comp(val, start->value)) {
+                    start = start->left;
+                } else {
+                    start = start->right;
+                }
+            }
+            return (parent);
+        }
+        iterator _setup_new_node(node_pointer &parent, const value_type &val) {
+            node_pointer new_node = _alloc.allocate(1);
+            _alloc.construct(new_node, node(val));
+            new_node->parent = parent;
 
+            if (_not_valid_node(parent)) {
+                _root = new_node;
+            } else if (_comp(new_node->value, parent->value)) {
+                parent->left = new_node;
+            } else {
+                parent->right = new_node;
+            }
+
+            if (_not_valid_node(_begin) || new_node->value < _begin->value) {
+                _begin = new_node;
+            }
+            if (!_end->parent || new_node->value > _end->parent->value) {
+                _end->parent = new_node;
+                new_node->right = _end;
+            }
+            new_node->color = red;
+            _size++;
+            _rb_insert_fixup(new_node);
+            return (iterator(new_node));
+        }
+
+        node_pointer _resolve_hint(iterator &hint, const value_type &val) {
+            node_pointer position = hint.base();
+            node_pointer next_position = (++hint).base();
+            if (_comp(position->value, val) && _comp(val, next_position->value)) {
+                return (position);
+            }
+            return (_root);
+        }
 
         void _free_nodes(node_pointer src, node_pointer end) {
             if (src != _nil && src != end) {

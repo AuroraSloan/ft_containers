@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TESTCLASS_HPP
 # define TESTCLASS_HPP
 

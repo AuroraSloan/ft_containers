@@ -1,3 +1,4 @@
+#pragma once
 #ifndef ALGORITHMTESTS_HPP
 # define ALGORITHMTESTS_HPP
 
@@ -8,19 +9,19 @@ class AlgorithmTests : public TestClass {
 public:
 
     // Canonical methods
-    AlgorithmTests(void);
-    ~AlgorithmTests(void);
+    AlgorithmTests();
+    ~AlgorithmTests();
 
 private:
 
     // Inherited pure methods
-    void printLongResults(void);
-    void printShortResults(void);
-    double timerTest(void);
+    void printLongResults();
+    void printShortResults();
+    double timerTest();
 
     // Algorithm tests
-    bool equal(void);
-    bool lexicographical_compare(void);
+    bool equal();
+    bool lexicographical_compare();
 
     // canonical methods
     AlgorithmTests(const AlgorithmTests& src);

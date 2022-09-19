@@ -1,3 +1,4 @@
+#pragma once
 #ifndef ITERATOR_TESTS_HPP
 # define ITERATOR_TESTS_HPP
 

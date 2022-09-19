@@ -1,3 +1,4 @@
+#pragma once
 #ifndef MAP_HPP
 # define MAP_HPP
 
@@ -119,9 +120,15 @@ namespace ft {
         ft::pair<iterator,bool> insert (const value_type& val) {
             return (_tree.insert(val));
         }
-        /*iterator insert (iterator position, const value_type& val) {}
+        iterator insert (iterator position, const value_type& val) {
+            return (_tree.insert(position, val));
+        }
         template <class InputIterator>
-        void insert (InputIterator first, InputIterator last) {}
+        void insert (InputIterator first, InputIterator last) {
+            _tree.insert(first, last);
+        }
+        /*
+
         void erase (iterator position) {}
         size_type erase (const key_type& k);
         void erase (iterator first, iterator last);*/

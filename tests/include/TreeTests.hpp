@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TREETESTS_HPP
 # define TREETESTS_HPP
 

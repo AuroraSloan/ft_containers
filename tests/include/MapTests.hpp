@@ -1,3 +1,4 @@
+#pragma once
 #ifndef MAPTESTS_HPP
 # define MAPTESTS_HPP
 
@@ -32,7 +33,10 @@ private:
     //bool  at();
 
     // Modifier Tests
-    bool    insert(void);
+    bool    insert();
+    bool    erase();
+    /*bool    swap();
+    bool    clear();*/
 
 
     // Helper Methods*/
@@ -63,6 +67,24 @@ private:
         }
         return (true);
     }
+
+    template <typename MapA, typename MapB>
+    void    print_maps(MapA & A, MapB & B) {
+
+        typename MapA::iterator   itA = A.begin();
+        typename MapB::iterator   itB = B.begin();
+
+        for (; itA != A.end() && itB != B.end(); itA++, itB++) {
+            std::cout << "A>> " << (*itA).first << " : " << (*itA).second << "\tB>> " << (*itB).first << " : " << (*itB).second << "\n";
+        }
+        for (; itA != A.end(); itA++) {
+            std::cout << "A>> " << (*itA).first << " : " << (*itA).second << "\n";
+        }
+        for (; itB != B.end(); itB++) {
+            std::cout << "\t\tB>>" << (*itB).first << " : " << (*itB).second << "\n";
+        }
+    }
+
     template <typename MapA, typename MapB>
     bool    maps_equal(MapA & mapAA, MapA & mapAB, MapB & comp) {
 
@@ -92,6 +114,29 @@ private:
             }
         }
         return (true);
+    }
+
+    template<typename FT, typename STD>
+    void _generate_random_maps(FT &ft_map, STD &std_map, size_t count) {
+        int     random_number;
+        srand (time(NULL));
+
+        for (size_t i = 0; i < count; i++) {
+            random_number = rand();
+            ft_map.insert(ft::make_pair(random_number, 'a'));
+            std_map.insert(std::make_pair(random_number, 'a'));
+        }
+    }
+
+    template<typename FT>
+    void _generate_random_maps(FT &ft_map, size_t count) {
+        int     random_number;
+        srand (time(NULL));
+
+        for (size_t i = 0; i < count; i++) {
+            random_number = rand();
+            ft_map.insert(ft::make_pair(random_number, 'a'));
+        }
     }
 
         // canonical methods
