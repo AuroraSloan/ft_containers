@@ -34,11 +34,13 @@ void MapTests::printLongResults() {
     print_subheader("Modifiers Tests");
     print_test_result("insert - ", insert());
     print_test_result("erase - ", erase());
+    print_test_result("clear - ", clear());
 
 }
 void    MapTests::printShortResults() {
     std::cout << "Map tests - ";
-    if (construction() && iterator() && reverse_iterator() && capacity() && bracketOperator() && insert() && erase()) {
+    if (construction() && iterator() && reverse_iterator() && capacity() && bracketOperator() && insert() && erase()
+        && clear()) {
         print_result(true);
     } else {
         print_result(false);
@@ -66,6 +68,7 @@ double  MapTests::timerTest() {
     //modifier
     insert();
     erase();
+    clear();
 
     end = clock();
     return ((double) (end - begin) / CLOCKS_PER_SEC);
@@ -326,8 +329,65 @@ bool    MapTests::insert() {
 //               ERASE                //
 //====================================//
 bool    MapTests::erase() {
+    ft::map<int, char> map;
+    std::map<int, char> comp;
+
+    _generate_random_maps(map, comp, 6);
+    ft::map<int, char>::iterator mapIt = map.begin();
+    std::map<int, char>::iterator compIt = comp.begin();
+
+    for (int i = 0; i < 2; i++, ++mapIt, ++compIt) {}
+    map.erase(mapIt);
+    comp.erase(compIt);
+
+    mapIt = map.begin();
+    compIt = comp.begin();
+    for (int i = 0; i < 2; i++, ++mapIt, ++compIt) {}
+    map.erase(mapIt);
+    comp.erase(compIt);
+
+    map.erase(map.begin());
+    comp.erase(comp.begin());
+
+    mapIt = map.end();
+    compIt = comp.end();
+    map.erase(--mapIt);
+    comp.erase(--compIt);
+
+    mapIt = map.begin();
+    compIt = comp.begin();
+    mapIt++;
+    mapIt++;
+    compIt++;
+    compIt++;
+    map.erase(map.begin(), mapIt);
+    comp.erase(comp.begin(), compIt);
+
+    if (!maps_equal(map, comp)) {
+        return (false);
+    }
+
     return (true);
 }
+
+//====================================//
+//              CLEAR                 //
+//====================================//
+bool    MapTests::clear() {
+    ft::map<int, char> map;
+    std::map<int, char> comp;
+
+    _generate_random_maps(map, comp, 1000);
+    map.clear();
+    comp.clear();
+
+    if (!maps_equal(map, comp)) {
+        return (false);
+    }
+
+    return (true);
+}
+
 //====================================//
 //            PUSH_BACK               //
 //====================================//

@@ -127,11 +127,16 @@ namespace ft {
         void insert (InputIterator first, InputIterator last) {
             _tree.insert(first, last);
         }
-        /*
 
-        void erase (iterator position) {}
-        size_type erase (const key_type& k);
-        void erase (iterator first, iterator last);*/
+        void erase (iterator position) {
+            _tree.erase((position));
+        }
+        void erase (iterator first, iterator last) {
+            _tree.erase(first, last);
+        }
+
+        /*size_type erase (const key_type& k);*/
+
         /*void swap(map &x) {
             _swap(_begin, x._begin);
             _swap(_end, x._end);

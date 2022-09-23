@@ -38,7 +38,7 @@ namespace ft {
         node_ptr    parent;
         bool        color;
 
-        _rb_node() : value(), left(), right(), parent(), color(black) {}
+        _rb_node() : value(), left(), right(), parent(), color(red) {}
         explicit _rb_node(const value_type val) : value(val), left(), right(), parent(), color(red) {}
         _rb_node(const _rb_node& src) : value(src.value), left(src.left), right(src.right), parent(src.parent), color(src.color) {}
         ~_rb_node() {}
@@ -220,11 +220,12 @@ namespace ft {
         // CONSTRUCTORS / DESTRUCTORS
         explicit _rb_map_tree(const Comp& comp, const allocator_type& alloc = allocator_type()) : _root(), _begin(), _nil(), _comp(comp), _alloc(alloc), _size(0) {
             //std::cerr << "tree default constructor called\n";
+
             _end = _alloc.allocate(1);
             _alloc.construct(_end, node());
         }
 
-        _rb_map_tree(const _rb_map_tree& src) : _root(), _begin(), _nil(src._nil), _comp(src._comp), _alloc(allocator_type()) {
+        explicit _rb_map_tree(const _rb_map_tree& src) : _root(), _begin(), _nil(src._nil), _comp(src._comp), _alloc(allocator_type()) {
             //std::cerr << "tree copy constructor called\n";
             _size = 0;
             _end = _alloc.allocate(1);
@@ -250,6 +251,30 @@ namespace ft {
             clear();
         }
 
+        // ITERATORS
+        iterator begin() { return (iterator(_begin)); }
+        const_iterator begin() const { return (const_iterator(_begin)); }
+
+        iterator end() { return (iterator(_end)); }
+        const_iterator end() const { return (const_iterator(_end)); }
+
+        reverse_iterator rbegin() { return (reverse_iterator(_end)); }
+        const_reverse_iterator rbegin() const { return (const_reverse_iterator(_end)); }
+
+        reverse_iterator rend() { return (reverse_iterator(_begin)); }
+        const_reverse_iterator rend() const { return (const_reverse_iterator(_begin)); }
+
+
+        // CAPACITY
+        size_type size() const { return (_size); }
+        size_type empty() const { return (!_size); }
+        size_type max_size() {
+            return (_alloc.max_size());
+        }
+
+        // ELEMENT ACCESS
+
+        // MODIFIERS
         ft::pair<iterator, bool> insert(const value_type& val) {
             node_pointer parent = _find_parent(_root, val);
 
@@ -275,36 +300,44 @@ namespace ft {
                 first++;
             }
         }
-        void rb_delete(node_pointer node) {
-            node_pointer    y = node;
-            node_pointer    x = _nil;
-            color_bool      y_original_color = y.color;
-            if (_not_valid_node(node->left)) {
-                x = node->right;
-                _rb_transplant(node, node->right);
-            } else if (_not_valid_node(node->right)) {
-                x = node->left;
-                _rb_transplant(node, node->left);
-            } else {
-                y = tree_min(node->right);
-                y_original_color = y->color;
-                x = y->right;
-                if (y->parent == node) {
-                    x->parent = y;
-                } else {
-                    _rb_transplant(y, y->right);
-                    y->right = node->right;
-                    y->right->parent = y;
+
+        void erase(iterator position) {
+            node_pointer node = position.base();
+            iterator end = (iterator(_end));
+//            node_pointer last_node = (--end).base();
+
+            if (_is_valid_node(node)) {
+                if (node == _begin) {
+                    _begin = (++position).base();
+                } else if (node == (--end).base()) {
+                    node_pointer new_last_node = (--end).base();
+                    _end->parent = new_last_node;
+                    new_last_node->right = _end;
                 }
-                _rb_transplant(node, y);
-                y->left = node->left;
-                y->left->parent = y;
-                y->color = node->color;
-            }
-            if (y_original_color == black) {
-                _rb_delete_fixup(x);
+                _rb_delete(node);
+                _alloc.destroy(node);
+                _alloc.deallocate(node, 1);
+                _size--;
             }
         }
+        /*size_type erase(const key_type& k) {
+
+        }*/
+        void erase(iterator first, iterator last) {
+            while (first != last) {
+                erase(first);
+                first++;
+            }
+        }
+        void clear () {
+            if (_size) {
+                _free_nodes(_root, _end);
+                _alloc.destroy(_end);
+                _alloc.deallocate(_end, 1);
+                _size = 0;
+            }
+        }
+
         /*node_reference  search(node_pointer src, value_type& val) {
             if (src != _nil && src != _end) {
                 if (_values_equal(src->value, val)) {
@@ -323,30 +356,6 @@ namespace ft {
                 //std::cerr << "key: " << x->value.first << " - value: " << x->value.second << '\n';
             }
         }*/
-
-        iterator begin() { return (iterator(_begin)); }
-        const_iterator begin() const { return (const_iterator(_begin)); }
-
-        iterator end() { return (iterator(_end)); }
-        const_iterator end() const { return (const_iterator(_end)); }
-
-        reverse_iterator rbegin() { return (reverse_iterator(_end)); }
-        const_reverse_iterator rbegin() const { return (const_reverse_iterator(_end)); }
-
-        reverse_iterator rend() { return (reverse_iterator(_begin)); }
-        const_reverse_iterator rend() const { return (const_reverse_iterator(_begin)); }
-
-        size_type size() const { return (_size); }
-        size_type empty() const { return (!_size); }
-        size_type max_size() {
-            return (_alloc.max_size());
-        }
-
-        void clear () {
-            _free_nodes(_root, _end);
-            _alloc.destroy(_end);
-            _alloc.deallocate(_end, 1);
-        }
 
         node_pointer getRoot() const { return (_root); }
         value_compare value_comp() const { return (_comp); }
@@ -460,10 +469,12 @@ namespace ft {
             }
             return (parent);
         }
-        iterator _setup_new_node(node_pointer &parent, const value_type &val) {
+        iterator _setup_new_node(node_pointer parent, const value_type &val) {
             node_pointer new_node = _alloc.allocate(1);
             _alloc.construct(new_node, node(val));
             new_node->parent = parent;
+            new_node->left = _nil;
+            new_node->right = _nil;
 
             if (_not_valid_node(parent)) {
                 _root = new_node;
@@ -486,7 +497,7 @@ namespace ft {
             return (iterator(new_node));
         }
 
-        node_pointer _resolve_hint(iterator &hint, const value_type &val) {
+        node_pointer _resolve_hint(iterator hint, const value_type &val) {
             node_pointer position = hint.base();
             node_pointer next_position = (++hint).base();
             if (_comp(position->value, val) && _comp(val, next_position->value)) {
@@ -517,17 +528,54 @@ namespace ft {
             }
         }
 
-
-        void _rb_transplant(node_pointer u, node_pointer v) {
+        //=================================================================//
+        //                         ERASE HELPERS                           //
+        //=================================================================//
+        void _rb_transplant(node_pointer toErase, node_pointer toReplace) {
             // need to deallocate and reallocate nodes?
-            if (_not_valid_node(u->parent)) {
-                _root = v;
-            } else if (u == u->parent->left) {
-                u->parent->left = v;
+            if (_not_valid_node(toErase->parent)) {
+                _root = toReplace;
+            } else if (toErase == toErase->parent->left) {
+                toErase->parent->left = toReplace;
             } else {
-                u->parent->right = v;
+                toErase->parent->right = toReplace;
             }
-            v->parent = u->parent;
+            if (toReplace) {
+                toReplace->parent = toErase->parent;
+            }
+        }
+
+        void _rb_delete(node_pointer node) {
+            node_pointer    x = _nil;
+            node_pointer    y = node;
+            bool            y_original_color = y->color;
+            if (node->left == _nil) {
+                x = node->right;
+                _rb_transplant(node, node->right);
+            } else if (node->right == _nil) {
+                x = node->left;
+                _rb_transplant(node, node->left);
+            } else {
+                y = tree_min(node->right, _nil);
+                y_original_color = y->color;
+                x = y->right;
+                if (y->parent == node) {
+                    if (x) {
+                        x->parent = y;
+                    }
+                } else {
+                    _rb_transplant(y, y->right);
+                    y->right = node->right;
+                    y->right->parent = y;
+                }
+                _rb_transplant(node, y);
+                y->left = node->left;
+                y->left->parent = y;
+                y->color = node->color;
+            }
+            if (y_original_color == black && x) {
+                _rb_delete_fixup(x);
+            }
         }
 
         void _rb_delete_fixup(node_pointer x) {
@@ -536,47 +584,51 @@ namespace ft {
                 if (x == x->parent->left) {
                     w = x->parent->right;
                     if (w->color == red) {
-                        w->coor = black;
+                        w->color = black;
                         x->parent->color = red;
                         _left_rotate(x->parent);
                         w = x->parent->right;
                     }
-                    if (w->left->color == black && w->right->color == black) {
+                    if (w->left && w->right && w->left->color == black && w->right->color == black) {
                         w->color = red;
                         x = x->parent;
-                    } else if (w->right->color == black) {
+                    } else if (w->right && w->right->color == black) {
                         w->left->color = black;
                         w->color = red;
                         _right_rotate(w);
-                        w = x->p->right;
+                        w = x->parent->right;
                     }
-                    w->color = x->parent->color;
-                    x->parent->color = black;
-                    w->right->color = black;
-                    _left_rotate(x->parent);
-                    x = _root;
+                    if (w->right && w->right->color == red) {
+                        w->color = x->parent->color;
+                        x->parent->color = black;
+                        w->right->color = black;
+                        _left_rotate(x->parent);
+                        x = _root;
+                    }
                 } else {
                     w = x->parent->left;
                     if (w->color == red) {
-                        w->coor = black;
+                        w->color = black;
                         x->parent->color = red;
                         _right_rotate(x->parent);
                         w = x->parent->left;
                     }
-                    if (w->right->color == black && w->left->color == black) {
+                    if (w->right && w->left && w->right->color == black && w->left->color == black) {
                         w->color = red;
                         x = x->parent;
-                    } else if (w->left->color == black) {
+                    } else if (w->left && w->left->color == black) {
                         w->right->color = black;
                         w->color = red;
                         _left_rotate(w);
-                        w = x->p->left;
+                        w = x->parent->left;
                     }
-                    w->color = x->parent->color;
-                    x->parent->color = black;
-                    w->left->color = black;
-                    _right_rotate(x->parent);
-                    x = _root;
+                    if (w->left && w->left->color == red) {
+                        w->color = x->parent->color;
+                        x->parent->color = black;
+                        w->left->color = black;
+                        _right_rotate(x->parent);
+                        x = _root;
+                    }
                 }
             }
             x->color = black;

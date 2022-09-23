@@ -35,8 +35,8 @@ private:
     // Modifier Tests
     bool    insert();
     bool    erase();
-    /*bool    swap();
-    bool    clear();*/
+    //bool    swap();
+    bool    clear();
 
 
     // Helper Methods*/
