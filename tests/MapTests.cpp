@@ -338,7 +338,7 @@ bool    MapTests::erase() {
     std::map<int, char> comp;
 
     // ERASE BY KEY
-    _generate_ordered_maps(map, comp, 3000);
+    _generate_ordered_maps(map, comp, 30);
     map.erase(10);
     comp.erase(10);
     map.erase(27);
@@ -353,7 +353,7 @@ bool    MapTests::erase() {
     comp.erase(0);
     map.erase(29);
     comp.erase(29);
-    for (int i = 0; i < 3000; i++) {
+    for (int i = 0; i < 30; i++) {
         map.erase(i);
         comp.erase(i);
     }

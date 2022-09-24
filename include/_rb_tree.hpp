@@ -309,9 +309,6 @@ namespace ft {
                 if (node == _begin) {
                     if (node == last.base()) {
                         _rb_delete(node);
-                        _alloc.destroy(node);
-                        _alloc.deallocate(node, 1);
-                        _size--;
                         _begin = _nil;
                         _root = _nil;
                         return (1);
@@ -327,9 +324,6 @@ namespace ft {
                     new_last->right = _end;
                 }
                 _rb_delete(node);
-                _alloc.destroy(node);
-                _alloc.deallocate(node, 1);
-                _size--;
                 return (1);
             }
             return (0);
@@ -617,6 +611,9 @@ namespace ft {
             if (node_original_color == black && node_grandchild) {
                 _rb_delete_fixup(node_grandchild);
             }
+            _alloc.destroy(node);
+            _alloc.deallocate(node, 1);
+            _size--;
         }
 
         void _rb_delete_fixup(node_pointer x) {
