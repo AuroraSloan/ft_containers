@@ -36,11 +36,13 @@ void MapTests::printLongResults() {
     print_test_result("erase - ", erase());
     print_test_result("clear - ", clear());
 
+    print_subheader("Lookup Tests");
+    print_test_result("find - ", find());
 }
 void    MapTests::printShortResults() {
     std::cout << "Map tests - ";
     if (construction() && iterator() && reverse_iterator() && capacity() && bracketOperator() && insert() && erase()
-        && clear()) {
+        && clear() && find()) {
         print_result(true);
     } else {
         print_result(false);
@@ -69,6 +71,9 @@ double  MapTests::timerTest() {
     insert();
     erase();
     clear();
+
+    // Lookup
+    find();
 
     end = clock();
     return ((double) (end - begin) / CLOCKS_PER_SEC);
@@ -332,17 +337,41 @@ bool    MapTests::erase() {
     ft::map<int, char> map;
     std::map<int, char> comp;
 
-    _generate_random_maps(map, comp, 6);
+    // ERASE BY KEY
+    _generate_ordered_maps(map, comp, 3000);
+    map.erase(10);
+    comp.erase(10);
+    map.erase(27);
+    comp.erase(27);
+    map.erase(0);
+    comp.erase(0);
+    map.erase(29);
+    comp.erase(29);
+
+    // edge case
+    map.erase(0);
+    comp.erase(0);
+    map.erase(29);
+    comp.erase(29);
+    for (int i = 0; i < 3000; i++) {
+        map.erase(i);
+        comp.erase(i);
+    }
+
+    _generate_random_maps(map, comp, 10);
+
+    /*
+    _generate_random_maps(map, comp, 10);
     ft::map<int, char>::iterator mapIt = map.begin();
     std::map<int, char>::iterator compIt = comp.begin();
 
-    for (int i = 0; i < 2; i++, ++mapIt, ++compIt) {}
+    for (int i = 0; i < 3; i++, ++mapIt, ++compIt) {}
     map.erase(mapIt);
     comp.erase(compIt);
 
     mapIt = map.begin();
     compIt = comp.begin();
-    for (int i = 0; i < 2; i++, ++mapIt, ++compIt) {}
+    for (int i = 0; i < 8; i++, ++mapIt, ++compIt) {}
     map.erase(mapIt);
     comp.erase(compIt);
 
@@ -352,16 +381,13 @@ bool    MapTests::erase() {
     mapIt = map.end();
     compIt = comp.end();
     map.erase(--mapIt);
-    comp.erase(--compIt);
+    comp.erase(--compIt);*/
 
-    mapIt = map.begin();
+    // range
+    /*mapIt = map.begin();
     compIt = comp.begin();
-    mapIt++;
-    mapIt++;
-    compIt++;
-    compIt++;
-    map.erase(map.begin(), mapIt);
-    comp.erase(comp.begin(), compIt);
+    map.erase(mapIt, map.end());
+    comp.erase(compIt, comp.end());*/
 
     if (!maps_equal(map, comp)) {
         return (false);
@@ -382,6 +408,33 @@ bool    MapTests::clear() {
     comp.clear();
 
     if (!maps_equal(map, comp)) {
+        return (false);
+    }
+
+    return (true);
+}
+//====================================//
+//              LOOKUP                //
+//====================================//
+bool    MapTests::find() {
+    ft::map<int, char> map;
+    std::map<int, char> comp;
+
+    for (int i = 0; i < 50; i++) {
+        map.insert(ft::make_pair(i, 'D'));
+        comp.insert(std::make_pair(i, 'D'));
+    }
+
+    if ((*map.find(7)).first != (*comp.find(7)).first) {
+        return (false);
+    }
+    if ((*map.find(0)).first != (*comp.find(0)).first) {
+        return (false);
+    }
+
+    ft::map<int, char>::const_iterator mapIt = map.find(14);
+    std::map<int, char>::const_iterator compIt = comp.find(14);
+    if ((*mapIt).first != (*compIt).first) {
         return (false);
     }
 

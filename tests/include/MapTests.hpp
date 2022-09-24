@@ -38,6 +38,9 @@ private:
     //bool    swap();
     bool    clear();
 
+    // Lookup Tests
+    bool find();
+
 
     // Helper Methods*/
     template <typename MapA, typename MapB>
@@ -114,6 +117,14 @@ private:
             }
         }
         return (true);
+    }
+
+    template<typename FT, typename STD>
+    void _generate_ordered_maps(FT &ft_map, STD &std_map, size_t count) {
+        for (size_t i = 0; i < count; i++) {
+            ft_map.insert(ft::make_pair(i, 'a'));
+            std_map.insert(std::make_pair(i, 'a'));
+        }
     }
 
     template<typename FT, typename STD>

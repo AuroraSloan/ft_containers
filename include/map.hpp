@@ -39,7 +39,7 @@ namespace ft {
                 return (comp(x.first, y.first));
             }
         };
-        typedef typename ft::_rb_map_tree<value_type, value_compare>    rb_tree;
+        typedef typename ft::_rb_map_tree<value_type, key_type, value_compare>    rb_tree;
         typedef typename rb_tree::iterator                                          iterator;
         typedef const iterator                                                      const_iterator;
         typedef typename rb_tree::reverse_iterator                                  reverse_iterator;
@@ -135,7 +135,9 @@ namespace ft {
             _tree.erase(first, last);
         }
 
-        /*size_type erase (const key_type& k);*/
+        size_type erase (const key_type& k) {
+            return (_tree.erase(k));
+        }
 
         /*void swap(map &x) {
             _swap(_begin, x._begin);
@@ -152,9 +154,13 @@ namespace ft {
         value_compare value_comp() const { return (_tree.value_comp()); }
 
         // OPERATIONS
-        /*iterator find (const key_type& k) {}
-        const_iterator find (const key_type& k) const {}
-        size_type count (const key_type& k) const {}
+        iterator find (const key_type& k) {
+            return (iterator(_tree.find(k)));
+        }
+        const_iterator find (const key_type& k) const {
+            return (const_iterator(_tree.find(k)));
+        }
+        /*size_type count (const key_type& k) const {}
         iterator lower_bound (const key_type& k) {}
         const_iterator lower_bound (const key_type& k) const {}
         iterator upper_bound (const key_type& k) {}
