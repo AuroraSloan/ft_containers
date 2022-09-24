@@ -304,6 +304,7 @@ namespace ft {
 
         size_type erase(const key_type& k) {
             node_pointer node = _find(_root, k);
+
             if (_is_valid_node(node)) {
                 iterator last = --(iterator(_end));
                 if (node == _begin) {
@@ -313,13 +314,11 @@ namespace ft {
                         _root = _nil;
                         return (1);
                     }
-                    iterator begin(_begin);
-                    begin++;
-                    _begin = begin.base();
+                    iterator new_begin = ++(iterator(_begin));
+                    _begin = new_begin.base();
                 }
                 if (node == last.base()) {
-                    --last;
-                    node_pointer new_last = last.base();
+                    node_pointer new_last = (--last).base();
                     _end->parent = new_last;
                     new_last->right = _end;
                 }
@@ -330,26 +329,35 @@ namespace ft {
         }
 
         void erase(iterator position) {
-            tmpdelete(position.base());
+            node_pointer node = position.base();
+
+            if (_is_valid_node(node)) {
+                iterator last = --(iterator(_end));
+                if (node == _begin) {
+                    if (node == last.base()) {
+                        _rb_delete(node);
+                        _begin = _nil;
+                        _root = _nil;
+                        return ;
+                    }
+                    iterator new_begin = ++(iterator(_begin));
+                    _begin = new_begin.base();
+                }
+                if (node == last.base()) {
+                    node_pointer new_last = (--last).base();
+                    _end->parent = new_last;
+                    new_last->right = _end;
+                }
+                _rb_delete(node);
+            }
         }
 
         void erase(iterator first, iterator last) {
-        /*  iterator tmpf(first);
-            iterator tmpl(last);
-            while (tmpf != tmpl) {
-                std::cerr << (*tmpf).first << std::endl;
-                tmpf++;
-            }
-            std::cerr << "fin\n";*/
-            iterator tmp;
+            key_type key;
             for (iterator it = first; it != last;) {
-                //node_pointer base = first.base();
-                //std::cerr << (*first).first << std::endl;
-                //first++;
-                //tmpdelete(base);
-                tmp = it;
-                ++it;
-                tmpdelete(tmp.base());
+                key = (*first).first;
+                ++first;
+                erase(key);
             }
         }
         void tmpdelete(node_pointer node) {
