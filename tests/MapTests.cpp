@@ -358,7 +358,7 @@ bool    MapTests::erase() {
         comp.erase(i);
     }
 
-    _generate_ordered_maps(map, comp, 100);
+    _generate_random_maps(map, comp, 100);
 
     ft::map<int, char>::iterator mapIt = map.begin();
     std::map<int, char>::iterator compIt = comp.begin();
@@ -367,29 +367,18 @@ bool    MapTests::erase() {
     map.erase(mapIt);
     comp.erase(compIt);
 
-    map.erase(map.begin());
-    comp.erase(comp.begin());
-
     mapIt = map.begin();
     compIt = comp.begin();
     for (int i = 0; i < 88; i++, ++mapIt, ++compIt) {}
     map.erase(mapIt);
     comp.erase(compIt);
 
-    mapIt = map.begin();
-    compIt = comp.begin();
-    ft::map<int, char>::iterator mapItT = mapIt;
-    std::map<int, char>::iterator compItT = compIt;
-    for (int i = 0; i < 50; i++) {
-        ++mapItT;
-        ++compItT;
-        map.erase(mapIt);
-        comp.erase(compIt);
-        mapIt = mapItT;
-        compIt = compItT;
-    }
+    map.erase(map.begin());
+    comp.erase(comp.begin());
+    map.erase(--map.end());
+    comp.erase(--comp.end());
 
-    _generate_ordered_maps(map, comp, 50);
+
     // range
     map.erase(map.begin(), map.end());
     comp.erase(comp.begin(), comp.end());
