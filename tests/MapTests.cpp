@@ -16,7 +16,7 @@ MapTests::~MapTests() {}
 
 // Inherited pure methods
 void MapTests::printLongResults() {
-    /*print_header(" Map Tests ");
+    print_header(" Map Tests ");
 
     print_subheader("Construction Tests");
     print_test_result("construction - ", construction());
@@ -32,7 +32,7 @@ void MapTests::printLongResults() {
     print_test_result("Bracket Operator - ", bracketOperator());
 
     print_subheader("Modifiers Tests");
-    print_test_result("insert - ", insert());*/
+    print_test_result("insert - ", insert());
     print_test_result("erase - ", erase());
     print_test_result("clear - ", clear());
 
@@ -49,7 +49,7 @@ void    MapTests::printShortResults() {
     }
 }
 double  MapTests::timerTest() {
-    /*clock_t begin, end;
+    clock_t begin, end;
 
     begin = clock();
 
@@ -76,8 +76,7 @@ double  MapTests::timerTest() {
     find();
 
     end = clock();
-    return ((double) (end - begin) / CLOCKS_PER_SEC);*/
-    return (0);
+    return ((double) (end - begin) / CLOCKS_PER_SEC);
 }
 
 
@@ -339,7 +338,7 @@ bool    MapTests::erase() {
     std::map<int, char> comp;
 
     // ERASE BY KEY
-    /*_generate_ordered_maps(map, comp, 30);
+    _generate_ordered_maps(map, comp, 30);
     map.erase(10);
     comp.erase(10);
     map.erase(27);
@@ -357,14 +356,14 @@ bool    MapTests::erase() {
     for (int i = 0; i < 30; i++) {
         map.erase(i);
         comp.erase(i);
-    }*/
+    }
 
-    _generate_random_maps(map, comp, 50);
+    _generate_ordered_maps(map, comp, 100);
 
     ft::map<int, char>::iterator mapIt = map.begin();
     std::map<int, char>::iterator compIt = comp.begin();
 
-    /*for (int i = 0; i < 13; i++, ++mapIt, ++compIt) {}
+    for (int i = 0; i < 13; i++, ++mapIt, ++compIt) {}
     map.erase(mapIt);
     comp.erase(compIt);
 
@@ -378,7 +377,7 @@ bool    MapTests::erase() {
     comp.erase(compIt);
 
     mapIt = map.begin();
-    compIt = comp.begin();*/
+    compIt = comp.begin();
     ft::map<int, char>::iterator mapItT = mapIt;
     std::map<int, char>::iterator compItT = compIt;
     for (int i = 0; i < 50; i++) {
@@ -390,12 +389,10 @@ bool    MapTests::erase() {
         compIt = compItT;
     }
 
-
+    _generate_ordered_maps(map, comp, 50);
     // range
-    /*mapIt = map.begin();
-    compIt = comp.begin();
-    map.erase(mapIt, map.end());
-    comp.erase(compIt, comp.end());*/
+    map.erase(map.begin(), map.end());
+    comp.erase(comp.begin(), comp.end());
 
     if (!maps_equal(map, comp)) {
         return (false);
