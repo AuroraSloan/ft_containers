@@ -358,7 +358,7 @@ bool    MapTests::erase() {
         comp.erase(i);
     }
 
-    _generate_ordered_maps(map, comp, 100);
+    _generate_random_maps(map, comp, 100);
 
     ft::map<int, char>::iterator mapIt = map.begin();
     std::map<int, char>::iterator compIt = comp.begin();

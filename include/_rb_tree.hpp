@@ -12,16 +12,16 @@ namespace ft {
     enum color_bool { black, red };
 
     template <typename node_type>
-    node_type tree_min(node_type node, node_type nil) {
-        while (node->left != nil) {
+    node_type tree_min(node_type node) {
+        while (node->left) {
             node = node->left;
         }
         return (node);
     }
 
     template <typename node_type>
-    node_type tree_max(node_type node, node_type nil) {
-        while (node->right != nil) {
+    node_type tree_max(node_type node) {
+        while (node->right) {
             node = node->right;
         }
         return (node);
@@ -69,9 +69,9 @@ namespace ft {
         typedef typename ft::iterator_traits<node_type*>::reference         node_reference;
         typedef typename ft::iterator_traits<node_type*>::iterator_category iterator_category;
 
-        _tree_iterator() : _data(), _nil() {}
-        _tree_iterator(const node_pointer &x) : _data(x), _nil() {}
-        _tree_iterator(_tree_iterator const & src) : _data(src._data), _nil(src._nil) {}
+        _tree_iterator() : _data() {}
+        _tree_iterator(const node_pointer &x) : _data(x) {}
+        _tree_iterator(_tree_iterator const & src) : _data(src._data) {}
         ~_tree_iterator() {}
 
         reference   operator*() const { return (_data->value); }
@@ -80,17 +80,16 @@ namespace ft {
         _tree_iterator& operator=(_tree_iterator const &rhs) {
             if (this != &rhs) {
                 _data = rhs._data;
-                _nil = rhs._nil;
             }
             return (*this);
         }
 
         _tree_iterator& operator++() {
-            if (_data->right != _nil) {
-                _data = ft::tree_min(_data->right, _nil);
+            if (_data->right) {
+                _data = ft::tree_min(_data->right);
             }
             else {
-                while (_data->parent != _nil && _data == _data->parent->right) {
+                while (_data->parent && _data == _data->parent->right) {
                     _data = _data->parent;
                 }
                 _data = _data->parent;
@@ -105,10 +104,10 @@ namespace ft {
         }
 
         _tree_iterator & operator--() {
-            if (_data->left != _nil) {
-                _data = (ft::tree_max(_data->left, _nil));
+            if (_data->left) {
+                _data = (ft::tree_max(_data->left));
             } else {
-                while (_data->parent != _nil && _data == _data->parent->left) {
+                while (_data->parent && _data == _data->parent->left) {
                     _data = _data->parent;
                 }
                 _data = _data->parent;
@@ -126,7 +125,6 @@ namespace ft {
 
     private:
         node_pointer _data;
-        node_pointer _nil;
 
     };
     template <typename T>
@@ -441,6 +439,9 @@ namespace ft {
         }
         void _right_rotate(const node_pointer x) {
             node_pointer y = x->left;
+            if (_not_valid_node(y)) {
+                return;
+            }
             x->left = y->right;
             if (_is_valid_node(y->right)) {
                 y->right->parent = x;
@@ -667,7 +668,7 @@ namespace ft {
                 node_grandchild = node->left;
                 _rb_transplant(node, node->left);
             } else {
-                to_replace = tree_min(node->right, _nil);
+                to_replace = tree_min(node->right);
                 node_original_color = to_replace->color;
                 node_grandchild = to_replace->right;
                 if (to_replace->parent == node) {
@@ -710,7 +711,9 @@ namespace ft {
                         x = x->parent;
                     } else {
                         if (_is_valid_node(w) && _is_valid_node(w->right) && w->right->color == black) {
-                            w->left->color = black;
+                            if (_is_valid_node(w->left)) {
+                                w->left->color = black;
+                            }
                             w->color = red;
                             _right_rotate(w);
                             w = x->parent->right;
