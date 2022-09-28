@@ -38,7 +38,7 @@ namespace ft {
         node_ptr    parent;
         bool        color;
 
-        _rb_node() : value(), left(), right(), parent(), color(black) {}
+        _rb_node() : value(), left(), right(), parent(), color(red) {}
         explicit _rb_node(const value_type val) : value(val), left(), right(), parent(), color(red) {}
         _rb_node(const _rb_node& src) : value(src.value), left(src.left), right(src.right), parent(src.parent), color(src.color) {}
         ~_rb_node() {}
@@ -304,62 +304,17 @@ namespace ft {
         }
 
         size_type erase(const key_type& k) {
-            //std::cerr << "trying to erase " << k << std::endl;
             node_pointer node = _find(_root, k);
-
             if (_is_valid_node(node)) {
-                if (node == _begin) {
-                    //std::cerr << "erasing begin: " << node->value.first << std::endl;
-                    if (node == _end->parent) {
-                        //std::cerr << "erasing begin and end: " << node->value.first << std::endl;
-                        _begin = _nil;
-                        _root = _nil;
-                        _end->parent = _nil;
-                        node->right = _nil;
-                        _rb_delete(node);
-                        return (1);
-                    }
-                    iterator new_begin = ++(iterator(_begin));
-                    _begin = new_begin.base();
-                    //std::cerr << "new begin: " << _begin->value.first << std::endl;
-                    _rb_delete(node);
-                    return (1);
-                } else if (node == _end->parent) {
-                    //std::cerr << "erasing end: " << node->value.first << std::endl;
-                    _end->parent = node->parent;
-                    node->parent->right = _end;
-                    _rb_delete(node);
-                    return (1);
-                }
-                //std::cerr << "erasing: " << node->value.first << std::endl;
-                _rb_delete(node);
-                return (1);
+                return (_erase(node));
             }
-            //std::cerr << "But it wasn't here" << std::endl;
             return (0);
         }
 
         void erase(iterator position) {
             node_pointer node = position.base();
-
             if (_is_valid_node(node)) {
-                iterator last = --(iterator(_end));
-                if (node == _begin) {
-                    if (node == last.base()) {
-                        _rb_delete(node);
-                        _begin = _nil;
-                        _root = _nil;
-                        return ;
-                    }
-                    iterator new_begin = ++(iterator(_begin));
-                    _begin = new_begin.base();
-                }
-                if (node == last.base()) {
-                    node_pointer new_last = (--last).base();
-                    _end->parent = new_last;
-                    new_last->right = _end;
-                }
-                _rb_delete(node);
+                _erase(node);
             }
         }
 
@@ -367,30 +322,8 @@ namespace ft {
             while (first != last) {
                 erase(first++);
             }
-            /*key_type key;
-            for (iterator it = first; it != last;) {
-                key = (*first).first;
-                ++first;
-                erase(key);
-            }*/
         }
-        void tmpdelete(node_pointer node) {
-            iterator end = iterator(_end);
-            node_pointer last = (--end).base();
-            if (_is_valid_node(node)) {
-                if (node == _begin) {
-                    _begin = (++iterator(_begin)).base();
-                } else if (node == last) {
-                    node_pointer new_last_node = (--end).base();
-                    _end->parent = new_last_node;
-                    new_last_node->right = _end;
-                }
-                _rb_delete(node);
-                _alloc.destroy(node);
-                _alloc.deallocate(node, 1);
-                _size--;
-            }
-        }
+
         void clear () {
             if (_size) {
                 _free_nodes(_root, _end);
@@ -418,7 +351,7 @@ namespace ft {
     private:
         void _left_rotate(const node_pointer x) {
             node_pointer y = x->right;
-            if (_not_valid_node(y)) {
+            if (_equals_nil(y)) {
                 return;
             }
             x->right = y->left;
@@ -426,7 +359,7 @@ namespace ft {
                 y->left->parent = x;
             }
             y->parent = x->parent;
-            if (_not_valid_node(x->parent)) {
+            if (_equals_nil(x->parent)) {
 //                std::cerr << "new root LR: " << y->value.first << std::endl;
                 _root = y;
             } else if (x == x->parent->left) {
@@ -439,7 +372,7 @@ namespace ft {
         }
         void _right_rotate(const node_pointer x) {
             node_pointer y = x->left;
-            if (_not_valid_node(y)) {
+            if (_equals_nil(y)) {
                 return;
             }
             x->left = y->right;
@@ -447,7 +380,7 @@ namespace ft {
                 y->right->parent = x;
             }
             y->parent = x->parent;
-            if (_not_valid_node(x->parent)) {
+            if (_equals_nil(x->parent)) {
 //                std::cerr << "new root RR: " << y->value.first << std::endl;
                 _root = y;
             } else if (x == x->parent->right) {
@@ -582,7 +515,7 @@ namespace ft {
             new_node->left = _nil;
             new_node->right = _nil;
 
-            if (_not_valid_node(parent)) {
+            if (_equals_nil(parent)) {
 //                std::cerr << "new root NN: " << new_node->value.first << std::endl;
                 _root = new_node;
             } else if (_comp(new_node->value, parent->value)) {
@@ -591,7 +524,7 @@ namespace ft {
                 parent->right = new_node;
             }
 
-            if (_not_valid_node(_begin) || new_node->value < _begin->value) {
+            if (_equals_nil(_begin) || new_node->value < _begin->value) {
                 _begin = new_node;
             }
             if (!_end->parent || new_node->value > _end->parent->value) {
@@ -639,9 +572,30 @@ namespace ft {
         //=================================================================//
         //                         ERASE HELPERS                           //
         //=================================================================//
+
+        size_type _erase(node_pointer node) {
+            iterator last = --(iterator(_end));
+
+            if (node == _begin && node == last.base()) {
+                _begin = _nil;
+                _root = _nil;
+                _end->parent = _nil;
+                node->right = _nil;
+            } else if (node == _begin) {
+                iterator new_begin = ++(iterator(_begin));
+                _begin = new_begin.base();
+            } else if (node == _end->parent) {
+                node_pointer new_last = (--last).base();
+                _end->parent = new_last;
+                new_last->right = _end;
+            }
+            _rb_delete(node);
+            return (1);
+        }
+
         void _rb_transplant(const node_pointer toErase, const node_pointer toReplace) {
             // need to deallocate and reallocate nodes?
-            if (_not_valid_node(toErase->parent)) {
+            if (_equals_nil(toErase->parent)) {
                 _root = toReplace;
                 //std::cerr << "new root Transplant: " << _root->value.first << std::endl;
             } else if (toErase == toErase->parent->left) {
@@ -661,10 +615,10 @@ namespace ft {
 
             bool            node_original_color = to_replace->color;
 
-            if (_not_valid_node(node->left)) {
+            if (_equals_nil(node->left)) {
                 node_grandchild = node->right;
                 _rb_transplant(node, node->right);
-            } else if (_not_valid_node(node->right)) {
+            } else if (_equals_nil(node->right)) {
                 node_grandchild = node->left;
                 _rb_transplant(node, node->left);
             } else {
@@ -764,7 +718,7 @@ namespace ft {
         }
 
         node_pointer _find(const node_pointer src, const key_type& k) {
-            if (_not_valid_node(src) || src->value.first == k) {
+            if (_equals_nil(src) || src->value.first == k) {
                 return (src);
             }
             if (k < src->value.first) {
@@ -777,7 +731,7 @@ namespace ft {
         bool _is_valid_node(const node_pointer node) {
             return (node != _nil && node != _end);
         }
-        bool _not_valid_node(const node_pointer node) {
+        bool _equals_nil(const node_pointer node) {
             return (node == _nil || node == _end);
         }
         bool _values_equal(const value_type& a, const value_type& b) {

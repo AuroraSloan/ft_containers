@@ -376,17 +376,10 @@ bool    MapTests::erase() {
     map.erase(mapIt);
     comp.erase(compIt);
 
-    mapIt = map.begin();
-    compIt = comp.begin();
-    ft::map<int, char>::iterator mapItT = mapIt;
-    std::map<int, char>::iterator compItT = compIt;
-    for (int i = 0; i < 50; i++) {
-        ++mapItT;
-        ++compItT;
-        map.erase(mapIt);
-        comp.erase(compIt);
-        mapIt = mapItT;
-        compIt = compItT;
+    map.erase(--(map.end()));
+    comp.erase(--(comp.end()));
+    if (!maps_equal(map, comp)) {
+        return (false);
     }
 
     _generate_ordered_maps(map, comp, 50);
