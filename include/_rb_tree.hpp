@@ -345,35 +345,24 @@ namespace ft {
             node_pointer node = position.base();
 
             if (_is_valid_node(node)) {
+                iterator last = --(iterator(_end));
                 if (node == _begin) {
-                    //std::cerr << "erasing begin: " << node->value.first << std::endl;
-                    if (node == _end->parent) {
-                        //std::cerr << "erasing begin and end: " << node->value.first << std::endl;
+                    if (node == last.base()) {
+                        _rb_delete(node);
                         _begin = _nil;
                         _root = _nil;
-                        _end->parent = _nil;
-                        node->right = _nil;
-                        _rb_delete(node);
                         return ;
                     }
                     iterator new_begin = ++(iterator(_begin));
                     _begin = new_begin.base();
-                    //std::cerr << "new begin: " << _begin->value.first << std::endl;
-                    _rb_delete(node);
-                    return ;
-                } else if (node == _end->parent) {
-                    //std::cerr << "erasing end: " << node->value.first << std::endl;
-                    _end->parent = node->parent;
-                    node->parent->right = _end;
-                    _rb_delete(node);
-                    return ;
                 }
-                //std::cerr << "erasing: " << node->value.first << std::endl;
+                if (node == last.base()) {
+                    node_pointer new_last = (--last).base();
+                    _end->parent = new_last;
+                    new_last->right = _end;
+                }
                 _rb_delete(node);
-                return ;
             }
-            //std::cerr << "But it wasn't here" << std::endl;
-            return ;
         }
 
         void erase(iterator first, iterator last) {
@@ -721,9 +710,7 @@ namespace ft {
                         x = x->parent;
                     } else {
                         if (_is_valid_node(w) && _is_valid_node(w->right) && w->right->color == black) {
-                            if (_is_valid_node(w->left)) {
-                                w->left->color = black;
-                            }
+                            w->left->color = black;
                             w->color = red;
                             _right_rotate(w);
                             w = x->parent->right;
@@ -752,9 +739,7 @@ namespace ft {
                         x = x->parent;
                     } else {
                         if (_is_valid_node(w) && _is_valid_node(w->left) && w->left->color == black) {
-                            if (_is_valid_node(w->right)) {
-                                w->right->color = black;
-                            }
+                            w->right->color = black;
                             w->color = red;
                             _left_rotate(w);
                             w = x->parent->left;
