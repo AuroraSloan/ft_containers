@@ -35,6 +35,7 @@ void MapTests::printLongResults() {
     print_test_result("insert - ", insert());
     print_test_result("erase - ", erase());
     print_test_result("clear - ", clear());
+    print_test_result("swap - ", swap());
 
     print_subheader("Lookup Tests");
     print_test_result("find - ", find());
@@ -42,7 +43,7 @@ void MapTests::printLongResults() {
 void    MapTests::printShortResults() {
     std::cout << "Map tests - ";
     if (construction() && iterator() && reverse_iterator() && capacity() && bracketOperator() && insert() && erase()
-        && clear() && find()) {
+        && clear() && swap() && find()) {
         print_result(true);
     } else {
         print_result(false);
@@ -411,6 +412,41 @@ bool    MapTests::clear() {
 
     return (true);
 }
+
+//====================================//
+//              SWAP                 //
+//====================================//
+bool    MapTests::swap() {
+    ft::map<int, char> mapA;
+    ft::map<int, char> mapB;
+    ft::map<int, char>::iterator mapIt;
+    std::map<int, char> compA;
+    std::map<int, char> compB;
+    std::map<int, char>::iterator compIt;
+
+    _generate_ordered_maps(mapA, compA, 100);
+    _generate_random_maps(mapB, compB, 200);
+
+    mapIt = mapB.begin();
+    compIt = compB.begin();
+    for(int i = 0; i < 40; i++) {
+        mapIt++;
+        compIt++;
+    }
+    int mapInt = (*mapIt).first;
+    int compInt = (*compIt).first;
+
+
+    mapA.swap(mapB);
+    compA.swap(compB);
+
+    if (!maps_equal(mapA, compA) || !maps_equal(mapB, compB)
+        || mapInt != (*mapIt).first || compInt != (*compIt).first) {
+        return (false);
+    }
+    return (true);
+}
+
 //====================================//
 //              LOOKUP                //
 //====================================//

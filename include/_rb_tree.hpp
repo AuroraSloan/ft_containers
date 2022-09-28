@@ -217,6 +217,7 @@ namespace ft {
 
     public:
         // CONSTRUCTORS / DESTRUCTORS
+        _rb_map_tree() : _root(), _begin(), _nil(), _comp(), _alloc(), _size(0) {}
         explicit _rb_map_tree(const Comp& comp, const allocator_type& alloc = allocator_type()) : _root(), _begin(), _nil(), _comp(comp), _alloc(alloc), _size(0) {
             //std::cerr << "tree default constructor called\n";
 
@@ -275,6 +276,13 @@ namespace ft {
         }
 
         // ELEMENT ACCESS
+        value_type& at(const key_type& key) {
+            node_pointer pair = _find(_root, key);
+            if (_equals_nil(pair)) {
+                throw std::out_of_range("_rb_map_tree - at: Key not found");
+            }
+            return (*pair);
+        }
 
         // MODIFIERS
         ft::pair<iterator, bool> insert(const value_type& val) {
@@ -333,6 +341,18 @@ namespace ft {
             }
         }
 
+        void swap(_rb_map_tree& src) {
+            _swap(_root, src._root);
+            _swap(_begin, src._begin);
+            _swap(_end, src._end);
+            _swap(_nil, src._nil);
+            _swap(_comp, src._comp);
+            _swap(_alloc, src._alloc);
+            _swap(_size, src._size);
+        }
+
+
+        // LOOKUP
         node_pointer    find(const key_type& k) {
             return (_find(_root, k));
         }
@@ -726,6 +746,13 @@ namespace ft {
             } else {
                 return (_find(src->right, k));
             }
+        }
+
+        template <typename Z>
+        void _swap(Z &a, Z &b) {
+            Z tmp = a;
+            a = b;
+            b = tmp;
         }
 
         bool _is_valid_node(const node_pointer node) {

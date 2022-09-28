@@ -113,6 +113,9 @@ namespace ft {
         size_type max_size() { return (_tree.max_size()); }
 
         // ELEMENT ACCESS
+        T& at(const Key& key) {
+            return (_tree.at(key).second);
+        }
         /*mapped_type& operator[](const key_type& k) {
         }*/
 
@@ -139,14 +142,12 @@ namespace ft {
             return (_tree.erase(k));
         }
 
-        /*void swap(map &x) {
-            _swap(_begin, x._begin);
-            _swap(_end, x._end);
-            _swap(_size, x._size);
-            _swap(_cap, x._cap);
-            _swap(_alloc, x._alloc);
-            _swap(_key_comp, x._key_comp);
-        }*/
+        void swap(map &x) {
+            if (this != &x) {
+                _tree.swap(x._tree);
+            }
+        }
+
         void clear() { _tree.clear(); }
 
         // OBSERVERS
@@ -174,8 +175,6 @@ namespace ft {
             _tree.inOrderWalk(_tree.getRoot());
         }
     private:
-
-
 
     };
 }

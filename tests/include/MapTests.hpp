@@ -35,7 +35,7 @@ private:
     // Modifier Tests
     bool    insert();
     bool    erase();
-    //bool    swap();
+    bool    swap();
     bool    clear();
 
     // Lookup Tests
