@@ -385,20 +385,13 @@ namespace ft {
            return (1);
         }
 
-
-        /*void inOrderWalk(node_pointer x) {
-            if (x != _nil && x != _end) {
-                inOrderWalk(x->left);
-                std::cerr << "\t" << x->value.first << ':' << x->value.second << std::endl;
-                inOrderWalk(x->right);
-                //std::cerr << "key: " << x->value.first << " - value: " << x->value.second << '\n';
-            }
-        }*/
-
         node_pointer getRoot() const { return (_root); }
         value_compare value_comp() const { return (_comp); }
 
     private:
+        //=================================================================//
+        //                           ROTATE                                //
+        //=================================================================//
         void _left_rotate(const node_pointer x) {
             node_pointer y = x->right;
             if (_equals_nil(y)) {
