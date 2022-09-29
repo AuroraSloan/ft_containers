@@ -30,7 +30,7 @@ private:
 
     // Element Access
     bool    bracketOperator();
-    //bool  at();
+    bool    at();
 
     // Modifier Tests
     bool    insert();
@@ -39,7 +39,9 @@ private:
     bool    clear();
 
     // Lookup Tests
-    bool find();
+    bool    find();
+    bool    count();
+    bool    bounds_range();
 
 
     // Helper Methods*/

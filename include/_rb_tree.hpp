@@ -277,11 +277,28 @@ namespace ft {
 
         // ELEMENT ACCESS
         value_type& at(const key_type& key) {
-            node_pointer pair = _find(_root, key);
-            if (_equals_nil(pair)) {
-                throw std::out_of_range("_rb_map_tree - at: Key not found");
+            node_pointer node = _find(_root, key);
+            if (_equals_nil(node)) {
+                throw std::out_of_range("_rb_map_tree::at: Key not found");
             }
-            return (*pair);
+            return (node->value);
+        }
+        const value_type& at(const key_type& key) const {
+            node_pointer node = _find(_root, key);
+            if (_equals_nil(node)) {
+                throw std::out_of_range("_rb_map_tree::at: Key not found");
+            }
+            return (node->value);
+        }
+
+        value_type& operator[](const value_type& val) {
+            node_pointer node = _find(_root, val.first);
+            if (_equals_nil(node)) {
+                ft::pair<iterator, bool> ret = insert(val);
+                iterator pairIt = ret.first;
+                return (pairIt.base()->value);
+            }
+            return (node->value);
         }
 
         // MODIFIERS
@@ -352,10 +369,23 @@ namespace ft {
         }
 
 
-        // LOOKUP
-        node_pointer    find(const key_type& k) {
+        // OPERATIONS
+        node_pointer        find(const key_type& k) {
             return (_find(_root, k));
         }
+        const node_pointer  find(const key_type& k) const{
+            return (_find(_root, k));
+        }
+
+        size_type   count(const key_type& k) const {
+           node_pointer node = find(k);
+           if (_equals_nil(node)) {
+               return (0);
+           }
+           return (1);
+        }
+
+
         /*void inOrderWalk(node_pointer x) {
             if (x != _nil && x != _end) {
                 inOrderWalk(x->left);
@@ -737,7 +767,7 @@ namespace ft {
             x->color = black;
         }
 
-        node_pointer _find(const node_pointer src, const key_type& k) {
+        node_pointer _find(const node_pointer src, const key_type& k) const {
             if (_equals_nil(src) || src->value.first == k) {
                 return (src);
             }
@@ -755,13 +785,13 @@ namespace ft {
             b = tmp;
         }
 
-        bool _is_valid_node(const node_pointer node) {
+        bool _is_valid_node(const node_pointer node) const {
             return (node != _nil && node != _end);
         }
-        bool _equals_nil(const node_pointer node) {
+        bool _equals_nil(const node_pointer node) const {
             return (node == _nil || node == _end);
         }
-        bool _values_equal(const value_type& a, const value_type& b) {
+        bool _values_equal(const value_type& a, const value_type& b) const {
             return (!_comp(a, b) && !_comp(b, a));
         }
     };

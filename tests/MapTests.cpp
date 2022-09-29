@@ -30,6 +30,7 @@ void MapTests::printLongResults() {
 
     print_subheader("Element Access Tests");
     print_test_result("Bracket Operator - ", bracketOperator());
+    print_test_result("at - ", at());
 
     print_subheader("Modifiers Tests");
     print_test_result("insert - ", insert());
@@ -39,11 +40,13 @@ void MapTests::printLongResults() {
 
     print_subheader("Lookup Tests");
     print_test_result("find - ", find());
+    print_test_result("count - ", count());
+    print_test_result("bounds - ", bounds_range());
 }
 void    MapTests::printShortResults() {
     std::cout << "Map tests - ";
-    if (construction() && iterator() && reverse_iterator() && capacity() && bracketOperator() && insert() && erase()
-        && clear() && swap() && find()) {
+    if (construction() && iterator() && reverse_iterator() && capacity() && bracketOperator() && at() && insert()
+    && erase() && clear() && swap() && find() && count() && bounds_range()) {
         print_result(true);
     } else {
         print_result(false);
@@ -66,15 +69,17 @@ double  MapTests::timerTest() {
 
     // element access
     bracketOperator();
-    //at();
+    at();
 
     //modifier
     insert();
     erase();
     clear();
 
-    // Lookup
+    // Operations
     find();
+    count();
+    bounds_range();
 
     end = clock();
     return ((double) (end - begin) / CLOCKS_PER_SEC);
@@ -252,7 +257,58 @@ bool    MapTests::capacity() {
 //          BRACKET OPERATOR          //
 //====================================//
 bool    MapTests::bracketOperator() {
-    // need emplace
+    ft::map<int, char> map;
+    std::map<int, char> comp;
+
+    map[4] = 'L';
+    comp[4] = 'L';
+    map[17] = 'M';
+    comp[17] = 'M';
+    map[17] = 'Z';
+    comp[17] = 'Z';
+    map[1];
+    comp[1];
+
+
+    if (!maps_equal(map, comp)) {
+        return (false);
+    }
+    return (true);
+}
+//====================================//
+//                 AT                 //
+//====================================//
+bool    MapTests::at() {
+    ft::map<int, char> map;
+    std::map<int, char> comp;
+
+
+    _generate_ordered_maps(map, comp, 50);
+    map.at(17) = 'Z';
+    comp.at(17) = 'Z';
+    map.at(49) = 'F';
+    comp.at(49) = 'F';
+
+    const ft::map<int, char> constMap(map);
+    const std::map<int, char> constComp(comp);
+    const char mapC = constMap.at(2);
+    const char compC = constComp.at(2);
+
+    int errorsCaught = 0;
+    try {
+        map.at(50);
+    } catch (const std::exception& ex){
+        errorsCaught++;
+    }
+    try {
+        comp.at(50);
+    } catch (const std::exception& ex){
+        errorsCaught++;
+    }
+
+    if (!maps_equal(map, comp) || errorsCaught != 2 || mapC != compC) {
+        return (false);
+    }
     return (true);
 }
 
@@ -447,8 +503,13 @@ bool    MapTests::swap() {
     return (true);
 }
 
+//============================================================================//
+//                                                                            //
+//                                OPERATIONS                                  //
+//                                                                            //
+//============================================================================//
 //====================================//
-//              LOOKUP                //
+//               find                 //
 //====================================//
 bool    MapTests::find() {
     ft::map<int, char> map;
@@ -466,12 +527,75 @@ bool    MapTests::find() {
         return (false);
     }
 
+    const ft::map<int, char> constMap(map);
+    const std::map<int, char> constComp(comp);
     ft::map<int, char>::const_iterator mapIt = map.find(14);
     std::map<int, char>::const_iterator compIt = comp.find(14);
     if ((*mapIt).first != (*compIt).first) {
         return (false);
     }
 
+    return (true);
+}
+//====================================//
+//               Count                 //
+//====================================//
+bool    MapTests::count() {
+    ft::map<int, char> map;
+    std::map<int, char> comp;
+
+    _generate_ordered_maps(map, comp, 30);
+
+    if (map.count(29) != comp.count(29) || map.count(50) != comp.count(50)) {
+        return (false);
+    }
+    return (true);
+}
+//====================================//
+//          LOWER_BOUND               //
+//====================================//
+bool    MapTests::bounds_range() {
+    ft::map<int, char> map;
+    std::map<int, char> comp;
+
+    _generate_ordered_maps(map, comp, 10);
+    map.erase(8);
+    comp.erase(8);
+
+    const ft::map<int, char> constMap(map);
+    const std::map<int, char> constComp(comp);
+
+
+    // LOWER
+    if ((*map.lower_bound(6)).first != (*comp.lower_bound(6)).first
+        || (*map.lower_bound(8)).first != (*comp.lower_bound(8)).first
+        || (*map.lower_bound(9)).first != (*comp.lower_bound(9)).first
+        || (*constMap.lower_bound(2)).first != (*constComp.lower_bound(2)).first) {
+        return (false);
+    }
+    // UPPER
+    if ((*map.upper_bound(6)).first != (*comp.upper_bound(6)).first
+        || (*map.upper_bound(8)).first != (*comp.upper_bound(8)).first
+        || (*map.upper_bound(0)).first != (*comp.upper_bound(0)).first
+        || (*constMap.upper_bound(2)).first != (*constComp.upper_bound(2)).first) {
+        return (false);
+    }
+    // EDGE
+    if (map.lower_bound(13) != map.end() || comp.lower_bound(13) != comp.end()
+        || map.upper_bound(13) != map.end() || comp.upper_bound(13) != comp.end()) {
+        return (false);
+    }
+    // RANGE
+    if (map.equal_range(0).first->first != comp.equal_range(0).first->first
+        || map.equal_range(0).second->first != comp.equal_range(0).second->first
+        || map.equal_range(3).first->first != comp.equal_range(3).first->first
+        || map.equal_range(3).second->first != comp.equal_range(3).second->first
+        || map.equal_range(8).first->first != comp.equal_range(8).first->first
+        || map.equal_range(8).second->first != comp.equal_range(8).second->first
+        || constMap.equal_range(3).first->first != constComp.equal_range(3).first->first
+        || constMap.equal_range(3).second->first != constComp.equal_range(3).second->first) {
+        return (false);
+    }
     return (true);
 }
 
