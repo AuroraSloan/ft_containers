@@ -1,33 +1,31 @@
-#include "include/VectorTests.hpp"
+#include "include/TreeTests.hpp"
 #include "include/TestClass.hpp"
 #include "../ft_containers.hpp"
-#include <vector>
+#include <map>
 #include <ctime>
 #ifdef TEST
-# include "../include/vector.hpp"
-# else
-namespace ft = std;
-#endif
-
-
+# include "../include/_rb_tree.hpp"
+# include "../include/utility.hpp"
+# include <set>
+# include <cstdlib>
 // Canonical methods
-VectorTests::VectorTests(void) : TestClass() {}
-VectorTests::~VectorTests(void) {}
+TreeTests::TreeTests() : TestClass() {}
+TreeTests::~TreeTests() {}
 
 // Inherited pure methods
-void VectorTests::printLongResults(void) {
-    print_header(" Vector Tests ");
+void TreeTests::printLongResults() {
+    print_header(" Tree Tests ");
 
     print_subheader("Construction Tests");
     print_test_result("construction - ", construction());
 
     print_subheader("Iterator Tests");
-    print_test_result("iterator methods - ", iterator_methods());
-    print_test_result("reverse iterator methods - ", reverse_iterator_methods());
+    print_test_result("iterator - ", iterator());
+    print_test_result("reverse iterator - ", reverse_iterator());
 
     print_subheader("Modifiers Tests");
-    print_test_result("assign - ", assign());
-    print_test_result("push_back - ", push_back());
+    print_test_result("insert - ", insert());
+    /*print_test_result("push_back - ", push_back());
     print_test_result("pop_back - ", pop_back());
     print_test_result("insert - ", insert());
     print_test_result("erase - ", erase());
@@ -45,50 +43,25 @@ void VectorTests::printLongResults(void) {
     print_test_result("operator[], at, front, back - ", element_access());
 
     print_subheader("Relational operator tests");
-    print_test_result("relational operators and swap - ", relational_operators());
+    print_test_result("relational operators and swap - ", relational_operators());*/
 }
-void    VectorTests::printShortResults(void) {
-    std::cout << "Vector tests - ";
-    if (construction() && iterator_methods() && reverse_iterator_methods() && assign()
-    && push_back() && pop_back() && insert() && erase() && swap() && clear() && size()
-    && resize() && capacity() && reserve() && element_access() && relational_operators()) {
+void    TreeTests::printShortResults() {
+    std::cout << "Tree tests - ";
+    if (construction()) {
         print_result(true);
     } else {
         print_result(false);
     }
 }
-double  VectorTests::timerTest(void) {
+double  TreeTests::timerTest() {
     clock_t begin, end;
 
     begin = clock();
 
     // construction
-    construction();
+    //construction();
 
-    // iterator
-    iterator_methods();
-    reverse_iterator_methods();
 
-    //modifier
-    assign();
-    push_back();
-    pop_back();
-    insert();
-    erase();
-    swap();
-    clear();
-
-    // capacity
-    size();
-    resize();
-    capacity();
-    reserve();
-
-    // element access
-    element_access();
-
-    // relational operators
-    relational_operators();
 
     end = clock();
     return ((double) (end - begin) / CLOCKS_PER_SEC);
@@ -101,77 +74,34 @@ double  VectorTests::timerTest(void) {
 //                                                                            //
 //============================================================================//
 //====================================//
-//        VECTOR CONSTRUCTION         //
+//        TREE CONSTRUCTION         //
 //====================================//
-bool    VectorTests::construction(void)
+bool    TreeTests::construction()
 {
-#ifdef INT
-    typedef ft::vector<int> VectorClass;
-    typedef ft::vector<int>::iterator iterator;
+    typedef ft::_rb_map_tree<ft::pair<int, char> > TreeClass;
 
     // Default construction
-    VectorClass dflt;
-    // Default construction overload
-    VectorClass empty(0);
-    VectorClass emptyXdata(0, 100);
-    VectorClass sizeOnly(100);
-    VectorClass sizeXdata(100, 99999);
-    VectorClass large(1000000, 99999);
-#endif
-#ifdef STR
-    typedef ft::vector<std::string> VectorClass;
-    typedef ft::vector<std::string>::iterator iterator;
-
-    // Default construction
-    VectorClass dflt;
-    // Default construction overload
-    VectorClass empty(0);
-    VectorClass emptyXdata(0, "hey");
-    VectorClass sizeOnly(100);
-    VectorClass sizeXdata(100, "YELLOW");
-    VectorClass large(1000000, "YELLOW");
-#endif
+    TreeClass dflt;
     // Copy Construction
-    VectorClass emptyCP(empty);
-    VectorClass emptyXdataCP(emptyXdata);
-    VectorClass sizeOnlyCP(sizeOnly);
-    VectorClass sizeXdataCP(sizeXdata);
-    VectorClass largeCP(large);
+    TreeClass toCpy;
+    toCpy.tree_insert(ft::make_pair(100, 'a'));
+    toCpy.tree_insert(ft::make_pair(17, 'c'));
+    toCpy.tree_insert(ft::make_pair(1, 'z'));
+    toCpy.tree_insert(ft::make_pair(900, '5'));
+    toCpy.tree_insert(ft::make_pair(55, 'i'));
+    TreeClass cpy_const(toCpy);
 
-    // Equal overload
-    VectorClass emptyEQ, emptyXdataEQ, sizeOnlyEQ, sizeXdataEQ, largeEQ;
+    // Equal operator overload
+    TreeClass dfltEQ, cpy_constEQ;
 
-    emptyEQ = emptyCP;
-    emptyXdataEQ = emptyXdataCP;
-    sizeOnlyEQ = sizeOnlyCP;
-    sizeXdataEQ = sizeXdataCP;
-    largeEQ = largeCP;
-    dflt = sizeXdataCP;
-    if (!containers_equal(empty, emptyCP, emptyEQ)
-        || !containers_equal(emptyXdata, emptyXdataCP, emptyXdataEQ)
-        || !containers_equal(sizeOnly, sizeOnlyCP, sizeOnlyEQ)
-        || !containers_equal(sizeXdata, sizeXdataCP, sizeXdataEQ)
-        || !containers_equal(large, largeCP, largeEQ)
-        || !containers_equal(dflt, sizeXdata, sizeXdataEQ))
+    dfltEQ = dflt;
+    cpy_constEQ = cpy_const;
+    if (!trees_equal(cpy_const, toCpy)
+        || !trees_equal(dfltEQ, dflt)
+        || !trees_equal(cpy_constEQ, cpy_const)
+        || !trees_equal(cpy_constEQ, toCpy)) {
         return (false);
-
-#ifdef INT
-    std::vector<int>    compsxd(100, 99999);
-    std::vector<int>::iterator compbg = compsxd.begin();
-    std::vector<int>::iterator compend = compsxd.end();
-    std::vector<int> comp(compbg, compend);
-#endif
-#ifdef STR
-    std::vector<std::string>    compsxd(100, "YELLOW");
-    std::vector<std::string>::iterator compbg = compsxd.begin();
-    std::vector<std::string>::iterator compend = compsxd.end();
-    std::vector<std::string> comp(compbg, compend);
-#endif
-    iterator bg = sizeXdata.begin();
-    iterator end = sizeXdata.end();
-    VectorClass templateTest(bg, end);
-    if (!containers_equal(comp, templateTest))
-        return (false);
+    }
     return (true);
 }
 
@@ -181,55 +111,106 @@ bool    VectorTests::construction(void)
 //                              ITERATOR TESTS                                //
 //                                                                            //
 //============================================================================//
-bool    VectorTests::iterator_methods(void) {
-    ft::vector<int>     vec;
-    std::vector<int>    comp;
+bool    TreeTests::iterator() {
+    typedef ft::_rb_map_tree<ft::pair<int, char> >::iterator tree_it;
+    typedef std::set<ft::pair<int, char> >::iterator         set_it;
+    srand (time(NULL));
 
-    for (int i = 1; i < 25; i++) {
-        vec.push_back(i);
-        comp.push_back(i);
+    ft::_rb_map_tree<ft::pair<int, char> >  tree;
+    std::set<ft::pair<int, char> >          set;
+    int                                     random_number;
+    char                                    character;
+
+    character = 'A';
+    for (int i = 0; i < 25; i++, character++) {
+        random_number = rand();
+        tree.tree_insert(ft::make_pair(random_number, character));
+        set.insert(ft::make_pair(random_number, character));
     }
 
-    std::vector<int>::iterator  cit_b = comp.begin();
-    std::vector<int>::iterator  cit_e = comp.end();
-    ft::vector<int>::iterator   vit_b = vec.begin();
-    ft::vector<int>::iterator   vit_e = vec.end();
-    if (*cit_b != *vit_b || *--cit_e != *--vit_e)
+    tree_it itA = tree.begin();
+    set_it compitA = set.begin();
+
+    // quick check begin and end
+    if (*--tree.end() != *set.rbegin()) {
         return (false);
-    for (size_t i = 0; i < 4; i++) {
-        vit_b++;
-        cit_b++;
-        vit_e--;
-        cit_e--;
     }
-    if (*cit_b != *vit_b || *cit_e != *vit_e)
+
+    // ++ begin - end
+    // std::cerr << "++\n";
+    for (; itA != tree.end(); itA++, compitA++) {
+       //std::cerr << *itA << " \n";
+       if ((*itA).first != (*compitA).first || (*itA).second != (*compitA).second) {
+           return (false);
+       }
+    }
+
+    // -- end to begin
+    // std::cerr << "--\n";
+    itA--;
+    compitA--;
+    for (; itA != tree.begin(); itA--, compitA--) {
+        //std::cerr << *itA << " \n";
+        if ((*itA).first != (*compitA).first || (*itA).second != (*compitA).second) {
+            return (false);
+        }
+    }
+    //std::cerr << *itA << " \n";
+    if ((*itA).first != (*compitA).first || (*itA).second != (*compitA).second) {
         return (false);
+    }
     return (true);
 }
 
-bool    VectorTests::reverse_iterator_methods(void) {
-    ft::vector<int>     vec;
-    std::vector<int>    comp;
+bool    TreeTests::reverse_iterator(void) {
+    typedef ft::_rb_map_tree<ft::pair<int, char> >::reverse_iterator tree_it;
+    typedef std::set<ft::pair<int, char> >::reverse_iterator         set_it;
+    srand (time(NULL));
 
-    for (int i = 1; i < 25; i++) {
-        vec.push_back(i);
-        comp.push_back(i);
+    ft::_rb_map_tree<ft::pair<int, char> >  tree;
+    std::set<ft::pair<int, char> >          set;
+    int                                     random_number;
+    char                                    character;
+
+    character = 'A';
+    for (int i = 0; i < 25; i++, character++) {
+        random_number = rand();
+        tree.tree_insert(ft::make_pair(random_number, character));
+        set.insert(ft::make_pair(random_number, character));
     }
 
-    std::vector<int>::reverse_iterator  crit_b = comp.rbegin();
-    std::vector<int>::reverse_iterator  crit_e = comp.rend();
-    ft::vector<int>::reverse_iterator   vrit_b = vec.rbegin();
-    ft::vector<int>::reverse_iterator   vrit_e = vec.rend();
-    if (*crit_b != *vrit_b || *--crit_e != *--vrit_e)
+    tree_it ritA = tree.rbegin();
+    set_it compritA = set.rbegin();
+
+    // quick check begin and end
+
+    if (*--tree.rend() != *set.begin()) {
         return (false);
-    for (size_t i = 0; i < 4; i++) {
-        vrit_b++;
-        crit_b++;
-        vrit_e--;
-        crit_e--;
     }
-    if (*crit_b != *vrit_b || *crit_e != *vrit_e)
+
+    // ++ begin - end
+    // std::cerr << "++\n";
+    for (; ritA != tree.rend(); ritA++, compritA++) {
+        //std::cerr << *ritA << " \n";
+        if ((*ritA).first != (*compritA).first || (*ritA).second != (*compritA).second) {
+            return (false);
+        }
+    }
+
+    // -- end to begin
+    // std::cerr << "--\n";
+    ritA--;
+    compritA--;
+    for (; ritA != tree.rbegin(); ritA--, compritA--) {
+        //std::cerr << *ritA << " \n";
+        if ((*ritA).first != (*compritA).first || (*ritA).second != (*compritA).second) {
+            return (false);
+        }
+    }
+    //std::cerr << *ritA << " \n";
+    if (*compritA != *ritA) {
         return (false);
+    }
     return (true);
 }
 
@@ -244,54 +225,22 @@ bool    VectorTests::reverse_iterator_methods(void) {
 //====================================//
 //               ASSIGN               //
 //====================================//
-bool    VectorTests::assign() {
+bool    TreeTests::insert() {
 
-    ft::vector<int>     myvec(10, 100);
-    std::vector<int>    comp(10, 100);
+    ft::_rb_map_tree<ft::pair<int, char> > tree;
 
-    // void  assign(size_type n, value_type const & val)
-    myvec.assign(10, 35);
-    comp.assign(10, 35);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    myvec.assign(1, 3700);
-    comp.assign(1, 3700);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    myvec.assign(100, 17);
-    comp.assign(100, 17);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    //template <class InputIterator>
-    //void assign(InputIterator first, InputIterator last)
-    ft::vector<int>     newvec(30, 7);
-    std::vector<int>    newcomp(30, 7);
-
-    ft::vector<int>::iterator vecs = newvec.begin();
-    ft::vector<int>::iterator vece = newvec.end();
-    std::vector<int>::iterator comps = newcomp.begin();
-    std::vector<int>::iterator compe = newcomp.end();
-    myvec.assign(vecs, vece);
-    comp.assign(comps, compe);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    ft::vector<int>     largervec(400, 987654);
-    std::vector<int>    largercomp(400, 987654);
-    vecs = largervec.begin();
-    vece = largervec.end();
-    comps = largercomp.begin();
-    compe = largercomp.end();
-    myvec.assign(vecs, vece);
-    comp.assign(comps, compe);
-    if (!containers_equal(myvec, comp))
-        return (false);
+    tree.tree_insert(ft::make_pair(4, 'a'));
+    tree.tree_insert(ft::make_pair(4, 'a'));
+    tree.tree_insert(ft::make_pair(5, 'b'));
+    tree.tree_insert(ft::make_pair(4, 'c'));
+    tree.inOrderWalk(tree.getRoot());
     return (true);
 }
 
 //====================================//
 //            PUSH_BACK               //
 //====================================//
-bool    VectorTests::push_back() {
+/*bool    VectorTests::push_back() {
     ft::vector<int>     myvec;
     ft::vector<int>     myvec2(10, 555);
     std::vector<int>    comp;
@@ -408,14 +357,14 @@ bool    VectorTests::insert() {
     comp.insert(comp.end(), 4, 555);
     if (!containers_equal(myvec, comp))
         return (false);
-    /*myvec.insert(myvec.end(), myvec.begin(), myvec.end() - 1);
+    myvec.insert(myvec.end(), myvec.begin(), myvec.end() - 1);
     comp.insert(comp.end(), comp.begin(), comp.end() - 1);
     if (!containers_equal(myvec, comp))
         return (false);
     myvec.insert(myvec.begin(), myvec.begin(), myvec.end());
     comp.insert(comp.begin(), comp.begin(), comp.end());
     if (!containers_equal(myvec, comp))
-        return (false);*/
+        return (false);
 
     return (true);
 }
@@ -441,20 +390,22 @@ bool    VectorTests::erase() {
     compIt = comp.erase(comp.begin());
     if (!containers_equal(vec, comp) || *vecIt != *compIt)
         return (false);
-    /*vecIt = vec.erase(vec.begin() + 6, vec.end());
+
+    vecIt = vec.erase(vec.begin() + 6, vec.end());
     compIt = comp.erase(comp.begin() + 6, comp.end());
     if (!containers_equal(vec, comp) || *vecIt != *compIt)
         return (false);
-    std::cerr << "1\n";
+
     vecIt = vec.erase(vec.end() - 1);
     compIt = comp.erase(comp.end() - 1);
     if (!containers_equal(vec, comp) || *vecIt != *compIt)
         return (false);
-    std::cerr << "1\n";
+
     vecIt = vec.erase(vec.begin(), vec.end());
     compIt = comp.erase(comp.begin(), comp.end());
     if (!containers_equal(vec, comp) || *vecIt != *compIt)
-        return (false);*/
+        return (false);
+
     return (true);
 }
 
@@ -733,16 +684,18 @@ bool    VectorTests::relational_operators(void)
         return (false);
 
     return (true);
-}
+}*/
 
 
 
 
-VectorTests::VectorTests(const VectorTests& src) : TestClass(src) {}
-const VectorTests& VectorTests::operator=(const VectorTests& rhs) {
+TreeTests::TreeTests(const TreeTests& src) : TestClass(src) {}
+const TreeTests& TreeTests::operator=(const TreeTests& rhs) {
     if (this != &rhs) {
         this->stdTime = rhs.stdTime;
         this->ftTime = rhs.ftTime;
     }
     return (*this);
 }
+
+#endif

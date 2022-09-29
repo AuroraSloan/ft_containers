@@ -2,9 +2,12 @@
 #include "include/TestClass.hpp"
 #include "../ft_containers.hpp"
 #include <stack>
-
 #include <ctime>
-
+#ifdef TEST
+# include "../include/stack.hpp"
+# else
+namespace ft = std;
+#endif
 // Canonical methods
 StackTests::StackTests(void) : TestClass() {}
 StackTests::~StackTests(void) {}

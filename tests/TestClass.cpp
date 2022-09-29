@@ -20,7 +20,7 @@ void    TestClass::test() {
 }
 
 // private methods used for test()
-void TestClass::testPerformance(void) {
+void TestClass::testPerformance() {
     ftTime = timerTest();
     namespace ft = std;
     stdTime = timerTest();

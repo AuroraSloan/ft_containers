@@ -1,3 +1,4 @@
+#pragma once
 #ifndef UTILITYTESTS_HPP
 # define UTILITYTESTS_HPP
 

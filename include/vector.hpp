@@ -1,3 +1,4 @@
+#pragma once
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
@@ -66,7 +67,7 @@ namespace ft {
         vector &operator=(const vector &rhs) {
             if (this != &rhs) {
                 _dealoc();
-                _alloc = rhs._alloc;
+                //_alloc = rhs._alloc;
                 _size = 0;
                 _allocate(rhs.capacity());
                 _construct(_end, rhs.size(), rhs._begin);

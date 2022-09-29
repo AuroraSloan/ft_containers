@@ -1,8 +1,12 @@
 #include "include/UtilityTests.hpp"
 #include "include/TestClass.hpp"
 #include "../ft_containers.hpp"
-
 #include <ctime>
+#ifdef TEST
+# include "../include/utility.hpp"
+# else
+namespace ft = std;
+#endif
 
 // Canonical methods
 UtilityTests::UtilityTests(void) : TestClass() {}

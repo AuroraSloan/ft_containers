@@ -1,8 +1,12 @@
 #include "include/IteratorTests.hpp"
 #include "TestClass.cpp"
 #include "../ft_containers.hpp"
-
 #include <ctime>
+#ifdef TEST
+# include "../include/iterator.hpp"
+# else
+namespace ft = std;
+#endif
 
 // Canonical methods
 IteratorTests::IteratorTests(void) : TestClass() {}
@@ -140,10 +144,10 @@ bool    IteratorTests::modification(IteratorA vecit, IteratorB compit) {
         return (false);
 
     // INEQUALITY COMPARISON
-    if (!(vecit < vecitB == compit < compitB)
-        || !(vecit > vecitB == compit > compitB)
-        || !(vecit <= vecitB == compit <= compitB)
-        || !(vecit >= vecitB == compit >= compitB))
+    if (!((vecit < vecitB) == (compit < compitB))
+        || !((vecit > vecitB) == (compit > compitB))
+        || !((vecit <= vecitB) == (compit <= compitB))
+        || !((vecit >= vecitB) == (compit >= compitB)))
         return (false);
 
     // COMPOUND ASSIGNMENT OPERATIONS

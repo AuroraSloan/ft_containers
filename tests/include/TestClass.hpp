@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TESTCLASS_HPP
 # define TESTCLASS_HPP
 
@@ -16,13 +17,13 @@
 class TestClass {
 public:
     // Canonical methods
-    TestClass(void);
-    virtual ~TestClass(void);
+    TestClass();
+    virtual ~TestClass();
 
-    void test(void);
+    void test();
 
 private:
-    void    testPerformance(void);
+    void    testPerformance();
     void    print_time_results(double stdtime, double fttime);
 
 protected:
@@ -33,9 +34,9 @@ protected:
     double stdTime;
     double ftTime;
 
-    virtual void printLongResults(void) = 0;
-    virtual void printShortResults(void) = 0;
-    virtual double timerTest(void) = 0;
+    virtual void printLongResults() = 0;
+    virtual void printShortResults() = 0;
+    virtual double timerTest() = 0;
 
     void    print_test_result(std::string testName, bool result);
     void    print_result(bool success);

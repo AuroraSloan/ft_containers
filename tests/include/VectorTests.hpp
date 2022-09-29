@@ -1,3 +1,4 @@
+#pragma once
 #ifndef VECTORTESTS_HPP
 # define VECTORTESTS_HPP
 
