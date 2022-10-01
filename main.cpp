@@ -8,7 +8,6 @@
 #include "ft_containers.hpp"
 #include <iostream>
 #include <cstring> //strcmp // find better way
-//#include "include/map.hpp"
 
 bool    str_equal(const char *A, const std::string& B) {
     return (strcmp(A, B.c_str()) == 0 || strcmp(A, "all") == 0);
@@ -25,39 +24,6 @@ void print_usage() {
 
     exit(EXIT_FAILURE);
 }
-
-/*class test {
-public:
-    int a;
-    test() : a() {
-        std::cerr << "dflt const\n";
-    }
-    test(int val) : a(val) {
-        std::cerr << "dflt const\n";
-    }
-    test(const test& src) : a(src.a) {
-        std::cerr << "cpy const\n";
-    }
-    test& operator=(const test& rhs) {
-        a = rhs.a;
-        std::cerr << "eq overload const\n";
-        return (*this);
-    }
-    ~test() {
-        std::cerr << "dest: " << a << '\n';
-    }
-};
-
-int main() {
-
-   test dflt;
-   test dfltVal(5);
-   test cpy(dfltVal);
-   test eq;
-   eq = cpy;
-
-   return (0);
-}*/
 
 int main(int argc, char **argv)
 {
@@ -84,11 +50,6 @@ int main(int argc, char **argv)
         stack.test();
     }
 
-    // tree tests
-    /*if (str_equal(argv[1], "tree")) {
-        TreeTests tree;
-        tree.test();
-    }*/
     // map tests
     if (str_equal(argv[1], "map")) {
         MapTests map;

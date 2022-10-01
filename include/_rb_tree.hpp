@@ -219,15 +219,12 @@ namespace ft {
         // CONSTRUCTORS / DESTRUCTORS
         _rb_map_tree() : _root(), _begin(), _nil(), _comp(), _alloc(), _size(0) {}
         explicit _rb_map_tree(const Comp& comp, const allocator_type& alloc = allocator_type()) : _root(), _begin(), _nil(), _comp(comp), _alloc(alloc), _size(0) {
-            //std::cerr << "tree default constructor called\n";
-
             _end = _alloc.allocate(1);
             _alloc.construct(_end, node());
             _end->color = black;
         }
 
         explicit _rb_map_tree(const _rb_map_tree& src) : _root(), _begin(), _nil(src._nil), _comp(src._comp), _alloc(allocator_type()) {
-            //std::cerr << "tree copy constructor called\n";
             _size = 0;
             _end = _alloc.allocate(1);
             _alloc.construct(_end, node());
@@ -236,7 +233,6 @@ namespace ft {
         }
 
         _rb_map_tree& operator=(const _rb_map_tree& rhs) {
-            //std::cerr << "tree equal operator overload called\n";
             if (this != &rhs) {
                 clear();
                 _size = 0;
@@ -250,7 +246,6 @@ namespace ft {
             return (*this);
         }
         ~_rb_map_tree() {
-            //std::cerr << "tree destructor called\n";
             clear();
         }
 
@@ -323,8 +318,7 @@ namespace ft {
         template <class InputIterator>
         void insert (InputIterator first, InputIterator last) {
             while (first != last) {
-                insert(*first);
-                first++;
+                insert(*first++);
             }
         }
 
@@ -385,20 +379,49 @@ namespace ft {
            return (1);
         }
 
-
-        /*void inOrderWalk(node_pointer x) {
-            if (x != _nil && x != _end) {
-                inOrderWalk(x->left);
-                std::cerr << "\t" << x->value.first << ':' << x->value.second << std::endl;
-                inOrderWalk(x->right);
-                //std::cerr << "key: " << x->value.first << " - value: " << x->value.second << '\n';
-            }
-        }*/
-
         node_pointer getRoot() const { return (_root); }
         value_compare value_comp() const { return (_comp); }
 
     private:
+        //=================================================================//
+        //                   INSERT SETUP NEW NODE                         //
+        //=================================================================//
+        iterator _setup_new_node(const node_pointer parent, const value_type &val) {
+            node_pointer new_node = _alloc.allocate(1);
+            _alloc.construct(new_node, node(val));
+            new_node->parent = parent;
+            new_node->color = red;
+            new_node->left = _nil;
+            new_node->right = _nil;
+            _size++;
+
+            if (_equals_nil(parent)) {
+                _root = new_node;
+            } else if (_comp(new_node->value, parent->value)) {
+                parent->left = new_node;
+            } else {
+                parent->right = new_node;
+            }
+            set_begin_end(new_node);
+            _rb_insert_fixup(new_node);
+            return (iterator(new_node));
+        }
+
+        void set_begin_end(node_pointer new_node) {
+            if (_equals_nil(_begin) || new_node->value < _begin->value) {
+                _begin = new_node;
+            }
+            if (!_end->parent || new_node->value > _end->parent->value) {
+                if (_end->parent) {
+                    _end->parent->right = new_node;
+                }
+                _end->parent = new_node;
+                new_node->right = _end;
+            }
+        }
+        //=================================================================//
+        //                        INSERT ROTATE                            //
+        //=================================================================//
         void _left_rotate(const node_pointer x) {
             node_pointer y = x->right;
             if (_equals_nil(y)) {
@@ -410,7 +433,6 @@ namespace ft {
             }
             y->parent = x->parent;
             if (_equals_nil(x->parent)) {
-//                std::cerr << "new root LR: " << y->value.first << std::endl;
                 _root = y;
             } else if (x == x->parent->left) {
                 x->parent->left = y;
@@ -431,7 +453,6 @@ namespace ft {
             }
             y->parent = x->parent;
             if (_equals_nil(x->parent)) {
-//                std::cerr << "new root RR: " << y->value.first << std::endl;
                 _root = y;
             } else if (x == x->parent->right) {
                 x->parent->right = y;
@@ -445,99 +466,54 @@ namespace ft {
         //=================================================================//
         //                        INSERT FIXUP                             //
         //=================================================================//
-        void _rb_insert_fixup_traverse(const node_pointer node, const node_pointer nodes_uncle) {
-            node->parent->color = black;
-            nodes_uncle->color = black;
-            node->parent->parent->color = red;
+        void _rb_insert_fixup(node_pointer& node) {
+            while (_is_valid_node(node->parent) && node->parent->color == red) {
+                if (node->parent == node->parent->parent->left) {
+                    _rb_insert_fixup_left(node);
+                } else {
+                    _rb_insert_fixup_right(node);
+                }
+            }
+            _root->color = black;
         }
 
-        void __parent_granparent_color_change(const node_pointer node) {
-            node->parent->color = black;
-            node->parent->parent->color = red;
-        }
-
-        void _rb_insert_fixup_left(node_pointer node) {
-            //std::cerr << "ifl: " << node << std::endl;
+        void _rb_insert_fixup_left(node_pointer& node) {
             node_pointer nodes_uncle = node->parent->parent->right;
-
             if (_is_valid_node(nodes_uncle) && nodes_uncle->color == red) {
                 _rb_insert_fixup_traverse(node, nodes_uncle);
-                //std::cerr << "node->p->p: " << node->parent->parent << std::endl;
-                node = node->parent->parent;
             } else {
                 if (_is_valid_node(node->parent->right) && node == node->parent->right) {
-                    //std::cerr << "node->p: " << node->parent->parent << std::endl;
                     node = node->parent;
                     _left_rotate(node);
                 }
-                __parent_granparent_color_change(node);
+                __parent_grandparent_color_change(node);
                 _right_rotate(node->parent->parent);
             }
         }
 
-        void _rb_insert_fixup_right(node_pointer node) {
+        void _rb_insert_fixup_right(node_pointer& node) {
             node_pointer nodes_uncle = node->parent->parent->left;
-            //std::cerr << "ifr: " << node << std::endl;
-
             if (_is_valid_node(nodes_uncle) && nodes_uncle->color == red) {
                 _rb_insert_fixup_traverse(node, nodes_uncle);
-                //std::cerr << "node->p->p: " << node->parent->parent << std::endl;
-                node = node->parent->parent;
             } else {
                 if (_is_valid_node(node->parent->left) && node == node->parent->left) {
                     node = node->parent;
                     _right_rotate(node);
                 }
-                __parent_granparent_color_change(node);
+                __parent_grandparent_color_change(node);
                 _left_rotate(node->parent->parent);
             }
         }
+        void _rb_insert_fixup_traverse(node_pointer& node, const node_pointer nodes_uncle) {
+            node->parent->color = black;
+            nodes_uncle->color = black;
+            node->parent->parent->color = red;
+            node = node->parent->parent;
+        }
 
-        void _rb_insert_fixup(node_pointer node) {
-            while (_is_valid_node(node->parent) && node->parent->color == red) {
-                if (node->parent == node->parent->parent->left) {
-                    //std::cerr << "ifleft: " << node << std::endl;
-                    //_rb_insert_fixup_left(node);
-                    //std::cerr << "ifl: " << node << std::endl;
-                    node_pointer nodes_uncle = node->parent->parent->right;
-
-                    if (_is_valid_node(nodes_uncle) && nodes_uncle->color == red) {
-                        _rb_insert_fixup_traverse(node, nodes_uncle);
-                        //std::cerr << "node->p->p: " << node->parent->parent << std::endl;
-                        node = node->parent->parent;
-                    } else {
-                        if (_is_valid_node(node->parent->right) && node == node->parent->right) {
-                            //std::cerr << "node->p: " << node->parent->parent << std::endl;
-                            node = node->parent;
-                            _left_rotate(node);
-                        }
-                        __parent_granparent_color_change(node);
-                        _right_rotate(node->parent->parent);
-                    }
-                    //std::cerr << "after: " << node << std::endl;
-                } else {
-                    //std::cerr << "ifright: " << node << std::endl;
-                    //_rb_insert_fixup_right(node);
-                    node_pointer nodes_uncle = node->parent->parent->left;
-                    //std::cerr << "ifr: " << node << std::endl;
-
-                    if (_is_valid_node(nodes_uncle) && nodes_uncle->color == red) {
-                        _rb_insert_fixup_traverse(node, nodes_uncle);
-                        //std::cerr << "node->p->p: " << node->parent->parent << std::endl;
-                        node = node->parent->parent;
-                    } else {
-                        if (_is_valid_node(node->parent->left) && node == node->parent->left) {
-                            node = node->parent;
-                            //std::cerr << "node->p: " << node->parent->parent << std::endl;
-                            _right_rotate(node);
-                        }
-                        __parent_granparent_color_change(node);
-                        _left_rotate(node->parent->parent);
-                    }
-                    //std::cerr << "after: " << node << std::endl;
-                }
-            }
-            _root->color = black;
+        void __parent_grandparent_color_change(const node_pointer node) {
+            node->parent->color = black;
+            node->parent->parent->color = red;
         }
 
         //=================================================================//
@@ -558,37 +534,7 @@ namespace ft {
             return (parent);
         }
 
-        iterator _setup_new_node(const node_pointer parent, const value_type &val) {
-            node_pointer new_node = _alloc.allocate(1);
-            _alloc.construct(new_node, node(val));
-            new_node->parent = parent;
-            new_node->left = _nil;
-            new_node->right = _nil;
-
-            if (_equals_nil(parent)) {
-//                std::cerr << "new root NN: " << new_node->value.first << std::endl;
-                _root = new_node;
-            } else if (_comp(new_node->value, parent->value)) {
-                parent->left = new_node;
-            } else {
-                parent->right = new_node;
-            }
-
-            if (_equals_nil(_begin) || new_node->value < _begin->value) {
-                _begin = new_node;
-            }
-            if (!_end->parent || new_node->value > _end->parent->value) {
-                _end->parent = new_node;
-                new_node->right = _end;
-            }
-            new_node->color = red;
-            _size++;
-            _rb_insert_fixup(new_node);
-            //std::cerr << new_node << " new_node key: " << (*new_node).value.first << "\n" << _root << " root key: " << (*_root).value.first << std::endl;
-            return (iterator(new_node));
-        }
-
-        node_pointer _resolve_hint(iterator hint, const value_type &val) {
+        node_pointer _resolve_hint(iterator &hint, const value_type &val) {
             node_pointer position = hint.base();
             node_pointer next_position = (++hint).base();
             if (_comp(position->value, val) && _comp(val, next_position->value)) {
@@ -598,8 +544,7 @@ namespace ft {
         }
 
         void _free_nodes(node_pointer src, node_pointer end) {
-            if (src != _nil && src != end) {
-                //std::cerr << "destructing: " << src->value << '\n';
+            if (_equals_nil(src)) {
                 _free_nodes(src->left, end);
                 _free_nodes(src->right, end);
                 _alloc.destroy(src);
@@ -612,15 +557,11 @@ namespace ft {
                 _insert_nodes(src->left, end);
                 _insert_nodes(src->right, end);
                 insert(src->value);
-                /*node_pointer new_node = _alloc.allocate(1);
-                _alloc.construct(new_node, node(src->value));
-                //std::cerr << "constructing: " << new_node->value << '\n';
-                tree_insert(new_node);*/
             }
         }
 
         //=================================================================//
-        //                         ERASE HELPERS                           //
+        //                              ERASE                              //
         //=================================================================//
 
         size_type _erase(node_pointer node) {
@@ -643,26 +584,13 @@ namespace ft {
             return (1);
         }
 
-        void _rb_transplant(const node_pointer toErase, const node_pointer toReplace) {
-            // need to deallocate and reallocate nodes?
-            if (_equals_nil(toErase->parent)) {
-                _root = toReplace;
-                //std::cerr << "new root Transplant: " << _root->value.first << std::endl;
-            } else if (toErase == toErase->parent->left) {
-                toErase->parent->left = toReplace;
-            } else {
-                toErase->parent->right = toReplace;
-            }
-            if (_is_valid_node(toReplace)) {
-                toReplace->parent = toErase->parent;
-            }
-        }
-
+        //=================================================================//
+        //                       ERASE DELETE                             //
+        //=================================================================//
         void _rb_delete(const node_pointer node) {
             node_pointer    node_grandchild = _nil;
             node_pointer    to_replace = node;
             node_pointer    s = node;
-
             bool            node_original_color = to_replace->color;
 
             if (_equals_nil(node->left)) {
@@ -697,75 +625,93 @@ namespace ft {
             _size--;
         }
 
+        void _rb_transplant(const node_pointer toErase, const node_pointer toReplace) {
+            if (_equals_nil(toErase->parent)) {
+                _root = toReplace;
+            } else if (toErase == toErase->parent->left) {
+                toErase->parent->left = toReplace;
+            } else {
+                toErase->parent->right = toReplace;
+            }
+            if (toReplace) {
+                toReplace->parent = toErase->parent;
+            }
+        }
+        //=================================================================//
+        //                    ERASE DELETE FIXUP                           //
+        //=================================================================//
         void _rb_delete_fixup(node_pointer x) {
-            node_pointer w = _nil;
-            //std::cerr << "fixup" << std::endl;
             while (x != _root && x->color == black) {
                 if (x == x->parent->left) {
-                    //std::cerr << "left" << std::endl;
-                    w = x->parent->right;
-                    if (_is_valid_node(w) && w->color == red) {
-                        w->color = black;
-                        x->parent->color = red;
-                        _left_rotate(x->parent);
-                        w = x->parent->right;
-                    }
-                    if (_is_valid_node(w) && _is_valid_node(w->left) && w->left->color == black && _is_valid_node(w->right) && w->right->color == black) {
-                        w->color = red;
-                        x = x->parent;
-                    } else {
-                        if (_is_valid_node(w) && _is_valid_node(w->right) && w->right->color == black) {
-                            if (_is_valid_node(w->left)) {
-                                w->left->color = black;
-                            }
-                            w->color = red;
-                            _right_rotate(w);
-                            w = x->parent->right;
-                        }
-                        if (_is_valid_node(w)) {
-                            w->color = x->parent->color;
-                        }
-                        x->parent->color = black;
-                        if (_is_valid_node(w) && _is_valid_node(w->right)) {
-                            w->right->color = black;
-                        }
-                        _left_rotate(x->parent);
-                        x = _root;
-                    }
+                    _rb_delete_fixup_left_child(x);
                 } else {
-                    //std::cerr << "right" << std::endl;
-                    w = x->parent->left;
-                    if (_is_valid_node(w) && w->color == red) {
-                        w->color = black;
-                        x->parent->color = red;
-                        _right_rotate(x->parent);
-                        w = x->parent->left;
-                    }
-                    if (_is_valid_node(w) && _is_valid_node(w->right) && w->right->color == black && _is_valid_node(w->left) && w->left->color == black) {
-                        w->color = red;
-                        x = x->parent;
-                    } else {
-                        if (_is_valid_node(w) && _is_valid_node(w->left) && w->left->color == black) {
-                            w->right->color = black;
-                            w->color = red;
-                            _left_rotate(w);
-                            w = x->parent->left;
-                        }
-                        if (_is_valid_node(w)) {
-                            w->color = x->parent->color;
-                        }
-                        x->parent->color = black;
-                        if (_is_valid_node(w) && _is_valid_node(w->left)) {
-                            w->left->color = black;
-                        }
-                        _right_rotate(x->parent);
-                        x = _root;
-                    }
+                    _rb_delete_fixup_right_child(x);
                 }
             }
-            //std::cerr << "fixupfin" << std::endl;
             x->color = black;
         }
+
+        void _rb_delete_fixup_left_child (node_pointer& x) {
+            node_pointer w = x->parent->right;
+            if (_is_valid_node(w) && w->color == red) {
+                w->color = black;
+                x->parent->color = red;
+                _left_rotate(x->parent);
+                w = x->parent->right;
+            }
+            if (w && w->left && w->right && w->left->color == black && w->right->color == black) {
+                w->color = red;
+                x = x->parent;
+            } else {
+                if (w && w->right && w->right->color == black) {
+                    if (_is_valid_node(w->left)) {
+                        w->left->color = black;
+                    }
+                    w->color = red;
+                    _right_rotate(w);
+                    w = x->parent->right;
+                }
+                if (w) {
+                    w->color = x->parent->color;
+                }
+                x->parent->color = black;
+                if (w && w->right) {
+                    w->right->color = black;
+                }
+                _left_rotate(x->parent);
+                x = _root;
+            }
+        }
+        void _rb_delete_fixup_right_child(node_pointer& x) {
+            node_pointer w = x->parent->left;
+            if (w && w->color == red) {
+                w->color = black;
+                x->parent->color = red;
+                _right_rotate(x->parent);
+                w = x->parent->left;
+            }
+            if (w && w->right && w->left && w->right->color == black && w->left->color == black) {
+                w->color = red;
+                x = x->parent;
+            } else {
+                if (w && w->left && w->left->color == black) {
+                    w->right->color = black;
+                    w->color = red;
+                    _left_rotate(w);
+                    w = x->parent->left;
+                }
+                if (w) {
+                    w->color = x->parent->color;
+                }
+                x->parent->color = black;
+                if (w && w->left) {
+                    w->left->color = black;
+                }
+                _right_rotate(x->parent);
+                x = _root;
+            }
+        }
+
 
         node_pointer _find(const node_pointer src, const key_type& k) const {
             if (_equals_nil(src) || src->value.first == k) {
