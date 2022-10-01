@@ -1,6 +1,6 @@
 #pragma once
-#ifndef MAP_HPP
-# define MAP_HPP
+#ifndef SET_HPP
+# define SET_HPP
 
 # include <memory>   // std::allocator
 # include <iterator> // std::iterator
@@ -10,41 +10,29 @@
 # include "type_traits.hpp" // ft::enable_if
 
 namespace ft {
-    template<typename Key,
-             typename T,
-             typename Compare = std::less<Key>,
-             typename Alloc = std::allocator<ft::pair<const Key,T> > >
-    class map {
+    template<typename T,
+            typename Compare = std::less<T>,
+            typename Alloc = std::allocator<const T> >
+    class set {
     public:
 
         // MEMBER TYPES
-        typedef Key                                                                 key_type;
-        typedef T                                                                   mapped_type;
-        typedef ft::pair<const key_type, mapped_type>                               value_type;
+        typedef T                                                                   key_type;
+        typedef T                                                                   value_type;
         typedef Compare                                                             key_compare;
+        typedef Compare                                                             value_compare;
         typedef Alloc                                                               allocator_type;
         typedef typename allocator_type::reference                                  reference;
         typedef typename allocator_type::const_reference                            const_reference;
         typedef typename allocator_type::pointer                                    pointer;
         typedef typename allocator_type::const_pointer                              const_pointer;
+        typedef typename ft::_rb_map_tree<key_type, value_compare>                  rb_tree;
+        typedef typename rb_tree::iterator                                          iterator;
+        typedef const iterator                                                      const_iterator;
+        typedef typename rb_tree::reverse_iterator                                  reverse_iterator;
+        typedef const reverse_iterator                                              const_reverse_iterator;
         typedef ptrdiff_t                                                           difference_type;
         typedef size_t                                                              size_type;
-
-        class value_compare : std::binary_function<value_type, value_type, bool> {
-            friend class map;
-        protected:
-            Compare comp;
-            value_compare(Compare c) : comp(c) {}
-        public:
-            bool operator()(const value_type& x, const value_type& y) const {
-                return (comp(x.first, y.first));
-            }
-        };
-        typedef typename ft::_rb_map_tree<value_type, value_compare>    rb_tree;
-        typedef typename rb_tree::iterator                              iterator;
-        typedef const iterator                                          const_iterator;
-        typedef typename rb_tree::reverse_iterator                      reverse_iterator;
-        typedef const reverse_iterator                                  const_reverse_iterator;
 
     private:
         key_compare     _key_comp;
@@ -55,36 +43,30 @@ namespace ft {
     public:
 
         // CONSTRUCTORS / DESTRUCTOR
-        explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
-        : _key_comp(comp), _value_comp(value_compare(_key_comp)), _tree(_value_comp), _alloc(alloc) {
-            //std::cerr << "map default constructor called" << std::endl;
-        }
+        explicit set (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+                : _key_comp(comp), _value_comp(comp), _tree(_key_comp), _alloc(alloc) {}
 
         template <class InputIterator>
-        map (InputIterator first,
+        set (InputIterator first,
              typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last,
-             const key_compare& comp = key_compare(),
-             const allocator_type& alloc = allocator_type()) : _key_comp(comp), _value_comp(value_compare(_key_comp)), _tree(_value_comp), _alloc(alloc) {
-            //std::cerr << "map iterator constructor" << std::endl;
+             const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+             : _key_comp(comp), _value_comp(value_compare(_key_comp)), _tree(_value_comp), _alloc(alloc) {
             while (first != last) {
                 _tree.insert(*first++);
             }
         }
-        map (const map& x) : _key_comp(x.key_comp()), _value_comp(x.value_comp()), _tree(x._tree), _alloc(allocator_type()) {
-            //std::cerr << "map copy constructor called" << std::endl;
-        }
-        map& operator=(const map& rhs) {
+        set (const set& x) : _key_comp(x.key_comp()), _value_comp(x.value_comp()), _tree(x._tree), _alloc(allocator_type()) {}
+
+        set& operator=(const set& rhs) {
             if (this != &rhs) {
                 _tree = rhs._tree;
                 _key_comp = rhs.key_comp();
                 _value_comp = rhs.value_comp();
-                //std::cerr << "map equal operator called" << std::endl;
             }
             return (*this);
         }
 
-        ~map() {
-        }
+        ~set() {}
 
 
         // ITERATORS
@@ -102,18 +84,6 @@ namespace ft {
         bool empty() const { return (_tree.empty()); }
         size_type size() const { return (_tree.size()); }
         size_type max_size() const { return (_tree.max_size()); }
-
-
-        // ELEMENT ACCESS
-        mapped_type& operator[](const key_type& key) {
-            return (_tree[ft::make_pair(key, mapped_type())].second);
-        }
-        mapped_type & at(const key_type & key) {
-            return (_tree.at(ft::make_pair(key, mapped_type())).second);
-        }
-        const mapped_type & at(const key_type& key) const {
-            return (_tree.at(ft::make_pair(key, mapped_type())).second);
-        }
 
 
         // MODIFIERS
@@ -134,11 +104,11 @@ namespace ft {
         void erase (iterator first, iterator last) {
             _tree.erase(first, last);
         }
-        size_type erase (const key_type& key) {
-            return (_tree.erase(ft::make_pair(key, mapped_type())));
+        size_type erase (const key_type& k) {
+            return (_tree.erase(k));
         }
 
-        void swap(map &x) {
+        void swap(set &x) {
             if (this != &x) {
                 _tree.swap(x._tree);
             }
@@ -153,14 +123,14 @@ namespace ft {
 
         // OPERATIONS
         iterator find (const key_type& k) {
-            return (iterator(_tree.find(ft::make_pair(k, mapped_type()))));
+            return (iterator(_tree.find(k)));
         }
         const_iterator find (const key_type& k) const {
-            return (const_iterator(_tree.find(ft::make_pair(k, mapped_type()))));
+            return (const_iterator(_tree.find(k)));
         }
 
         size_type count (const key_type& k) const {
-            return(_tree.count(ft::make_pair(k, mapped_type())));
+            return(_tree.count(k));
         }
 
         iterator lower_bound (const key_type& k) {
@@ -190,11 +160,12 @@ namespace ft {
         bool _keys_equal(const key_type & a, const key_type& b) const {
             return (!_key_comp(a, b) && !_key_comp(b, a));
         }
+
         iterator _lower_bound (const key_type& k) const {
             iterator begin(_tree.begin());
 
             for (;begin != _tree.end(); begin++) {
-                if (_keys_equal(k, (*begin).first) || _key_comp(k, (*begin).first)) {
+                if (_keys_equal(k, *begin) || _key_comp(k, *begin)) {
                     break ;
                 }
             }
@@ -204,7 +175,7 @@ namespace ft {
             iterator begin(_tree.begin());
 
             for (;begin != _tree.end(); begin++) {
-                if (_key_comp(k, (*begin).first)) {
+                if (_key_comp(k, *begin)) {
                     break ;
                 }
             }

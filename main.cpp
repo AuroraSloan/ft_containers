@@ -3,8 +3,8 @@
 #include "tests/AlgorithmTests.cpp"
 #include "tests/UtilityTests.cpp"
 #include "tests/StackTests.cpp"
-
 #include "tests/MapTests.cpp"
+#include "tests/SetTests.cpp"
 #include "ft_containers.hpp"
 #include <iostream>
 #include <cstring> //strcmp // find better way
@@ -54,6 +54,11 @@ int main(int argc, char **argv)
     if (str_equal(argv[1], "map")) {
         MapTests map;
         map.test();
+    }
+    // set tests
+    if (str_equal(argv[1], "map")) {
+        SetTests set;
+        set.test();
     }
 
     // algorithm tests

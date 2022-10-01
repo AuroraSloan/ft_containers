@@ -189,12 +189,11 @@ namespace ft {
     bool operator!=(_tree_reverse_iterator<Iterator> const & lhs, _tree_reverse_iterator<Iterator> const & rhs) { return (lhs.base() != rhs.base()); }
 
     // RED BLACK TREE
-    template <typename T, typename Key, class Comp, class Alloc = std::allocator<_rb_node<T> > >
+    template <typename T, class Comp, class Alloc = std::allocator<_rb_node<T> > >
     class _rb_map_tree {
     public:
 
         typedef T                                       value_type;
-        typedef Key                                     key_type;
         typedef _rb_node<T>                             node;
         typedef Comp                                    value_compare;
         typedef Alloc                                   allocator_type;
@@ -266,20 +265,18 @@ namespace ft {
         // CAPACITY
         size_type size() const { return (_size); }
         size_type empty() const { return (!_size); }
-        size_type max_size() {
-            return (_alloc.max_size());
-        }
+        size_type max_size() const { return (_alloc.max_size());}
 
         // ELEMENT ACCESS
-        value_type& at(const key_type& key) {
-            node_pointer node = _find(_root, key);
+        value_type& at(const value_type& val) {
+            node_pointer node = _find(_root, val);
             if (_equals_nil(node)) {
                 throw std::out_of_range("_rb_map_tree::at: Key not found");
             }
             return (node->value);
         }
-        const value_type& at(const key_type& key) const {
-            node_pointer node = _find(_root, key);
+        const value_type& at(const value_type& val) const {
+            node_pointer node = _find(_root, val);
             if (_equals_nil(node)) {
                 throw std::out_of_range("_rb_map_tree::at: Key not found");
             }
@@ -287,7 +284,7 @@ namespace ft {
         }
 
         value_type& operator[](const value_type& val) {
-            node_pointer node = _find(_root, val.first);
+            node_pointer node = _find(_root, val);
             if (_equals_nil(node)) {
                 ft::pair<iterator, bool> ret = insert(val);
                 iterator pairIt = ret.first;
@@ -322,8 +319,8 @@ namespace ft {
             }
         }
 
-        size_type erase(const key_type& k) {
-            node_pointer node = _find(_root, k);
+        size_type erase(const value_type& val) {
+            node_pointer node = _find(_root, val);
             if (_is_valid_node(node)) {
                 return (_erase(node));
             }
@@ -364,15 +361,15 @@ namespace ft {
 
 
         // OPERATIONS
-        node_pointer        find(const key_type& k) {
-            return (_find(_root, k));
+        node_pointer        find(const value_type& val) {
+            return (_find(_root, val));
         }
-        const node_pointer  find(const key_type& k) const{
-            return (_find(_root, k));
+        const node_pointer  find(const value_type& val) const{
+            return (_find(_root, val));
         }
 
-        size_type   count(const key_type& k) const {
-           node_pointer node = find(k);
+        size_type   count(const value_type& val) const {
+           node_pointer node = find(val);
            if (_equals_nil(node)) {
                return (0);
            }
@@ -713,14 +710,14 @@ namespace ft {
         }
 
 
-        node_pointer _find(const node_pointer src, const key_type& k) const {
-            if (_equals_nil(src) || src->value.first == k) {
+        node_pointer _find(const node_pointer src, const value_type& val) const {
+            if (_equals_nil(src) || _values_equal(src->value, val)) {
                 return (src);
             }
-            if (k < src->value.first) {
-                return (_find(src->left, k));
+            if (_comp(val, src->value)) {
+                return (_find(src->left, val));
             } else {
-                return (_find(src->right, k));
+                return (_find(src->right, val));
             }
         }
 
