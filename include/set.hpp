@@ -12,27 +12,27 @@
 namespace ft {
     template<typename T,
             typename Compare = std::less<T>,
-            typename Alloc = std::allocator<const T> >
+            typename Alloc = std::allocator<T> >
     class set {
     public:
 
         // MEMBER TYPES
-        typedef T                                                                   key_type;
-        typedef T                                                                   value_type;
-        typedef Compare                                                             key_compare;
-        typedef Compare                                                             value_compare;
-        typedef Alloc                                                               allocator_type;
-        typedef typename allocator_type::reference                                  reference;
-        typedef typename allocator_type::const_reference                            const_reference;
-        typedef typename allocator_type::pointer                                    pointer;
-        typedef typename allocator_type::const_pointer                              const_pointer;
-        typedef typename ft::_rb_map_tree<key_type, value_compare>                  rb_tree;
-        typedef typename rb_tree::iterator                                          iterator;
-        typedef const iterator                                                      const_iterator;
-        typedef typename rb_tree::reverse_iterator                                  reverse_iterator;
-        typedef const reverse_iterator                                              const_reverse_iterator;
-        typedef ptrdiff_t                                                           difference_type;
-        typedef size_t                                                              size_type;
+        const typedef T                                                 key_type;
+        const typedef T                                                 value_type;
+        typedef Compare                                                 key_compare;
+        typedef Compare                                                 value_compare;
+        typedef Alloc                                                   allocator_type;
+        //typedef typename allocator_type::reference                    reference;
+        typedef typename allocator_type::const_reference                const_reference;
+        typedef typename allocator_type::pointer                        pointer;
+        typedef typename allocator_type::const_pointer                  const_pointer;
+        typedef typename ft::_rb_map_tree<key_type, value_compare>      rb_tree;
+        typedef typename rb_tree::iterator                              iterator;
+        typedef const iterator                                          const_iterator;
+        typedef typename rb_tree::reverse_iterator                      reverse_iterator;
+        typedef const reverse_iterator                                  const_reverse_iterator;
+        typedef ptrdiff_t                                               difference_type;
+        typedef size_t                                                  size_type;
 
     private:
         key_compare     _key_comp;

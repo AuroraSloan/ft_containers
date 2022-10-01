@@ -91,9 +91,6 @@ bool    SetTests::construction()
     typedef ft::set<int> Set;
     typedef std::set<int> Comp;
 
-    // Default construction
-    Set dflt;
-    Comp comp_dflt;
     // Copy Construction
     Set toCpy;
     Comp comp_toCpy;
@@ -108,17 +105,11 @@ bool    SetTests::construction()
     Comp comp_itConst(comp_toCpy.begin(), comp_toCpy.end());
 
     // Equal operator overload
-    Set dfltEQ, cpy_constEQ;
-    Comp comp_dfltEQ, comp_cpy_constEQ;
 
-    dfltEQ = dflt;
-    comp_dfltEQ = comp_dflt;
-
-    cpy_constEQ = cpy_const;
-    comp_cpy_constEQ = comp_cpy_const;
+    Set cpy_constEQ = cpy_const;
+    Comp comp_cpy_constEQ = comp_cpy_const;
 
     if (!sets_equal(cpy_const, toCpy, comp_cpy_const)
-        || !sets_equal(dfltEQ, dflt, comp_dfltEQ)
         || !sets_equal(cpy_constEQ, cpy_const, comp_cpy_constEQ)
         || !sets_equal(cpy_constEQ, toCpy)
         || !sets_equal(toCpy, itConst, comp_itConst)) {
