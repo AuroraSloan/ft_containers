@@ -1,8 +1,7 @@
 #ifndef FT_CONTAINERS_HPP
 # define FT_CONTAINERS_HPP
 
-// test variables/ arguments
-# define INT /* INT / STRING */
+# define INT
 
 // Test output
 # define SHORT /* SHORT / LONG */
