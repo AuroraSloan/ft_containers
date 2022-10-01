@@ -45,6 +45,7 @@ void MapTests::printLongResults() {
 }
 void    MapTests::printShortResults() {
     std::cout << "Map tests - ";
+
     if (construction() && iterator() && reverse_iterator() && capacity() && bracketOperator() && at() && insert()
     && erase() && clear() && swap() && find() && count() && bounds_range()) {
         print_result(true);
@@ -99,14 +100,11 @@ bool    MapTests::construction()
     typedef ft::map<int, char> Map;
     typedef std::map<int, char> Comp;
 
-    // Default construction
-    Map dflt;
-    Comp comp_dflt;
     // Copy Construction
     Map toCpy;
     Comp comp_toCpy;
 
-    _generate_random_maps(toCpy, comp_toCpy, 30);
+    _generate_random_maps(toCpy, comp_toCpy, 10);
 
     Map cpy_const(toCpy);
     Comp comp_cpy_const(comp_toCpy);
@@ -116,17 +114,10 @@ bool    MapTests::construction()
     Comp comp_itConst(comp_toCpy.begin(), comp_toCpy.end());
 
     // Equal operator overload
-    Map dfltEQ, cpy_constEQ;
-    Comp comp_dfltEQ, comp_cpy_constEQ;
-
-    dfltEQ = dflt;
-    comp_dfltEQ = comp_dflt;
-
-    cpy_constEQ = cpy_const;
-    comp_cpy_constEQ = comp_cpy_const;
+    Map cpy_constEQ = cpy_const;
+    Comp comp_cpy_constEQ = comp_cpy_const;
 
     if (!maps_equal(cpy_const, toCpy, comp_cpy_const)
-        || !maps_equal(dfltEQ, dflt, comp_dfltEQ)
         || !maps_equal(cpy_constEQ, cpy_const, comp_cpy_constEQ)
         || !maps_equal(cpy_constEQ, toCpy)
         || !maps_equal(toCpy, itConst, comp_itConst)) {
@@ -439,7 +430,7 @@ bool    MapTests::erase() {
         return (false);
     }
 
-    _generate_ordered_maps(map, comp, 50);
+    _generate_ordered_maps(map, comp, 30);
     // range
     map.erase(map.begin(), map.end());
     comp.erase(comp.begin(), comp.end());
@@ -447,7 +438,6 @@ bool    MapTests::erase() {
     if (!maps_equal(map, comp)) {
         return (false);
     }
-
     return (true);
 }
 
