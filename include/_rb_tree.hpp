@@ -541,7 +541,7 @@ namespace ft {
         }
 
         void _free_nodes(node_pointer src, node_pointer end) {
-            if (_equals_nil(src)) {
+            if (_is_valid_node(src)) {
                 _free_nodes(src->left, end);
                 _free_nodes(src->right, end);
                 _alloc.destroy(src);
