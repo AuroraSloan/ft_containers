@@ -1,6 +1,6 @@
 NAME := ft_containers
 CXX := c++
-CXXFLAGS := -std=c++98 -pedantic -Wall -Wextra -Werror #-g3 -fsanitize=address
+CXXFLAGS := -std=c++98 -pedantic -Wall -Wextra -Werror
 SRCS := main.cpp
 OBJS := $(SRCS:.cpp=.o)
 

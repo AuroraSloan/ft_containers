@@ -38,6 +38,9 @@ void SetTests::printLongResults() {
     print_test_result("find - ", find());
     print_test_result("count - ", count());
     print_test_result("bounds - ", bounds_range());
+    
+    print_subheader("Relational Operators");
+    print_test_result("relational operators - ", relational_operators());
 }
 void    SetTests::printShortResults() {
     std::cout << "Set tests - ";
@@ -449,8 +452,8 @@ bool    SetTests::find() {
 
     const ft::set<int> constset(set);
     const std::set<int> constComp(comp);
-    ft::set<int, char>::const_iterator setIt = set.find(14);
-    std::set<int, char>::const_iterator compIt = comp.find(14);
+    ft::set<int>::const_iterator setIt = set.find(14);
+    std::set<int>::const_iterator compIt = comp.find(14);
     if (*setIt != *compIt) {
         return (false);
     }
@@ -516,6 +519,47 @@ bool    SetTests::bounds_range() {
         || *constset.equal_range(3).second != *constComp.equal_range(3).second) {
         return (false);
     }
+    return (true);
+}
+//============================================================================//
+//                                                                            //
+//                      RELATIONAL OPERATORS TESTS                            //
+//                                                                            //
+//============================================================================//
+//====================================//
+//   relational operators and swap    //
+//====================================//
+bool    SetTests::relational_operators(void)
+{
+    ft::set<int>     set1;
+    ft::set<int>     set2;
+
+    // RELATIONAL OPERATORS
+    for (size_t i = 0; i < 40; i++) {
+        set1.insert(i);
+        set2.insert(i);
+    }
+
+    if (!(set1 == set2) || set1 != set2 || set1 < set2 || set1 > set2 || !(set1 <= set2) || !(set1 >= set2))
+        return (false);
+
+    set1.erase(1);
+    if (set1 == set2 || !(set1 != set2) || !(set1 > set2) || !(set2 < set1) || set2 > set1 || set1 < set2)
+        return (false);
+    if (!(set1 >= set2) || set2 >= set1 || set1 <= set2 || !(set2 <= set1))
+        return (false);
+
+    // SWAP && RELATIONAL OPERATORS
+    ft::set<int>     swapA(set1);
+    ft::set<int>     swapB;
+    for (size_t i = 0; i < 80; i++) {
+        swapB.insert(i);
+    }
+
+    ft::swap(set1, swapB);
+    if (swapA != swapB || swapA == set1)
+        return (false);
+
     return (true);
 }
 

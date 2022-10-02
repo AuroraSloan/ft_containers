@@ -217,7 +217,6 @@ namespace ft {
     public:
         // CONSTRUCTORS / DESTRUCTORS
         explicit _rb_map_tree(const Comp& comp, const allocator_type& alloc = allocator_type()) : _root(), _begin(), _nil(), _comp(comp), _alloc(alloc), _size(0) {
-//            std::cerr << "constructing & allocating _end" << std::endl;
             _end = _alloc.allocate(1);
             _alloc.construct(_end, node());
             _end->color = black;
@@ -226,7 +225,6 @@ namespace ft {
         explicit _rb_map_tree(const _rb_map_tree& src) : _root(), _begin(), _nil(src._nil), _comp(src._comp), _alloc(allocator_type()) {
             _size = 0;
             _end = _alloc.allocate(1);
-//            std::cerr << "constructing & allocating _end" << std::endl;
             _alloc.construct(_end, node());
             _end->color = black;
             _insert_nodes(src._root, src._end);
@@ -238,7 +236,6 @@ namespace ft {
                 _size = 0;
                 _comp = rhs._comp;
                 _nil = rhs._nil;
-//                std::cerr << "constructing & allocating _end" << std::endl;
                 _end = _alloc.allocate(1);
                 _alloc.construct(_end, node());
                 _end->color = black;
@@ -350,7 +347,6 @@ namespace ft {
         void clear () {
             if (_size) {
                 _free_nodes(_root, _end);
-//                std::cerr << "deallocating end in clear" << std::endl;
                 _alloc.destroy(_end);
                 _alloc.deallocate(_end, 1);
                 _size = 0;
@@ -394,7 +390,6 @@ namespace ft {
         iterator _setup_new_node(const node_pointer parent, const value_type &val) {
             node_pointer new_node = _alloc.allocate(1);
             _alloc.construct(new_node, node(val));
-//            std::cerr << "setup aloc: " << val.first << std::endl;
             new_node->parent = parent;
             new_node->color = red;
             new_node->left = _nil;
@@ -418,9 +413,9 @@ namespace ft {
                 _begin = new_node;
             }
             if (!_end->parent || new_node->value > _end->parent->value) {
-                /*if (_end->parent) {
+                if (_end->parent) {
                     _end->parent->right = new_node;
-                }*/
+                }
                 _end->parent = new_node;
                 new_node->right = _end;
             }
@@ -553,7 +548,6 @@ namespace ft {
             if (_is_valid_node(src)) {
                 _free_nodes(src->left, end);
                 _free_nodes(src->right, end);
-//                std::cerr << "free_nodes dealloc: " << src->value.first << std::endl;
                 _size--;
                 _alloc.destroy(src);
                 _alloc.deallocate(src, 1);
@@ -628,7 +622,6 @@ namespace ft {
             if (node_original_color == black && _is_valid_node(node_grandchild)) {
                 _rb_delete_fixup(node_grandchild);
             }
-//            std::cerr << "rb delete dealloc: " << s->value.first << std::endl;
             _alloc.destroy(s);
             _alloc.deallocate(s, 1);
             _size--;

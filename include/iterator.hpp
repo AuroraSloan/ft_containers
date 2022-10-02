@@ -16,7 +16,6 @@ namespace ft {
         typedef typename Iterator::iterator_category    iterator_category;
     };
 
-    // === if we make an iterator from a regular pointer we will have access to all the types we need....=== //
     template <typename T>
     struct iterator_traits<T*> {
         typedef ptrdiff_t                                   difference_type;

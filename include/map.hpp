@@ -56,8 +56,7 @@ namespace ft {
 
         // CONSTRUCTORS / DESTRUCTOR
         explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
-        : _key_comp(comp), _value_comp(value_compare(_key_comp)), _tree(_value_comp), _alloc(alloc) {
-        }
+        : _key_comp(comp), _value_comp(value_compare(_key_comp)), _tree(_value_comp), _alloc(alloc) {}
 
         template <class InputIterator>
         map (InputIterator first,
@@ -68,8 +67,7 @@ namespace ft {
                 _tree.insert(*first++);
             }
         }
-        map (const map& x) : _key_comp(x.key_comp()), _value_comp(x.value_comp()), _tree(x._tree), _alloc(allocator_type()) {
-        }
+        map (const map& x) : _key_comp(x.key_comp()), _value_comp(x.value_comp()), _tree(x._tree), _alloc(allocator_type()) {}
         map& operator=(const map& rhs) {
             if (this != &rhs) {
                 _tree = rhs._tree;

@@ -39,6 +39,9 @@ private:
     bool    count();
     bool    bounds_range();
 
+    // Relational Operators
+    bool    relational_operators();
+
 
     // Helper Methods*/
     template <typename setA, typename setB>
