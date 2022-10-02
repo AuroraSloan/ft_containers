@@ -18,56 +18,53 @@ namespace ft {
     public:
 
         // MEMBER TYPES
-        typedef T value_type;
-        typedef Alloc allocator_type;
-        typedef typename allocator_type::reference reference;
-        typedef typename allocator_type::const_reference const_reference;
-        typedef typename allocator_type::pointer pointer;
-        typedef typename allocator_type::const_pointer const_pointer;
-        // should be convertable to const
-        typedef typename ft::random_access_iterator<T> iterator;
-        // const in the right place?? cannot be convertable to non-const
-        /* Constant iterators are iterators that do not fulfill the requirements of an output iterator;
-        *  Dereferencing them yields a reference to a constant element (such as const T&).
-        */
-        typedef const iterator const_iterator;
-        // should be convertable to const
-        typedef typename ft::reverse_iterator<iterator> reverse_iterator;
-        // const in the right place?? cannot be convertable to non-const
-        typedef const reverse_iterator const_reverse_iterator;
-        typedef ptrdiff_t difference_type;
-        typedef size_t size_type;
+        typedef T                                           value_type;
+        typedef Alloc                                       allocator_type;
+        typedef typename allocator_type::reference          reference;
+        typedef typename allocator_type::const_reference    const_reference;
+        typedef typename allocator_type::pointer            pointer;
+        typedef typename allocator_type::const_pointer      const_pointer;
+        typedef typename ft::random_access_iterator<T>      iterator;
+        typedef typename ft::reverse_iterator<iterator>     reverse_iterator;
+        typedef const iterator                              const_iterator;
+        typedef const reverse_iterator                      const_reverse_iterator;
+        typedef ptrdiff_t                                   difference_type;
+        typedef size_t                                      size_type;
 
+    private:
+        pointer _begin;
+        pointer _end;
+        size_t _size;
+        size_t _cap;
+        allocator_type _alloc;
+
+    public:
         // CONSTRUCTORS / DESTRUCTOR
-        explicit vector(allocator_type const &alloc = allocator_type()) : _begin(NULL), _end(NULL), _size(0), _cap(0), _alloc(alloc) {}
+        explicit vector(allocator_type const &alloc = allocator_type()) : _begin(), _end(), _size(0), _cap(0), _alloc(alloc) {}
         explicit vector(size_type n, value_type const &val = value_type(),
                         allocator_type const &alloc = allocator_type()) : _alloc(alloc) {
             _allocate(n);
             _construct(_end, n, val);
         }
-
-        ~vector() {
-            _dealoc();
-        }
-
         template<class InputIterator>
-        vector(InputIterator first,
-               typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last,
+        vector(InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last,
                allocator_type const &alloc = allocator_type()) : _alloc(alloc) {
             size_type n = static_cast<size_type>(std::distance(first, last));
             _allocate(n);
             _construct(_end, n, first);
         }
-
         vector(vector const &x) : _alloc(allocator_type()) {
             _allocate(x._cap);
             _construct(_end, x._size, x._begin);
         }
+        ~vector() {
+            _dealoc();
+        }
 
+        // OPERATOR=
         vector &operator=(const vector &rhs) {
             if (this != &rhs) {
                 _dealoc();
-                //_alloc = rhs._alloc;
                 _size = 0;
                 _allocate(rhs.capacity());
                 _construct(_end, rhs.size(), rhs._begin);
@@ -77,19 +74,15 @@ namespace ft {
 
         // ITERATORS
         iterator begin() { return (iterator(_begin)); }
-
         const_iterator begin() const { return (const_iterator(_begin)); }
 
         iterator end() { return (iterator(_end)); }
-
         const_iterator end() const { return (const_iterator(_end)); }
 
         reverse_iterator rbegin() { return (reverse_iterator(_end)); }
-
         const_reverse_iterator rbegin() const { return (const_reverse_iterator(_end)); }
 
         reverse_iterator rend() { return (reverse_iterator(_begin)); }
-
         const_reverse_iterator rend() const { return (const_reverse_iterator(_begin)); }
 
 
@@ -112,7 +105,6 @@ namespace ft {
         bool empty() const { return (!size()); }
 
         void reserve(size_type n) {
-            // try to use _dealloc _alloc and _construct later
             pointer _newBegin, _newEnd;
             size_type tmpSize = _size;
 
@@ -131,7 +123,6 @@ namespace ft {
 
         // ELEMENT ACCESS
         reference operator[](size_type n) { return (*(_begin + n)); }
-
         const_reference operator[](size_type n) const { return (*(_begin + n)); }
 
         reference at(size_type n) {
@@ -139,7 +130,6 @@ namespace ft {
                 throw std::out_of_range("vector");
             return (_begin[n]);
         }
-
         const_reference at(size_type n) const {
             if (n >= size())
                 throw std::out_of_range("vector");
@@ -147,13 +137,17 @@ namespace ft {
         }
 
         reference front() { return (*_begin); }
-
         const_reference front() const { return (*_begin); }
 
         reference back() { return (*(_end - 1)); }
-
         const_reference back() const { return (*(_end - 1)); }
 
+        value_type* data() {
+            return (_begin);
+        }
+        const value_type* data() const {
+            return (_begin);
+        }
 
         // MODIFIERS
         template<class InputIterator>
@@ -247,7 +241,6 @@ namespace ft {
         iterator erase(iterator position) {
             return (_erase(position, 1));
         }
-
         iterator erase(iterator first, iterator last) {
             return (_erase(first, static_cast<size_type>(std::distance(first, last))));
         }
@@ -272,11 +265,6 @@ namespace ft {
 
 
     private:
-        pointer _begin;
-        pointer _end;
-        size_t _size;
-        size_t _cap;
-        allocator_type _alloc;
 
         void _dealoc(void) {
             clear();

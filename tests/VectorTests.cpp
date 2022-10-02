@@ -204,6 +204,13 @@ bool    VectorTests::iterator_methods(void) {
     }
     if (*cit_b != *vit_b || *cit_e != *vit_e)
         return (false);
+
+    ft::vector<int>::iterator  regularIt = vec.begin();
+    ft::vector<int>::const_iterator  constIt = vec.begin();
+    if (*regularIt != *constIt) {
+        return (false);
+    }
+
     return (true);
 }
 
@@ -230,6 +237,12 @@ bool    VectorTests::reverse_iterator_methods(void) {
     }
     if (*crit_b != *vrit_b || *crit_e != *vrit_e)
         return (false);
+
+    ft::vector<int>::reverse_iterator  regularIt = vec.rbegin();
+    ft::vector<int>::const_reverse_iterator constIt = vec.rbegin();
+    if (*regularIt != *constIt) {
+        return (false);
+    }
     return (true);
 }
 
@@ -408,14 +421,6 @@ bool    VectorTests::insert() {
     comp.insert(comp.end(), 4, 555);
     if (!containers_equal(myvec, comp))
         return (false);
-    /*myvec.insert(myvec.end(), myvec.begin(), myvec.end() - 1);
-    comp.insert(comp.end(), comp.begin(), comp.end() - 1);
-    if (!containers_equal(myvec, comp))
-        return (false);
-    myvec.insert(myvec.begin(), myvec.begin(), myvec.end());
-    comp.insert(comp.begin(), comp.begin(), comp.end());
-    if (!containers_equal(myvec, comp))
-        return (false);*/
 
     return (true);
 }
@@ -437,24 +442,30 @@ bool    VectorTests::erase() {
         comp.push_back(i);
     }
 
+
     vecIt = vec.erase(vec.begin());
     compIt = comp.erase(comp.begin());
     if (!containers_equal(vec, comp) || *vecIt != *compIt)
         return (false);
-    /*vecIt = vec.erase(vec.begin() + 6, vec.end());
+    vecIt = vec.erase(vec.begin() + 6, vec.end());
     compIt = comp.erase(comp.begin() + 6, comp.end());
+    vecIt--;
+    compIt--;
     if (!containers_equal(vec, comp) || *vecIt != *compIt)
         return (false);
-    std::cerr << "1\n";
+
     vecIt = vec.erase(vec.end() - 1);
     compIt = comp.erase(comp.end() - 1);
+    vecIt--;
+    compIt--;
     if (!containers_equal(vec, comp) || *vecIt != *compIt)
         return (false);
-    std::cerr << "1\n";
-    vecIt = vec.erase(vec.begin(), vec.end());
-    compIt = comp.erase(comp.begin(), comp.end());
-    if (!containers_equal(vec, comp) || *vecIt != *compIt)
-        return (false);*/
+
+    vec.erase(vec.begin(), vec.end());
+    comp.erase(comp.begin(), comp.end());
+
+    if (!containers_equal(vec, comp))
+        return (false);
     return (true);
 }
 
@@ -647,7 +658,7 @@ bool    VectorTests::reserve(void)
 //============================================================================//
 
 //====================================//
-//    opeerator[], at, front, back    //
+// opeerator[], at, front, back, data //
 //====================================//
 bool    VectorTests::element_access(void)
 {
@@ -686,6 +697,16 @@ bool    VectorTests::element_access(void)
     }
     if (!thrownExcpeption) {
         std::cout << RED << "no thrown exception for at() \n" << RESET;
+        return (false);
+    }
+
+    // DATA
+    if (*vec.data() != *comp.data()) {
+        return (false);
+    }
+    const int v = *comp.data();
+    const int c = *comp.data();
+    if (v != c) {
         return (false);
     }
 
