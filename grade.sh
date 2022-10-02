@@ -1,4 +1,4 @@
 #!/bin/bash
 
 make re
-./ft_containers stack
+./ft_containers all

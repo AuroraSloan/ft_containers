@@ -43,6 +43,8 @@ private:
     bool    count();
     bool    bounds_range();
 
+    // Relational operators tests
+    bool    relational_operators(void);
 
     // Helper Methods*/
     template <typename MapA, typename MapB>

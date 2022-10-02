@@ -42,12 +42,15 @@ void MapTests::printLongResults() {
     print_test_result("find - ", find());
     print_test_result("count - ", count());
     print_test_result("bounds - ", bounds_range());
+    
+    print_subheader("Relational Operators Tests");
+    print_test_result("relational operators - ", relational_operators());
 }
 void    MapTests::printShortResults() {
     std::cout << "Map tests - ";
 
     if (construction() && iterator() && reverse_iterator() && capacity() && bracketOperator() && at() && insert()
-    && erase() && clear() && swap() && find() && count() && bounds_range()) {
+    && erase() && clear() && swap() && find() && count() && bounds_range() && relational_operators()) {
         print_result(true);
     } else {
         print_result(false);
@@ -81,6 +84,9 @@ double  MapTests::timerTest() {
     find();
     count();
     bounds_range();
+    
+    // Relational Operators
+    relational_operators();
 
     end = clock();
     return ((double) (end - begin) / CLOCKS_PER_SEC);
@@ -369,10 +375,14 @@ bool    MapTests::insert() {
     }
 
     // INSERT BY ITERATORS
+    ft::map<int, char>::iterator mapIt = map.begin();
+    std::map<int, char>::iterator compIt = comp.begin();
     _generate_random_maps(map2, comp2, 50);
-    map2.insert(map.begin(), map.end());
-    comp2.insert(comp.begin(), comp.end());
-    if (!maps_equal(map2, comp2)) {
+
+    map2.insert(mapIt, map.end());
+    comp2.insert(compIt, comp.end());
+
+    if (!maps_equal(map2, comp2) || (*mapIt).first != (*compIt).first) {
         return (false);
     }
 
@@ -590,6 +600,48 @@ bool    MapTests::bounds_range() {
         || constMap.equal_range(3).second->first != constComp.equal_range(3).second->first) {
         return (false);
     }
+    return (true);
+}
+
+//============================================================================//
+//                                                                            //
+//                      RELATIONAL OPERATORS TESTS                            //
+//                                                                            //
+//============================================================================//
+//====================================//
+//   relational operators and swap    //
+//====================================//
+bool    MapTests::relational_operators(void)
+{
+    ft::map<int, char>     map1;
+    ft::map<int, char>     map2;
+
+    // RELATIONAL OPERATORS
+    for (size_t i = 0; i < 40; i++) {
+        map1.insert(ft::make_pair(i, 'a'));
+        map2.insert(ft::make_pair(i, 'a'));
+    }
+
+    if (!(map1 == map2) || map1 != map2 || map1 < map2 || map1 > map2 || !(map1 <= map2) || !(map1 >= map2))
+        return (false);
+
+    map1.erase(1);
+    if (map1 == map2 || !(map1 != map2) || !(map1 > map2) || !(map2 < map1) || map2 > map1 || map1 < map2)
+        return (false);
+    if (!(map1 >= map2) || map2 >= map1 || map1 <= map2 || !(map2 <= map1))
+        return (false);
+
+    // SWAP && RELATIONAL OPERATORS
+    ft::map<int, char>     swapA(map1);
+    ft::map<int, char>     swapB;
+    for (size_t i = 0; i < 80; i++) {
+        swapB.insert(ft::make_pair(i, 'a'));
+    }
+
+    ft::swap(map1, swapB);
+    if (swapA != swapB || swapA == map1)
+        return (false);
+
     return (true);
 }
 

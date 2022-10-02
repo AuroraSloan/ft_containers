@@ -6,7 +6,7 @@
 # include "vector.hpp"   // ft::vector
 
 namespace ft {
-    template<typename Type, class Container = std::deque<Type> >
+    template<typename Type, class Container = ft::vector<Type> >
     class stack {
     public:
         // MEMBER TYPES

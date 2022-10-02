@@ -442,11 +442,11 @@ bool    VectorTests::erase() {
         comp.push_back(i);
     }
 
-
     vecIt = vec.erase(vec.begin());
     compIt = comp.erase(comp.begin());
     if (!containers_equal(vec, comp) || *vecIt != *compIt)
         return (false);
+
     vecIt = vec.erase(vec.begin() + 6, vec.end());
     compIt = comp.erase(comp.begin() + 6, comp.end());
     vecIt--;
