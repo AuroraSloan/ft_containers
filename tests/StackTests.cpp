@@ -64,6 +64,11 @@ bool    StackTests::construction() {
         return (false);
     }
 
+    ft::stack<int> eqoperator = copy_constructed;
+    if (!(stacks_equal(eqoperator, copy_constructed))) {
+        return (false);
+    }
+
     ft::vector<int> vector(32, 999);
     ft::stack<int, ft::vector<int> > constructed_from_vector(vector);
     ft::stack<int> check;

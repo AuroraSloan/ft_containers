@@ -6,7 +6,7 @@
 # include "vector.hpp"   // ft::vector
 
 namespace ft {
-    template<typename Type, class Container = ft::vector<Type> >
+    template<typename Type, class Container = std::deque<Type> >
     class stack {
     public:
         // MEMBER TYPES
@@ -16,6 +16,11 @@ namespace ft {
 
         // CONSTRUCTORS / DESTRUCTOR
         explicit stack (const container_type& ctnr = container_type()) : _ctnr(ctnr) {}
+        stack( const stack& src) : _ctnr(src._ctnr) {}
+        ~stack() {}
+        stack& operator=(const stack& rhs) {
+            _ctnr = rhs._ctnr;
+        }
 
         bool empty(void) const {
             return (_ctnr.empty());
@@ -39,7 +44,6 @@ namespace ft {
         void pop(void) {
             _ctnr.pop_back();
         }
-
         template <typename T, class C>
         friend bool operator==(const stack<T,C>& lhs, const stack<T,C>& rhs);
         template <typename T, class C>
@@ -53,7 +57,7 @@ namespace ft {
         template <typename T, class C>
         friend bool operator>=(const stack<T,C>& lhs, const stack<T,C>& rhs);
 
-    private:
+    protected:
         container_type  _ctnr;
     };
 
