@@ -105,7 +105,6 @@ double  VectorTests::timerTest(void) {
 //====================================//
 bool    VectorTests::construction(void)
 {
-#ifdef INT
     typedef ft::vector<int> VectorClass;
     typedef ft::vector<int>::iterator iterator;
 
@@ -117,20 +116,7 @@ bool    VectorTests::construction(void)
     VectorClass sizeOnly(100);
     VectorClass sizeXdata(100, 99999);
     VectorClass large(1000000, 99999);
-#endif
-#ifdef STR
-    typedef ft::vector<std::string> VectorClass;
-    typedef ft::vector<std::string>::iterator iterator;
 
-    // Default construction
-    VectorClass dflt;
-    // Default construction overload
-    VectorClass empty(0);
-    VectorClass emptyXdata(0, "hey");
-    VectorClass sizeOnly(100);
-    VectorClass sizeXdata(100, "YELLOW");
-    VectorClass large(1000000, "YELLOW");
-#endif
     // Copy Construction
     VectorClass emptyCP(empty);
     VectorClass emptyXdataCP(emptyXdata);
@@ -155,18 +141,11 @@ bool    VectorTests::construction(void)
         || !containers_equal(dflt, sizeXdata, sizeXdataEQ))
         return (false);
 
-#ifdef INT
     std::vector<int>    compsxd(100, 99999);
     std::vector<int>::iterator compbg = compsxd.begin();
     std::vector<int>::iterator compend = compsxd.end();
     std::vector<int> comp(compbg, compend);
-#endif
-#ifdef STR
-    std::vector<std::string>    compsxd(100, "YELLOW");
-    std::vector<std::string>::iterator compbg = compsxd.begin();
-    std::vector<std::string>::iterator compend = compsxd.end();
-    std::vector<std::string> comp(compbg, compend);
-#endif
+
     iterator bg = sizeXdata.begin();
     iterator end = sizeXdata.end();
     VectorClass templateTest(bg, end);
@@ -258,10 +237,27 @@ bool    VectorTests::reverse_iterator_methods(void) {
 //               ASSIGN               //
 //====================================//
 bool    VectorTests::assign() {
+    // assign on empty
+    ft::vector<int>   emptyVec;
+    std::vector<int>  emptyComp;
+    emptyComp.assign(1, 1);
+    emptyVec.assign(1, 1);
+    if (!containers_equal(emptyVec, emptyComp)) {
+        return (false);
+    }
+    // assign w/1
+    // Insert w/ only one
+    ft::vector<int>     oneVec(1, 1);
+    std::vector<int>    oneComp(1, 1);
+    oneVec.assign(2, 3);
+    oneComp.assign(2, 3);
+    if (!containers_equal(oneVec, oneComp)) {
+        return (false);
+    }
+
 
     ft::vector<int>     myvec(10, 100);
     std::vector<int>    comp(10, 100);
-
     // void  assign(size_type n, value_type const & val)
     myvec.assign(10, 35);
     comp.assign(10, 35);
@@ -305,6 +301,22 @@ bool    VectorTests::assign() {
 //            PUSH_BACK               //
 //====================================//
 bool    VectorTests::push_back() {
+    ft::vector<int> emptyVec;
+    std::vector<int> emptyComp;
+    emptyVec.push_back(1);
+    emptyComp.push_back(1);
+    if (!containers_equal(emptyVec, emptyComp)) {
+        return (false);
+    }
+    // push_back w/ only one
+    ft::vector<int>     oneVec(1, 1);
+    std::vector<int>    oneComp(1, 1);
+    oneVec.push_back(3);
+    oneComp.push_back(3);
+    if (!containers_equal(oneVec, oneComp)) {
+        return (false);
+    }
+
     ft::vector<int>     myvec;
     ft::vector<int>     myvec2(10, 555);
     std::vector<int>    comp;
@@ -358,15 +370,24 @@ bool    VectorTests::pop_back() {
 //              INSERT                //
 //====================================//
 bool    VectorTests::insert() {
-    /*std::cerr << "insert....." << std::endl;
     ft::vector<int>     emptyVec;
     std::vector<int>    emptyComp;
 
+    // Insert on empty
     emptyVec.insert(emptyVec.begin(), 77);
     emptyComp.insert(emptyComp.begin(), 77);
     if (!containers_equal(emptyVec, emptyComp)) {
         return (false);
-    }*/
+    }
+
+    // Insert w/ only one
+    ft::vector<int>     oneVec(1, 1);
+    std::vector<int>    oneComp(1, 1);
+    oneVec.insert(oneVec.begin(), 2, 3);
+    oneComp.insert(oneComp.begin(), 2, 3);
+    if (!containers_equal(oneVec, oneComp)) {
+        return (false);
+    }
 
     ft::vector<int>     myvec(30, 5);
     std::vector<int>    comp(30, 5);
@@ -456,11 +477,15 @@ bool    VectorTests::erase() {
     if (!containers_equal(vec, comp) || *vecIt != *compIt)
         return (false);
 
+    // still valid?
+    vecIterator vecCheck = vec.begin();
+    compIterator compCheck = comp.begin();
+
     vecIt = vec.erase(vec.begin() + 6, vec.end());
     compIt = comp.erase(comp.begin() + 6, comp.end());
     vecIt--;
     compIt--;
-    if (!containers_equal(vec, comp) || *vecIt != *compIt)
+    if (!containers_equal(vec, comp) || *vecIt != *compIt || *vecCheck != *compCheck)
         return (false);
 
     vecIt = vec.erase(vec.end() - 1);
@@ -610,6 +635,17 @@ bool    VectorTests::resize(void)
     if (!containers_equal(vec, comp))
         return (false);
 
+    vec.resize(0);
+    comp.resize(0);
+    if (!containers_equal(vec, comp)) {
+        return (false);
+    }
+    vec.resize(33);
+    comp.resize(33);
+    if (!containers_equal(vec, comp)) {
+        return (false);
+    }
+
     return (true);
 }
 
@@ -657,6 +693,16 @@ bool    VectorTests::reserve(void)
     if (!containers_equal(vec, comp))
         return (false);
 
+    bool thrownExcpeption = false;
+    try {
+        vec.reserve(vec.max_size() + 1);
+    } catch (const std::exception& e){
+        thrownExcpeption = true;
+    }
+    if (!thrownExcpeption) {
+        std::cout << RED << "no thrown exception for at() \n" << RESET;
+        return (false);
+    }
     return (true);
 }
 
@@ -700,7 +746,7 @@ bool    VectorTests::element_access(void)
     {
         vec.at(50);
     }
-    catch(...)
+    catch(const std::exception& e)
     {
         thrownExcpeption = true;
     }

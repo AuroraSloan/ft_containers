@@ -92,16 +92,12 @@ namespace ft {
 
         void resize(size_type n, value_type val = value_type()) {
             if (n > _capacity)
-                reserve(n);
+                _reserve(n);
             while(_size < n) {
                 push_back(val);
-                /*_alloc.construct(_begin + _size, val);
-                _size++;*/
             }
             while(n < _size) {
                 pop_back();
-                /*--_size;
-                _alloc.destroy(_begin + _size);*/
             }
         }
 
@@ -111,10 +107,17 @@ namespace ft {
 
         void reserve(size_type n) {
             if (n > max_size()) {
-                throw std::length_error("fix these words later");
+                throw std::length_error("allocate(size_t n) 'n' exceeds maximum supported size");
             }
             if (n > _capacity) {
-                pointer _newBegin = _alloc.allocate(n);
+                pointer _newBegin = NULL;
+                try {
+                    _newBegin = _alloc.allocate(n);
+                } catch (const std::exception& e) {
+                    _dealoc();
+                    throw e;
+                }
+
                 size_type tmpSize = _size;
 
                 _construct(_newBegin, _size, _begin);
@@ -161,7 +164,7 @@ namespace ft {
             size_type size = static_cast<size_type>(std::distance(first, last));
             if (size > _capacity) {
                 _dealoc();
-                _capacity = size * 2;
+                _capacity = (size == 0 ? 1 : size * 2);
                 _allocate(_capacity);
             } else {
                 clear();
@@ -172,7 +175,7 @@ namespace ft {
         void assign(size_type n, value_type const &val) {
             if (n > _capacity) {
                 _dealoc();
-                _capacity = n * 2;
+                _capacity = (n == 0 ? 1 : n * 2);
                 _allocate(_capacity);
             } else {
                 clear();
@@ -182,9 +185,8 @@ namespace ft {
 
         void push_back(value_type const &val) {
             if (_size == _capacity)
-                reserve((size() == 0 ? 1 : size()) * 2);
+                _reserve(_size);
             _alloc.construct(_begin + _size, val);
-            //*(_begin + _size) = val;
             _size++;
         }
 
@@ -199,7 +201,7 @@ namespace ft {
             size_type pos = static_cast<size_type>(std::distance(begin(), position));
 
             if (_size == _capacity)
-                reserve((size() == 0 ? 1 : size()) * 2);
+                _reserve(_size);
             _construct_from_end(pos, 1);
             _alloc.construct(_begin + pos, val);
             ++_size;
@@ -210,7 +212,7 @@ namespace ft {
             size_type pos = static_cast<size_type>(std::distance(begin(), position));
 
             if (_size + n > _capacity)
-                reserve((_size + n) * 2);
+                _reserve(_size + n);
             _construct_from_end(pos, n);
             for (size_type i = 0; i < n; i++) {
                 _alloc.destroy(_begin + pos + i);
@@ -227,7 +229,7 @@ namespace ft {
             size_type n = static_cast<size_type>(std::distance(first, last));
 
             if (_size + n > _capacity)
-                reserve((_size + n) * 2);
+                _reserve(_size + n);
             _construct_from_end(pos, n);
             for (size_type i = 0; i < n; i++) {
                 _alloc.destroy(_begin + pos + i);
@@ -272,7 +274,12 @@ namespace ft {
         }
 
         void _allocate(size_type n) {
-            _begin = _alloc.allocate(n);
+            try {
+                _begin = _alloc.allocate(n);
+            } catch (const std::exception& e) {
+                _dealoc();
+                throw e;
+            }
             _capacity = n;
             _size = 0;
         }
@@ -297,12 +304,16 @@ namespace ft {
         }
 
 
-        void _construct_from_end(size_type index, size_type distance) {
-            size_t new_last_pos = _size + distance - 1;
+        void _construct_from_end(int index, int distance) {
+            int new_last_pos = _size + distance - 1;
             for (; new_last_pos - distance >= index; new_last_pos--) {
                 _alloc.construct(_begin + new_last_pos, *(_begin + new_last_pos - distance));
                 _alloc.destroy(_begin + new_last_pos - distance);
             }
+        }
+
+        void _reserve(size_t size) {
+            reserve((size == 0 ? 1 : size) * 2);
         }
 
         iterator _erase(iterator position, size_type n) {
@@ -317,12 +328,7 @@ namespace ft {
             for (size_type i = 0; start + j + i != old_end; i++) {
                 _alloc.construct(start + i, *(start + j + i));
                 _alloc.destroy(start + j + i);
-                /*_alloc.destroy(start + i);
-                _alloc.construct(start + i, *(start + j));
-                j++;*/
             }
-            /*old_end = _begin + _size;
-            _alloc.destroy(old_end);*/
 
             return (iterator(start));
         }
