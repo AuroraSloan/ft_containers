@@ -94,7 +94,7 @@ namespace ft {
             if (n > _capacity)
                 reserve(n);
             while(_size < n) {
-                push_back();
+                push_back(val);
                 /*_alloc.construct(_begin + _size, val);
                 _size++;*/
             }
@@ -200,7 +200,7 @@ namespace ft {
 
             if (_size == _capacity)
                 reserve((size() == 0 ? 1 : size()) * 2);
-            _construct_from_end(pos, 0);
+            _construct_from_end(pos, 1);
             _alloc.construct(_begin + pos, val);
             ++_size;
             return (iterator(_begin + pos));
@@ -211,10 +211,10 @@ namespace ft {
 
             if (_size + n > _capacity)
                 reserve((_size + n) * 2);
-            _construct_from_end(pos + n, n - 1);
+            _construct_from_end(pos, n);
             for (size_type i = 0; i < n; i++) {
-                _alloc.destroy(_pbegin + i);
-                _alloc.construct(_pbegin + i, val);
+                _alloc.destroy(_begin + pos + i);
+                _alloc.construct(_begin + pos + i, val);
                 _size++;
             }
         }
@@ -223,18 +223,15 @@ namespace ft {
         void insert(iterator position,
                     typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first,
                     InputIterator last) {
-            pointer _pbegin, _pend;
-            size_type location = static_cast<size_type>(std::distance(begin(), position));
+            size_type pos = static_cast<size_type>(std::distance(begin(), position));
             size_type n = static_cast<size_type>(std::distance(first, last));
 
-            if (_passedMaxCapacity(_size + n))
+            if (_size + n > _capacity)
                 reserve((_size + n) * 2);
-            _pbegin = _begin + location;
-            _pend = _begin + location + n;
-            _construct_from_end(_pend, n);
+            _construct_from_end(pos, n);
             for (size_type i = 0; i < n; i++) {
-                _alloc.destroy(_pbegin + i);
-                _alloc.construct(_pbegin + i, *(first + i));
+                _alloc.destroy(_begin + pos + i);
+                _alloc.construct(_begin + pos + i, *(first + i));
                 _size++;
             }
         }
@@ -249,7 +246,7 @@ namespace ft {
         void swap(vector &x) {
             _swap(_begin, x._begin);
             _swap(_size, x._size);
-            _swap(_capacity, x._cap);
+            _swap(_capacity, x._capacity);
             _swap(_alloc, x._alloc);
         }
 
@@ -292,55 +289,40 @@ namespace ft {
                 _size++;
             }
         }
-        /*void _construct(pointer &start, size_type n, value_type val) {
+        void _construct(pointer start, size_type n, iterator src) {
             for (size_type i = 0; i < n; i++) {
-                _alloc.construct(start++, val);
+                _alloc.construct(start + i, *(src + i));
                 _size++;
             }
         }
 
-        void _construct(pointer &start, size_type n, pointer src) {
-            for (size_type i = 0; i < n; i++) {
-                _alloc.construct(start++, *(src + i));
-                _size++;
-            }
-        }
 
-        void _construct(pointer &start, pointer src) {
-            for (size_type i = 0; i < _size; i++)
-                _alloc.construct(start++, *(src + i));
-        }
-
-        void _construct(pointer &start, size_type n, iterator src) {
-            for (size_type i = 0; i < n; i++) {
-                _alloc.construct(start++, *(src + i));
-                _size++;
-            }
-        }*/
-
-        void _construct_from_end(size_type index, size_type extra) {
-            size_t new_last_pos = _size + extra;
-            for (; new_last_pos - 1 > index; new_last_pos--) {
-                _alloc.construct(_begin + new_last_pos, *(_begin + new_last_pos - 1));
-                _alloc.destroy(_begin + new_last_pos - 1);
+        void _construct_from_end(size_type index, size_type distance) {
+            size_t new_last_pos = _size + distance - 1;
+            for (; new_last_pos - distance >= index; new_last_pos--) {
+                _alloc.construct(_begin + new_last_pos, *(_begin + new_last_pos - distance));
+                _alloc.destroy(_begin + new_last_pos - distance);
             }
         }
 
         iterator _erase(iterator position, size_type n) {
             pointer start = _begin + static_cast<size_type>(std::distance(begin(), position));
+            pointer old_end = _begin + _size;
             size_type j = 0;
 
             for (; j < n; j++) {
                 _alloc.destroy(start + j);
                 _size--;
             }
-            for (size_type i = 0; start + j != _end; i++) {
-                _alloc.destroy(start + i);
+            for (size_type i = 0; start + j + i != old_end; i++) {
+                _alloc.construct(start + i, *(start + j + i));
+                _alloc.destroy(start + j + i);
+                /*_alloc.destroy(start + i);
                 _alloc.construct(start + i, *(start + j));
-                j++;
+                j++;*/
             }
-            _end = _begin + _size;
-            _alloc.destroy(_end);
+            /*old_end = _begin + _size;
+            _alloc.destroy(old_end);*/
 
             return (iterator(start));
         }

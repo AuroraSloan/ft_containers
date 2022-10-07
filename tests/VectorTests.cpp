@@ -358,7 +358,7 @@ bool    VectorTests::pop_back() {
 //              INSERT                //
 //====================================//
 bool    VectorTests::insert() {
-    std::cerr << "insert....." << std::endl;
+    /*std::cerr << "insert....." << std::endl;
     ft::vector<int>     emptyVec;
     std::vector<int>    emptyComp;
 
@@ -366,7 +366,7 @@ bool    VectorTests::insert() {
     emptyComp.insert(emptyComp.begin(), 77);
     if (!containers_equal(emptyVec, emptyComp)) {
         return (false);
-    }
+    }*/
 
     ft::vector<int>     myvec(30, 5);
     std::vector<int>    comp(30, 5);
