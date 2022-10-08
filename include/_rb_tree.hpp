@@ -216,29 +216,21 @@ namespace ft {
 
     public:
         // CONSTRUCTORS / DESTRUCTORS
-        explicit _rb_map_tree(const Comp& comp, const allocator_type& alloc = allocator_type()) : _root(), _begin(), _nil(), _comp(comp), _alloc(alloc), _size(0) {
-            _end = _alloc.allocate(1);
-            _alloc.construct(_end, node());
-            _end->color = black;
+        explicit _rb_map_tree(const Comp& comp, const allocator_type& alloc = allocator_type()) : _root(), _begin(), _nil(), _comp(comp), _alloc(alloc) {
+           _init_alloc();
         }
 
         explicit _rb_map_tree(const _rb_map_tree& src) : _root(), _begin(), _nil(src._nil), _comp(src._comp), _alloc(allocator_type()) {
-            _size = 0;
-            _end = _alloc.allocate(1);
-            _alloc.construct(_end, node());
-            _end->color = black;
+            _init_alloc();
             _insert_nodes(src._root, src._end);
         }
 
         _rb_map_tree& operator=(const _rb_map_tree& rhs) {
             if (this != &rhs) {
                 clear();
-                _size = 0;
                 _comp = rhs._comp;
                 _nil = rhs._nil;
-                _end = _alloc.allocate(1);
-                _alloc.construct(_end, node());
-                _end->color = black;
+                _init_alloc();
                 _insert_nodes(rhs._root, rhs._end);
             }
             return (*this);
@@ -379,11 +371,21 @@ namespace ft {
            }
            return (1);
         }
-
-        node_pointer getRoot() const { return (_root); }
         value_compare value_comp() const { return (_comp); }
 
     private:
+        void _init_alloc() {
+            try {
+                _size = 0;
+                _end = _alloc.allocate(1);
+                _alloc.construct(_end, node());
+                _end->color = black;
+            } catch (const std::exception& e) {
+                clear();
+                throw e;
+            }
+
+        }
         //=================================================================//
         //                   INSERT SETUP NEW NODE                         //
         //=================================================================//
